@@ -1,0 +1,20 @@
+@startuml actors
+skinparam monochrome true
+skinparam backgroundColor transparent
+skinparam actorStyle awesome
+
+:Administrator: as admin
+:User: as U
+:Non Authenticated User: as NAU
+:Authenticated User: as AU
+:Organizer: as AUO
+:Atendee: as AUA
+
+
+U <-- NAU
+U <-- AU
+
+AU <-- AUO
+AU <-- AUA
+
+@enduml
