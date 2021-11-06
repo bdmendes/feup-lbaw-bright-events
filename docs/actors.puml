@@ -4,16 +4,15 @@ skinparam backgroundColor transparent
 skinparam actorStyle awesome
 
 :Administrator: as admin
-:User: as U
+:Visitor: as V
 :Non Authenticated User: as NAU
 :Authenticated User: as AU
 :Organizer: as AUO
-:Atendee: as AUA
+:Attendee: as AUA
 
 
-U <-- NAU
-U <-- AU
-
+V <-- NAU
+V <-- AU
 AU <-- AUO
 AU <-- AUA
 
