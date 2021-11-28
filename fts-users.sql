@@ -4,7 +4,7 @@ ALTER TABLE users DROP COLUMN IF EXISTS tsvectors;
 DROP TRIGGER IF EXISTS users_search_update ON users;
 DROP FUNCTION IF EXISTS users_search_update;
 
--- Add column to work to store computed ts_vectors.
+-- Add column to users to store computed ts_vectors.
 ALTER TABLE users
 ADD COLUMN tsvectors TSVECTOR;
 
@@ -13,7 +13,6 @@ CREATE FUNCTION users_search_update() RETURNS TRIGGER AS $$
 BEGIN
  IF TG_OP = 'INSERT' THEN
         NEW.tsvectors = (
-         setweight(NEW.username, 'A') ||
          setweight(to_tsvector('english', NEW.name), 'B') ||
 		 setweight(to_tsvector('english', NEW.bio), 'C')
         );
@@ -21,7 +20,6 @@ BEGIN
  IF TG_OP = 'UPDATE' THEN
          IF (NEW.username <> OLD.username OR NEW.name <> OLD.name OR NEW.bio <> OLD.bio) THEN
 			NEW.tsvectors = (
-			 setweight(NEW.username, 'A') ||
 			 setweight(to_tsvector('english', NEW.name), 'B') ||
 			 setweight(to_tsvector('english', NEW.bio), 'C')
 			);
@@ -31,7 +29,7 @@ BEGIN
 END $$
 LANGUAGE plpgsql;
 
--- Create a trigger before insert or update on work.
+-- Create a trigger before insert or update on users.
 CREATE TRIGGER users_search_update
  BEFORE INSERT OR UPDATE ON users
  FOR EACH ROW

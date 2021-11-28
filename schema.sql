@@ -47,6 +47,7 @@ CREATE TABLE users (
     password TEXT NOT NULL,
     name TEXT NOT NULL,
     is_admin BOOLEAN NOT NULL,
+    bio TEXT,
     birth_date TIMESTAMP CHECK (birth_date < CURRENT_DATE),
     is_blocked BOOLEAN NOT NULL DEFAULT FALSE,
     TYPE gender NOT NULL,
