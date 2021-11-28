@@ -1,3 +1,24 @@
+DROP TABLE IF EXISTS notification;
+DROP TABLE IF EXISTS report;
+DROP TABLE IF EXISTS user_poll_option;
+DROP TABLE IF EXISTS poll_option;
+DROP TABLE IF EXISTS poll;
+DROP TABLE IF EXISTS comment;
+DROP TABLE IF EXISTS event_tag;
+DROP TABLE IF EXISTS attendance;
+DROP TABLE IF EXISTS attendance_request;
+DROP TABLE IF EXISTS event;
+DROP TABLE IF EXISTS location;
+DROP TABLE IF EXISTS tag;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS file;
+
+DROP TYPE IF EXISTS country;
+DROP TYPE IF EXISTS gender;
+DROP TYPE IF EXISTS event_state;
+DROP TYPE IF EXISTS notification_type;
+DROP TYPE IF EXISTS report_motive;
+
 CREATE TYPE country AS ENUM ('Albania', 'Portugal');
 CREATE TYPE gender AS ENUM ('Male', 'Female', 'Other');
 CREATE TYPE event_state AS ENUM ('Cancelled', 'Finished', 'On-going', 'Due');
@@ -26,7 +47,7 @@ CREATE TABLE users (
     password TEXT NOT NULL,
     name TEXT NOT NULL,
     is_admin BOOLEAN NOT NULL,
-    birth_date DATETIME < CURRENT_DATE,
+    birth_date TIMESTAMP CHECK (birth_date < CURRENT_DATE),
     is_blocked BOOLEAN NOT NULL DEFAULT FALSE,
     TYPE gender NOT NULL,
     profile_picture INTEGER REFERENCES file ON DELETE SET NULL ON UPDATE CASCADE
@@ -36,7 +57,7 @@ CREATE TABLE event (
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     description TEXT,
-    date DATETIME NOT NULL,
+    date TIMESTAMP NOT NULL,
     is_private BOOLEAN NOT NULL,
     is_disabled BOOLEAN NOT NULL DEFAULT FALSE,
     TYPE event_state NOT NULL,
@@ -63,9 +84,9 @@ CREATE TABLE attendance (
 );
 
 CREATE TABLE attendance_request (
-    id SERIAL PRIMERY KEY,
+    id SERIAL PRIMARY KEY,
     event INTEGER REFERENCES event ON DELETE CASCADE ON UPDATE CASCADE, 
-    users INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
+    addressee INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
     is_accepted BOOLEAN DEFAULT FALSE NOT NULL,
     is_invite BOOLEAN NOT NULL
 );
@@ -76,7 +97,7 @@ CREATE TABLE poll (
     creator INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
     title TEXT NOT NULL,
     description TEXT NOT NULL,
-    date DATETIME DEFAULT NOW(),
+    date TIMESTAMP DEFAULT NOW(),
     is_open BOOLEAN DEFAULT TRUE
 );
 
@@ -87,34 +108,34 @@ CREATE TABLE poll_option (
 );
 
 CREATE TABLE user_poll_option (
-    users INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
-    poll_option INTEGER REFERENCES poll_option ON DELETE CASCADE ON UPDATE 
+    voter INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
+    poll_option INTEGER REFERENCES poll_option ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE comment (
     id SERIAL PRIMARY KEY,
     event INTEGER REFERENCES event ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
-    users INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
+    commenter INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
     body TEXT, 
-    date DATETIME DEFAULT NOW() NOT NULL
+    date TIMESTAMP DEFAULT NOW() NOT NULL
 );
 
 CREATE TABLE notification (
     id SERIAL PRIMARY KEY,
-    date DATETIME DEFAULT NOW() NOT NULL,
+    date TIMESTAMP DEFAULT NOW() NOT NULL,
     TYPE notification_type NOT NULL,
     is_seen BOOLEAN DEFAULT FALSE NOT NULL,
     event INTEGER REFERENCES event ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
     attendance_request INTEGER REFERENCES attendance_request ON DELETE CASCADE ON UPDATE CASCADE,
     poll INTEGER REFERENCES poll ON DELETE CASCADE ON UPDATE CASCADE,
     comment INTEGER REFERENCES comment ON DELETE CASCADE ON UPDATE CASCADE,
-    users INTEGER REFERENCES users ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
+    addresse INTEGER REFERENCES users ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
     CONSTRAINT single_reference CHECK ((attendance_request IS NOT NULL AND event IS NULL AND comment IS NULL) OR (attendance_request IS NULL AND event IS NOT NULL AND comment IS NULL) OR (attendance_request IS NULL AND event IS NULL AND comment IS NOT NULL))
 );
 
 CREATE TABLE report (
     id SERIAL PRIMARY KEY,
-    date DATETIME DEFAULT NOW(),
+    date TIMESTAMP DEFAULT NOW(),
     description TEXT,
     TYPE report_motive NOT NULL,
     handled_by INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE, 
@@ -122,4 +143,4 @@ CREATE TABLE report (
     reported_user INTEGER REFERENCES users ON DELETE CASCADE ON UPDATE CASCADE,
     reported_comment INTEGER REFERENCES comment ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT single_reference CHECK ((reported_event IS NOT NULL AND reported_user IS NULL AND reported_comment IS NULL) OR (reported_event IS NULL AND reported_user IS NOT NULL AND reported_comment IS NULL) OR (reported_event IS NULL AND reported_user IS NULL AND reported_comment IS NOT NULL))
-)
+);
