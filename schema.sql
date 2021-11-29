@@ -12,12 +12,12 @@ DROP TRIGGER IF EXISTS request_event_type ON attendance_request;
 DROP TRIGGER IF EXISTS request_diff_users ON attendance_request;
 DROP TRIGGER IF EXISTS voter_is_attendee ON user_poll_option;
 DROP INDEX IF EXISTS search_idx;
-ALTER TABLE event DROP COLUMN IF EXISTS tsvectors;
 
+ALTER TABLE IF EXISTS event DROP COLUMN IF EXISTS tsvectors;
 DROP TRIGGER IF EXISTS event_search_update ON event;
 DROP FUNCTION IF EXISTS event_search_update;
 DROP INDEX IF EXISTS user_search_idx;
-ALTER TABLE users DROP COLUMN IF EXISTS tsvectors;
+ALTER TABLE IF EXISTS users DROP COLUMN IF EXISTS tsvectors;
 DROP TRIGGER IF EXISTS users_search_update ON users;
 DROP FUNCTION IF EXISTS users_search_update;
 
