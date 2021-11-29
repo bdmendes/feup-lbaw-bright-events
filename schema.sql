@@ -7,6 +7,15 @@ DROP TRIGGER IF EXISTS block_admin_organizer ON event;
 DROP TRIGGER IF EXISTS request_event_type ON attendance_request;
 DROP TRIGGER IF EXISTS request_diff_users ON attendance_request;
 DROP TRIGGER IF EXISTS voter_is_attendee ON user_poll_option;
+DROP INDEX IF EXISTS search_idx;
+ALTER TABLE event DROP COLUMN IF EXISTS tsvectors;
+
+DROP TRIGGER IF EXISTS event_search_update ON event;
+DROP FUNCTION IF EXISTS event_search_update;
+DROP INDEX IF EXISTS user_search_idx;
+ALTER TABLE users DROP COLUMN IF EXISTS tsvectors;
+DROP TRIGGER IF EXISTS users_search_update ON users;
+DROP FUNCTION IF EXISTS users_search_update;
 
 DROP VIEW IF EXISTS event_poll;
 
@@ -349,3 +358,70 @@ CREATE TRIGGER voter_is_attendee
     BEFORE INSERT OR UPDATE ON user_poll_option
     FOR EACH ROW
     EXECUTE PROCEDURE voter_is_attendee();
+
+-- Add column to users to store computed ts_vectors.
+ALTER TABLE event ADD COLUMN tsvectors TSVECTOR;
+
+-- Create a function to automatically update ts_vectors.
+CREATE FUNCTION event_search_update() RETURNS TRIGGER AS $$
+BEGIN
+ IF TG_OP = 'INSERT' THEN
+        NEW.tsvectors = (
+         setweight(to_tsvector('english', NEW.title), 'A') ||
+		 setweight(to_tsvector('english', NEW.description), 'B')
+        );
+ END IF;
+ IF TG_OP = 'UPDATE' THEN
+         IF (NEW.username <> OLD.username OR NEW.name <> OLD.name OR NEW.bio <> OLD.bio) THEN
+            NEW.tsvectors = (
+            setweight(to_tsvector('english', NEW.title), 'A') ||
+            setweight(to_tsvector('english', NEW.description), 'B')
+            );
+         END IF;
+ END IF;
+ RETURN NEW;
+END $$
+LANGUAGE plpgsql;
+
+-- Create a trigger before insert or update on users.
+CREATE TRIGGER event_search_update
+ BEFORE INSERT OR UPDATE ON event
+ FOR EACH ROW
+ EXECUTE PROCEDURE event_search_update();
+
+-- Finally, create a GIN index for ts_vectors.
+CREATE INDEX search_idx ON event USING GIN (tsvectors);
+
+
+-- Add column to users to store computed ts_vectors.
+ALTER TABLE users ADD COLUMN tsvectors TSVECTOR;
+
+-- Create a function to automatically update ts_vectors.
+CREATE FUNCTION users_search_update() RETURNS TRIGGER AS $$
+BEGIN
+ IF TG_OP = 'INSERT' THEN
+        NEW.tsvectors = (
+         setweight(to_tsvector('english', NEW.name), 'A') ||
+		 setweight(to_tsvector('english', NEW.bio), 'B')
+        );
+ END IF;
+ IF TG_OP = 'UPDATE' THEN
+         IF (NEW.username <> OLD.username OR NEW.name <> OLD.name OR NEW.bio <> OLD.bio) THEN
+			NEW.tsvectors = (
+			 setweight(to_tsvector('english', NEW.name), 'A') ||
+			 setweight(to_tsvector('english', NEW.bio), 'B')
+			);
+         END IF;
+ END IF;
+ RETURN NEW;
+END $$
+LANGUAGE plpgsql;
+
+-- Create a trigger before insert or update on users.
+CREATE TRIGGER users_search_update
+ BEFORE INSERT OR UPDATE ON users
+ FOR EACH ROW
+ EXECUTE PROCEDURE users_search_update();
+
+-- Finally, create a GIN index for ts_vectors.
+CREATE INDEX user_search_idx ON users USING GIN (tsvectors);
