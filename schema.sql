@@ -23,8 +23,6 @@ DROP FUNCTION IF EXISTS users_search_update;
 
 DROP INDEX IF EXISTS date_event_idx;
 DROP INDEX IF EXISTS event_comment_idx;
-DROP INDEX IF EXISTS event_poll_idx;
-DROP INDEX IF EXISTS event_request_idx;
 DROP INDEX IF EXISTS user_notification_idx;
 
 DROP VIEW IF EXISTS event_poll;
