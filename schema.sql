@@ -47,7 +47,8 @@ CREATE TABLE users (
     password TEXT NOT NULL,
     name TEXT NOT NULL,
     is_admin BOOLEAN NOT NULL,
-    birth_date TIMESTAMP CHECK (birth_date < CURRENT_DATE),
+    bio TEXT,
+    birth_date DATE CHECK (birth_date < CURRENT_DATE),
     is_blocked BOOLEAN NOT NULL DEFAULT FALSE,
     TYPE gender NOT NULL,
     profile_picture INTEGER REFERENCES file ON DELETE SET NULL ON UPDATE CASCADE
