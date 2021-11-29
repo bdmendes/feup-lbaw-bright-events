@@ -1,3 +1,7 @@
+-------------------------------------------------
+--------------- Clear database ------------------
+-------------------------------------------------
+
 DROP TRIGGER IF EXISTS is_handled_by_admin ON report;
 DROP TRIGGER IF EXISTS block_admin_comment ON comment;
 DROP TRIGGER IF EXISTS block_admin_poll_vote ON user_poll_option;
@@ -16,6 +20,10 @@ DROP INDEX IF EXISTS user_search_idx;
 ALTER TABLE users DROP COLUMN IF EXISTS tsvectors;
 DROP TRIGGER IF EXISTS users_search_update ON users;
 DROP FUNCTION IF EXISTS users_search_update;
+
+DROP INDEX IF EXISTS date_event_idx;
+DROP INDEX IF EXISTS date_comment_idx;
+DROP INDEX IF EXISTS user_notification_idx;
 
 DROP VIEW IF EXISTS event_poll;
 
@@ -55,6 +63,10 @@ CREATE TYPE gender AS ENUM ('Male', 'Female', 'Other');
 CREATE TYPE event_state AS ENUM ('Cancelled', 'Finished', 'On-going', 'Due');
 CREATE TYPE notification_type AS ENUM ('Disabled event', 'Cancelled event', 'Join request', 'Accepted request', 'Declined request', 'Invite', 'Accepted invite', 'Declined invite', 'New comment', 'New poll', 'Poll closed');
 CREATE TYPE report_motive AS ENUM ('Sexual harassment', 'Violence or bodily harm', 'Nudity or explicit content', 'Hate speech', 'Other');
+
+-------------------------------------------------
+-------------------- Tables ---------------------
+-------------------------------------------------
 
 CREATE TABLE file (
     id SERIAL PRIMARY KEY,
@@ -179,7 +191,7 @@ CREATE TABLE report (
 );
 
 -------------------------------------------------
--------------------- Views --------------------
+-------------------- Views ----------------------
 -------------------------------------------------
 
 CREATE VIEW event_poll AS
@@ -187,7 +199,7 @@ CREATE VIEW event_poll AS
 FROM poll JOIN event ON (poll.event = event.id));
 
 ------------------------------------------------------
--------------------- Functions --------------------
+-------------------- Functions -----------------------
 ------------------------------------------------------
 
 CREATE FUNCTION is_handled_by_admin() RETURNS TRIGGER AS
@@ -311,7 +323,7 @@ $BODY$
 LANGUAGE plpgsql;
 
 ----------------------------------------------------
--------------------- Triggers --------------------
+-------------------- Triggers ----------------------
 ----------------------------------------------------
 
 CREATE TRIGGER is_handled_by_admin
@@ -358,6 +370,10 @@ CREATE TRIGGER voter_is_attendee
     BEFORE INSERT OR UPDATE ON user_poll_option
     FOR EACH ROW
     EXECUTE PROCEDURE voter_is_attendee();
+
+----------------------------------------------------
+------------ Full-text search indexes --------------
+----------------------------------------------------
 
 -- Add column to users to store computed ts_vectors.
 ALTER TABLE event ADD COLUMN tsvectors TSVECTOR;
@@ -425,3 +441,12 @@ CREATE TRIGGER users_search_update
 
 -- Finally, create a GIN index for ts_vectors.
 CREATE INDEX user_search_idx ON users USING GIN (tsvectors);
+
+----------------------------------------------------
+---------------- Performance indexes ---------------
+----------------------------------------------------
+CREATE INDEX date_event_idx ON event USING BTREE (date);
+CREATE INDEX event_comment_idx on comment USING HASH (event);
+CREATE INDEX event_poll_idx on poll USING HASH (event);
+CREATE INDEX event_request_idx on attendance_request USING HASH (event);
+CREATE INDEX user_notification_idx  ON notification USING HASH (addressee);
