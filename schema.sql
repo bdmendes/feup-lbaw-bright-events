@@ -1,3 +1,23 @@
+DROP TRIGGER IF EXISTS is_handled_by_admin;
+DROP TRIGGER IF EXISTS block_admin_comment ON comment;
+DROP TRIGGER IF EXISTS block_admin_poll_vote ON user_poll_option;
+DROP TRIGGER IF EXISTS block_admin_attendance ON attendance;
+DROP TRIGGER IF EXISTS block_admin_request ON attendance_request;
+DROP TRIGGER IF EXISTS block_admin_organizer ON event;
+DROP TRIGGER IF EXISTS request_event_type ON attendance_request;
+DROP TRIGGER IF EXISTS request_diff_users ON attendance_request;
+DROP TRIGGER IF EXISTS voter_is_attendee ON report;
+
+DROP FUNCTION IF EXISTS is_handled_by_admin ON report;
+DROP FUNCTION IF EXISTS block_admin_comment;
+DROP FUNCTION IF EXISTS block_admin_poll_vote;
+DROP FUNCTION IF EXISTS block_admin_attendance;
+DROP FUNCTION IF EXISTS block_admin_request;
+DROP FUNCTION IF EXISTS block_admin_organizer;
+DROP FUNCTION IF EXISTS request_event_type;
+DROP FUNCTION IF EXISTS request_diff_users;
+DROP FUNCTION IF EXISTS voter_is_attendee;
+
 DROP TABLE IF EXISTS notification;
 DROP TABLE IF EXISTS report;
 DROP TABLE IF EXISTS user_poll_option;
@@ -146,3 +166,186 @@ CREATE TABLE report (
     reported_comment INTEGER REFERENCES comment ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT single_reference CHECK ((reported_event IS NOT NULL AND reported_user IS NULL AND reported_comment IS NULL) OR (reported_event IS NULL AND reported_user IS NOT NULL AND reported_comment IS NULL) OR (reported_event IS NULL AND reported_user IS NULL AND reported_comment IS NOT NULL))
 );
+
+-------------------------------------------------
+-------------------- Views --------------------
+-------------------------------------------------
+
+CREATE VIEW event_poll AS
+(SELECT poll.id AS poll_id, event 
+FROM poll JOIN event ON (poll.event = event.id));
+
+------------------------------------------------------
+-------------------- Functions --------------------
+------------------------------------------------------
+
+CREATE FUNCTION is_handled_by_admin() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.handled_by IS NOT NULL THEN
+        IF NOT EXISTS (SELECT * FROM users WHERE id = NEW.handled_by AND is_admin = TRUE) THEN
+            RAISE EXCEPTION 'A report can only be handled by a user.';
+        END IF;
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION block_admin_comment() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.commenter IS NOT NULL THEN
+        IF EXISTS (SELECT * FROM users WHERE id = NEW.commenter AND is_admin = TRUE) THEN 
+            RAISE EXCEPTION 'Admins cannot write comments';
+        END IF;
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION block_admin_poll_vote() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.voter IS NOT NULL THEN
+        IF EXISTS (SELECT * FROM users WHERE id = NEW.voter AND is_admin = TRUE) THEN 
+            RAISE EXCEPTION 'Admins cannot vote in polls';
+        END IF;
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION block_admin_attendance() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.attendee IS NOT NULL THEN
+        IF EXISTS (SELECT * FROM users WHERE id = NEW.attendee AND is_admin = TRUE) THEN 
+            RAISE EXCEPTION 'Admins cannot attend events';
+        END IF;
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION block_admin_request() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.addressee IS NOT NULL THEN
+        IF EXISTS (SELECT * FROM users WHERE id = NEW.addressee AND is_admin = TRUE) THEN 
+            RAISE EXCEPTION 'Admins cannot be the recipient of requests';
+        END IF;
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION block_admin_organizer() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.organizer IS NOT NULL THEN
+        IF EXISTS (SELECT * FROM users WHERE id = NEW.organizer AND is_admin = TRUE) THEN 
+            RAISE EXCEPTION 'Admins cannot be organizers';
+        END IF;
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION request_event_type() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.event IS NOT NULL THEN
+        IF NOT EXISTS (SELECT * FROM event WHERE id = NEW.event AND (event_state = 'Due' OR event_state = 'On-going')) THEN 
+            RAISE EXCEPTION 'Requests can only be sent for due or on-going events';
+        END IF;
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION request_diff_users() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.attendee IS NOT NULL THEN
+        IF EXISTS (SELECT * FROM event WHERE organizer = NEW.attendee AND id = NEW.event) THEN
+            RAISE EXCEPTION 'Requests for a certain event can not be sent to the organizer of that same event'; 
+        END IF;
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION voter_is_attendee() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.voter IS NOT NULL THEN
+        IF NOT EXISTS (SELECT * 
+        FROM event_poll JOIN attendance ON (event_poll.event = attendance.event) 
+        WHERE poll_id = NEW.id AND attendee = NEW.voter) THEN
+            RAISE EXCEPTION 'A poll voter must attend the event related to the poll';
+        END IF;
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+----------------------------------------------------
+-------------------- Triggers --------------------
+----------------------------------------------------
+
+CREATE TRIGGER is_handled_by_admin
+    BEFORE INSERT OR UPDATE ON report
+    FOR EACH ROW
+    EXECUTE PROCEDURE is_handled_by_admin();
+
+CREATE TRIGGER block_admin_comment
+    BEFORE INSERT OR UPDATE ON comment
+    FOR EACH ROW
+    EXECUTE PROCEDURE block_admin_comment();
+
+CREATE TRIGGER block_admin_poll_vote
+    BEFORE INSERT OR UPDATE ON user_poll_option
+    FOR EACH ROW
+    EXECUTE PROCEDURE block_admin_poll_vote();
+
+
+CREATE TRIGGER block_admin_attendance
+    BEFORE INSERT OR UPDATE ON attendance
+    FOR EACH ROW
+    EXECUTE PROCEDURE block_admin_attendance();
+
+
+CREATE TRIGGER block_admin_request
+    BEFORE INSERT OR UPDATE ON attendance_request
+    FOR EACH ROW
+    EXECUTE PROCEDURE block_admin_request();
+
+
+CREATE TRIGGER block_admin_organizer
+    BEFORE INSERT OR UPDATE ON event
+    FOR EACH ROW
+    EXECUTE PROCEDURE block_admin_organizer();
+
+CREATE TRIGGER request_event_type
+    BEFORE INSERT OR UPDATE ON attendance_request
+    FOR EACH ROW
+    EXECUTE PROCEDURE request_event_type();
+
+CREATE TRIGGER request_diff_users
+    BEFORE INSERT OR UPDATE ON attendance_request
+    FOR EACH ROW
+    EXECUTE PROCEDURE request_diff_users();
+
+CREATE TRIGGER voter_is_attendee
+    BEFORE INSERT OR UPDATE ON user_poll_option
+    FOR EACH ROW
+    EXECUTE PROCEDURE voter_is_attendee();
