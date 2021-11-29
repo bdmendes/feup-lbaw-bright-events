@@ -1,4 +1,4 @@
-DROP TRIGGER IF EXISTS is_handled_by_admin ON report;
+DROP TRIGGER IF EXISTS is_handled_by_admin;
 
 CREATE FUNCTION is_handled_by_admin() RETURNS TRIGGER AS
 $BODY$

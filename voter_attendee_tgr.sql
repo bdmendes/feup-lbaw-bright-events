@@ -1,4 +1,5 @@
 DROP TRIGGER IF EXISTS voter_is_attendee ON report;
+DROP FUNCTION IF EXISTS voter_is_attendee ON report;
 
 CREATE VIEW event_poll AS
 SELECT id AS poll_id, event 
