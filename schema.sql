@@ -57,7 +57,7 @@ CREATE TABLE users (
 CREATE TABLE event (
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
-    description TEXT,
+    description VARCHAR(1000),
     date TIMESTAMP NOT NULL,
     is_private BOOLEAN NOT NULL,
     is_disabled BOOLEAN NOT NULL DEFAULT FALSE,
@@ -97,7 +97,7 @@ CREATE TABLE poll (
     event INTEGER REFERENCES event ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
     creator INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
     title TEXT NOT NULL,
-    description TEXT NOT NULL,
+    description VARCHAR(1000) NOT NULL,
     date TIMESTAMP DEFAULT NOW(),
     is_open BOOLEAN DEFAULT TRUE
 );
@@ -137,7 +137,7 @@ CREATE TABLE notification (
 CREATE TABLE report (
     id SERIAL PRIMARY KEY,
     date TIMESTAMP DEFAULT NOW(),
-    description TEXT,
+    description VARCHAR(1000),
     TYPE report_motive NOT NULL,
     handled_by INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE, 
     reported_event INTEGER REFERENCES event ON DELETE CASCADE ON UPDATE CASCADE, 
