@@ -18,7 +18,7 @@ $BODY$
 BEGIN
     IF NEW.commenter IS NOT NULL THEN
         IF EXISTS (SELECT * FROM users WHERE id = NEW.commenter AND is_admin = TRUE) THEN 
-            RAISE EXCEPTION "Admins can't write comments.";
+            RAISE EXCEPTION 'Admins cannot write comments';
         END IF;
     END IF;
     RETURN NEW;
@@ -37,7 +37,7 @@ $BODY$
 BEGIN
     IF NEW.voter IS NOT NULL THEN
         IF EXISTS (SELECT * FROM users WHERE id = NEW.voter AND is_admin = TRUE) THEN 
-            RAISE EXCEPTION "Admins can't vote in polls.";
+            RAISE EXCEPTION 'Admins cannot vote in polls';
         END IF;
     END IF;
     RETURN NEW;
@@ -55,7 +55,7 @@ $BODY$
 BEGIN
     IF NEW.attendee IS NOT NULL THEN
         IF EXISTS (SELECT * FROM users WHERE id = NEW.attendee AND is_admin = TRUE) THEN 
-            RAISE EXCEPTION "Admins can't attend events.";
+            RAISE EXCEPTION 'Admins cannot attend events';
         END IF;
     END IF;
     RETURN NEW;
@@ -73,7 +73,7 @@ $BODY$
 BEGIN
     IF NEW.addressee IS NOT NULL THEN
         IF EXISTS (SELECT * FROM users WHERE id = NEW.addressee AND is_admin = TRUE) THEN 
-            RAISE EXCEPTION "Admins can't be the recipient of requests.";
+            RAISE EXCEPTION 'Admins cannot be the recipient of requests';
         END IF;
     END IF;
     RETURN NEW;
@@ -91,7 +91,7 @@ $BODY$
 BEGIN
     IF NEW.organizer IS NOT NULL THEN
         IF EXISTS (SELECT * FROM users WHERE id = NEW.organizer AND is_admin = TRUE) THEN 
-            RAISE EXCEPTION "Admins can't be organizers."
+            RAISE EXCEPTION 'Admins cannot be organizers';
         END IF;
     END IF;
     RETURN NEW;

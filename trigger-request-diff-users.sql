@@ -4,7 +4,7 @@ DROP FUNCTION IF EXISTS request_diff_users;
 CREATE FUNCTION request_diff_users() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF NEW.attendee NOT NULL THEN
+    IF NEW.attendee IS NOT NULL THEN
         IF EXISTS (SELECT * FROM event WHERE organizer = NEW.attendee AND id = NEW.event) THEN
             RAISE EXCEPTION 'Requests for a certain event can not be sent to the organizer of that same event'; 
         END IF;

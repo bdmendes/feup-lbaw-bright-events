@@ -5,8 +5,8 @@ CREATE FUNCTION request_event_type() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.event IS NOT NULL THEN
-        IF NOT EXISTS (SELECT * FROM event WHERE id = NEW.event AND (event_state = 'Due' OR event_state = 'On-going')) 
-            RAISE EXCEPTION 'Requests can only be sent for due or on-going events.';
+        IF NOT EXISTS (SELECT * FROM event WHERE id = NEW.event AND (event_state = 'Due' OR event_state = 'On-going')) THEN 
+            RAISE EXCEPTION 'Requests can only be sent for due or on-going events';
         END IF;
     END IF;
     RETURN NEW;

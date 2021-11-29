@@ -1,14 +1,14 @@
 DROP TRIGGER IF EXISTS voter_is_attendee ON report;
-DROP FUNCTION IF EXISTS voter_is_attendee ON report;
+DROP FUNCTION IF EXISTS voter_is_attendee;
 
 CREATE VIEW event_poll AS
-SELECT id AS poll_id, event 
-FROM poll JOIN event ON (poll.event = event.id)
+(SELECT poll.id AS poll_id, event 
+FROM poll JOIN event ON (poll.event = event.id));
 
 CREATE FUNCTION voter_is_attendee() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF NEW.voter IS NOT NULL
+    IF NEW.voter IS NOT NULL THEN
         IF NOT EXISTS (SELECT * 
         FROM event_poll JOIN attendance ON (event_poll.event = attendance.event) 
         WHERE poll_id = NEW.id AND attendee = NEW.voter) THEN
