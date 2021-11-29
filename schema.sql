@@ -1,4 +1,4 @@
-DROP TRIGGER IF EXISTS is_handled_by_admin;
+DROP TRIGGER IF EXISTS is_handled_by_admin ON report;
 DROP TRIGGER IF EXISTS block_admin_comment ON comment;
 DROP TRIGGER IF EXISTS block_admin_poll_vote ON user_poll_option;
 DROP TRIGGER IF EXISTS block_admin_attendance ON attendance;
@@ -6,9 +6,11 @@ DROP TRIGGER IF EXISTS block_admin_request ON attendance_request;
 DROP TRIGGER IF EXISTS block_admin_organizer ON event;
 DROP TRIGGER IF EXISTS request_event_type ON attendance_request;
 DROP TRIGGER IF EXISTS request_diff_users ON attendance_request;
-DROP TRIGGER IF EXISTS voter_is_attendee ON report;
+DROP TRIGGER IF EXISTS voter_is_attendee ON user_poll_option;
 
-DROP FUNCTION IF EXISTS is_handled_by_admin ON report;
+DROP VIEW IF EXISTS event_poll;
+
+DROP FUNCTION IF EXISTS is_handled_by_admin;
 DROP FUNCTION IF EXISTS block_admin_comment;
 DROP FUNCTION IF EXISTS block_admin_poll_vote;
 DROP FUNCTION IF EXISTS block_admin_attendance;
@@ -70,7 +72,7 @@ CREATE TABLE users (
     bio TEXT,
     birth_date DATE CHECK (birth_date < CURRENT_DATE),
     is_blocked BOOLEAN NOT NULL DEFAULT FALSE,
-    TYPE gender NOT NULL,
+    gender gender NOT NULL,
     profile_picture INTEGER REFERENCES file ON DELETE SET NULL ON UPDATE CASCADE
 );
 
@@ -81,7 +83,7 @@ CREATE TABLE event (
     date TIMESTAMP NOT NULL,
     is_private BOOLEAN NOT NULL,
     is_disabled BOOLEAN NOT NULL DEFAULT FALSE,
-    TYPE event_state NOT NULL,
+    event_state event_state NOT NULL,
     cover_image INTEGER REFERENCES file ON DELETE SET NULL ON UPDATE CASCADE,
     organizer INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
     location INTEGER REFERENCES location ON DELETE SET NULL ON UPDATE CASCADE 
@@ -145,7 +147,7 @@ CREATE TABLE comment (
 CREATE TABLE notification (
     id SERIAL PRIMARY KEY,
     date TIMESTAMP DEFAULT NOW() NOT NULL,
-    TYPE notification_type NOT NULL,
+    notification_type notification_type NOT NULL,
     is_seen BOOLEAN DEFAULT FALSE NOT NULL,
     event INTEGER REFERENCES event ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
     attendance_request INTEGER REFERENCES attendance_request ON DELETE CASCADE ON UPDATE CASCADE,
@@ -159,7 +161,7 @@ CREATE TABLE report (
     id SERIAL PRIMARY KEY,
     date TIMESTAMP DEFAULT NOW(),
     description VARCHAR(1000),
-    TYPE report_motive NOT NULL,
+    report_motive report_motive NOT NULL,
     handled_by INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE, 
     reported_event INTEGER REFERENCES event ON DELETE CASCADE ON UPDATE CASCADE, 
     reported_user INTEGER REFERENCES users ON DELETE CASCADE ON UPDATE CASCADE,
@@ -261,7 +263,7 @@ CREATE FUNCTION request_event_type() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.event IS NOT NULL THEN
-        IF NOT EXISTS (SELECT * FROM event WHERE id = NEW.event AND (event_state = 'Due' OR event_state = 'On-going')) THEN 
+        IF EXISTS (SELECT e.* FROM event e WHERE id = NEW.event AND e.event_state <> 'Due' AND e.event_state <> 'On-going') THEN 
             RAISE EXCEPTION 'Requests can only be sent for due or on-going events';
         END IF;
     END IF;
@@ -273,8 +275,8 @@ LANGUAGE plpgsql;
 CREATE FUNCTION request_diff_users() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF NEW.attendee IS NOT NULL THEN
-        IF EXISTS (SELECT * FROM event WHERE organizer = NEW.attendee AND id = NEW.event) THEN
+    IF NEW.addressee IS NOT NULL THEN
+        IF EXISTS (SELECT * FROM event WHERE organizer = NEW.addressee AND id = NEW.event) THEN
             RAISE EXCEPTION 'Requests for a certain event can not be sent to the organizer of that same event'; 
         END IF;
     END IF;
@@ -288,8 +290,9 @@ $BODY$
 BEGIN
     IF NEW.voter IS NOT NULL THEN
         IF NOT EXISTS (SELECT * 
-        FROM event_poll JOIN attendance ON (event_poll.event = attendance.event) 
-        WHERE poll_id = NEW.id AND attendee = NEW.voter) THEN
+        FROM event_poll JOIN attendance a ON (event_poll.event = a.event)
+                        JOIN poll_option po ON (po.poll = event_poll.poll_id) 
+        WHERE po.id = NEW.poll_option AND attendee = NEW.voter) THEN
             RAISE EXCEPTION 'A poll voter must attend the event related to the poll';
         END IF;
     END IF;
@@ -317,18 +320,15 @@ CREATE TRIGGER block_admin_poll_vote
     FOR EACH ROW
     EXECUTE PROCEDURE block_admin_poll_vote();
 
-
 CREATE TRIGGER block_admin_attendance
     BEFORE INSERT OR UPDATE ON attendance
     FOR EACH ROW
     EXECUTE PROCEDURE block_admin_attendance();
 
-
 CREATE TRIGGER block_admin_request
     BEFORE INSERT OR UPDATE ON attendance_request
     FOR EACH ROW
     EXECUTE PROCEDURE block_admin_request();
-
 
 CREATE TRIGGER block_admin_organizer
     BEFORE INSERT OR UPDATE ON event
