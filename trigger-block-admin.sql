@@ -71,8 +71,8 @@ CREATE TRIGGER block_admin_attendance
 CREATE FUNCTION block_admin_request() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF NEW.addresse IS NOT NULL THEN
-        IF EXISTS (SELECT * FROM users WHERE id = NEW.addresse AND is_admin = TRUE) THEN 
+    IF NEW.addressee IS NOT NULL THEN
+        IF EXISTS (SELECT * FROM users WHERE id = NEW.addressee AND is_admin = TRUE) THEN 
             RAISE EXCEPTION "Admins can't be the recipient of requests.";
         END IF;
     END IF;
