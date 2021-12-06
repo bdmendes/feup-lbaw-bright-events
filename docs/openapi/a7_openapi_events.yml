@@ -1,0 +1,343 @@
+openapi: '3.0.2'
+
+info:
+  title: Bright Events
+  version: '1.0'
+
+servers:
+  - url: https://api.server.test/v1
+
+tags:
+  - name: 'M01: Authentication and Personal Profile'
+  - name: 'M02: User Search and User Profiles'
+  - name: 'M03: Events and Event-related Content'
+  - name: 'M04: Static Pages'
+  - name: 'M05: Administration Management'
+
+# Permissions
+# NAU - Non-authenticated User
+# AU - Authenticated User
+# AUO - User that organizes an event
+# ADM - System administrator
+
+paths:
+
+  #/events:
+    
+
+
+        
+
+  /events/create:
+    post:
+      operationId: R301
+      summary: 'R301: Create event'
+      description: 'Create event: Access: AU'
+      tags:
+        - 'M03: Events and Event-related Content'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                isPrivate:
+                  type: boolean
+                date:
+                  type: string
+                organizer:
+                  type: integer
+                
+      responses:
+        '401':
+          description: "Event creation requires authentication"
+        '200':
+          description: "Ok. show event creation page"
+              
+  /events/view:
+    get:
+      operationId: R302
+      summary: "R302: Event's details"
+      tags:
+        - 'M03: Events and Event-related Content'
+      responses:
+        '404':
+          description: 'Event not found'
+        '403':
+          description: "User doesn't have permission to view event"
+        '401':
+          description: "Event requires authentication to be viewed"
+        '200':
+          description: "OK. Show event's details"
+        
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of event
+    post:
+      operationId: R308
+      summary: 'R301: Create comment'
+      description: 'Create comment: Access: AU AUO '
+      tags:
+        - 'M03: Events and Event-related Content'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+                user:
+                  type: integer
+                event:
+                  type: integer
+                author:
+                  type: integer
+      responses:
+        '200':
+          description: ""
+    
+    
+  
+  /events/edit:
+    get:
+      operationId: R304
+      summary: "R304: Edit event "
+      tags:
+        - "M03: Events and Event-related Content"
+      responses:
+        '404' : 
+          description: "Event not found"
+        '200':
+          description: "Ok. show event's details"
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+          description: ID of Event
+  
+
+  
+  /api/events:
+    get:
+      operationId: R301
+      summary: "R301: Event's list"
+      tags:
+        - 'M03: Events and Event-related Content'
+      responses:
+        '200':
+          description: 'OK, Show list of events'
+      parameters:
+        - in: query
+          name: sortBy
+          schema:
+            type: string
+          description: "Defines the value of which the event's should be ordered"
+
+        - in : query
+          name: order
+          schema:
+            type: string
+          description: "Defines if it's ascending order or descending order"
+        
+        - in: query
+          name: global
+          schema:
+            type: string 
+          description: "Filters events via title and description"
+        
+        - in: query
+          name: location
+          schema:
+            type: string
+          description: "Filters events via location"
+
+        - in: query
+          name: organizer
+          schema:
+            type: integer
+          description: "Filters events via it's organizer"
+
+        - in: query
+          name: tag
+          schema:
+            type: string
+          description: "Filters events via tag"
+
+        - in: query
+          name: beginDate
+          schema:
+            type: string
+            format: date
+          description: "Show events that start after 'beginDate'"
+        
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date
+          description: "Show events that started before 'endDate'"
+        
+  /api/events/comments:
+    get: 
+      operationId: "R305"
+      summary: "Get event's comments"
+      tags:
+        - 'M03: Events and Event-related Content'
+      parameters:
+        - in: query
+          name: eventId
+          schema:
+            type: integer
+          description: "Event's id"
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: "Offset of comments"
+        - in: query
+          name: size
+          schema:
+            type: integer
+          description: "Determines the number of comments given"
+
+      responses:
+        '404':
+          description: "Event not found"
+        '200':
+          description: "OK, show event's comments "
+    
+    post:
+      operationId: R310
+      summary: 'R310: Create comment'
+      description: 'Create comment: Access: AU AUO '
+      tags:
+        - 'M03: Events and Event-related Content'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+                user:
+                  type: integer
+                event:
+                  type: integer
+                author:
+                  type: integer
+      responses:
+        
+        
+        '200':
+          description: "OK, "
+        
+
+
+  /api/events/attendees:
+    get: 
+      operationId: "R306"
+      summary: "R306: Get event's attendees"
+      tags:
+        - 'M03: Events and Event-related Content'
+      
+      parameters:
+        - in: query
+          name: eventId
+          schema:
+            type: integer
+          description: "Event's id"
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: "Offset of attendees"
+        - in: query
+          name: size
+          schema:
+            type: integer
+          description: "Determines the number of attendees given"
+      responses:
+        '404':
+          description: "Event not found"
+        '200':
+          description: "OK, show event's attendees "
+
+  /api/events/invites:
+    get: 
+      operationId: "R307"
+      summary: "R307: Get event's pending invites"
+      tags:
+        - 'M03: Events and Event-related Content'
+      
+      parameters:
+        - in: query
+          name: eventId
+          schema:
+            type: integer
+          description: "Event's id"
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: "Offset of invites"
+        - in: query
+          name: size
+          schema:
+            type: integer
+          description: "Determines the number of invites given"
+      responses:
+        '403':
+          description: "User doesn't have permission to view event's invites"
+        '402':
+          description: "Requires authentication to view event's invites"
+        '404':
+          description: "Event not found"
+        '200':
+          description: "OK, show event's invites "
+
+  /api/events/join_requests:
+    get: 
+      operationId: "R307"
+      summary: "R307: Get event's pending join requests"
+      tags:
+        - 'M03: Events and Event-related Content'
+      
+      parameters:
+        - in: query
+          name: eventId
+          schema:
+            type: integer
+          description: "Event's id"
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: "Offset of join requests"
+        - in: query
+          name: size
+          schema:
+            type: integer
+          description: "Determines the number of join requests given"
+      responses:
+        '403':
+          description: "User doesn't have permission to view event's join requests"
+        '402':
+          description: "Requires authentication to view event's join requests"
+        '404':
+          description: "Event not found"
+        '200':
+          description: "OK, show event's join requests "
