@@ -35,7 +35,7 @@ paths:
     post:
       operationId: R102
       summary: 'R102: Sign-in Action'
-      description: 'Processes the sign-in form. Accessible by NAU'
+      description: 'Process the sign-in form. Accessible by NAU'
       tags:
         - 'M01: Authentication and Personal Profile'
       
@@ -65,7 +65,7 @@ paths:
               examples:
                 302Success:
                   description: 'Authentication succeeded. Redirecting to user profile.'
-                  value: '/users/{id}'
+                  value: '' # update when /users/{id} is implemented
                 302Failure:
                   description: 'Authentication failed. Redirect to login form'
                   value: '/login' 
@@ -74,7 +74,7 @@ paths:
     post:
       operationId: R103
       summary: 'R103: Sign-out Action'
-      description: 'Signs out the currently authenticated user. Accessible by AU, ADM'
+      description: 'Sign out the currently authenticated user. Accessible by AU, ADM'
       tags:
             - 'M01: Authentication and Personal Profile'
       responses:
@@ -89,3 +89,64 @@ paths:
                 302Success:
                   description: 'Sign-out succeeded. Redirecting to home page'
                   value: '' # update when / is implemented
+
+  /register:
+    get:
+      operationId: R104
+      summary: 'R104: Provide Register form. Accessible by NAU'
+      tags:
+        - 'M01: Authentication and Personal Profile'
+      responses:
+        '200':
+          description: 'OK. Show register form (UI08)'
+
+    post:
+      operationId: R105
+      summary: 'R105: Register Action'
+      description: 'Process the Register form. Accessible by NAU'
+      tags:
+        - 'M01: Authentication and Personal Profile'
+      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                confirm_password:
+                  type: string
+                gender:
+                  type: string
+                  enum: ['Male, Female, Other']
+              required:
+                - name
+                - username
+                - email
+                - password
+                - confirm_password
+                - gender
+    
+      responses:
+        '302':
+          description: 'Post credentials processing redirect'
+          headers:
+            Location:
+              description: 'Redirect path'
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Authentication succeeded. Redirect to user profile'
+                  value: '' # update when /user/{id} is implemented
+                302Failure:
+                  description: 'Authentication failed. Redirect to register form'
+                  value: '/register'
