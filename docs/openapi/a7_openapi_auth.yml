@@ -21,21 +21,21 @@ tags:
 # ADM - System administrator
 
 paths:
-  /sign-in:
+  /login:
     get:
       operationId: R101
-      summary: 'R101: Sign-in Form'
-      description: 'Provide sign-in form. Accessible by NAU'
+      summary: 'R101: Login Form'
+      description: 'Provide login form. Accessible by NAU'
       tags:
         - 'M01: Authentication and Personal Profile'
       responses:
         '200':
-          description: 'OK. Show Sign-in form (UI09)'
+          description: 'OK. Show login form (UI09)'
 
     post:
       operationId: R102
-      summary: 'R102: Sign-in Action'
-      description: 'Process the sign-in form. Accessible by NAU'
+      summary: 'R102: Login Action'
+      description: 'Process the login form. Accessible by NAU'
       tags:
         - 'M01: Authentication and Personal Profile'
       
@@ -70,16 +70,16 @@ paths:
                   description: 'Authentication failed. Redirect to login form'
                   value: '/login' 
 
-  /sign-out:
+  /logout:
     post:
       operationId: R103
-      summary: 'R103: Sign-out Action'
-      description: 'Sign out the currently authenticated user. Accessible by AU, ADM'
+      summary: 'R103: Logout Action'
+      description: 'Logout the currently authenticated user. Accessible by AU, ADM'
       tags:
             - 'M01: Authentication and Personal Profile'
       responses:
         '302':
-          description: 'Post sign-out redirect'
+          description: 'Post logout redirect'
           headers:
             Location:
               description: 'Redirect path'
@@ -87,7 +87,7 @@ paths:
                 type: string
               examples:
                 302Success:
-                  description: 'Sign-out succeeded. Redirecting to home page'
+                  description: 'Logout succeeded. Redirecting to home page'
                   value: '' # update when / is implemented
 
   /register:
