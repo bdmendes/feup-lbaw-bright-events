@@ -26,20 +26,31 @@ tags:
 
 paths:
   # M05: Administration Management
-  /api/report/report_event:
+  /api/report/event/:
     post:
       operationId: R501
       summary: "R501: Report an event"
       tags:
         - "M05: Administration Management"
-      parameters:
-          - name: id
-            in: header
-            description: "Id of the event to report"
-            required: true
+      requestBody:
+        description: 'Id of the event to report'
+        required: true
+        content:
+          application/x-www-form-urlencoded:
             schema:
-              type: string
-      
+              type: object
+              properties:
+                id:
+                  type: integer
+                motive: 
+                  type: string
+                  enum: ['Sexual harassment', 'Violence or bodily harm', 'Nudity or explicit content', 'Hate speech', 'Other']
+                description:
+                  type: string
+                timestamp:
+                  type: string
+                  format: date-time
+
       responses:
         '400':
           description: "A"
