@@ -1,0 +1,67 @@
+openapi: "3.0.2"
+
+info:
+  title: Bright Events
+  version: "1.0"
+
+servers:
+  - url: https://api.server.test/v1
+    description: "Mock for url"
+
+  - url: http://lbaw21gg.lbaw.fe.up.pt/
+    description: "Production server"
+
+tags:
+  - name: "M01: Authentication and Personal Profile"
+  - name: "M02: User Search and User Profiles"
+  - name: "M03: Events and Event-related Content"
+  - name: "M04: Static Pages"
+  - name: "M05: Administration Management"
+
+# Permissions
+# NAU - Non-authenticated User
+# AU - Authenticated User
+# AUO - User that organizes an event
+# ADM - System administrator
+
+paths:
+  # M05: Administration Management
+  /api/report/report_event:
+    post:
+      operationId: R501
+      summary: "R501: Report an event"
+      tags:
+        - "M05: Administration Management"
+      parameters:
+          - name: id
+            in: header
+            description: "Id of the event to report"
+            required: true
+            schema:
+              type: string
+      
+      responses:
+        '400':
+          description: "A"
+        '200':
+          description: "Ok. Event reported. Show message?"
+
+  /reports:
+    get:
+      operationId: R5XX
+      summary: "R501: Get reports list page. Accessible by ADM"
+      tags:
+        - "M05: Administration Management"
+      responses:
+        "200":
+          description: "OK. Show reports list page (UI07)"
+
+  /reports/{reportId}:
+    get:
+      operationId: R5XX
+      summary: "R502: Get selected reports detail page. Accessible by ADM"
+      tags:
+        - "M05: Administration Management"
+      responses:
+        "200":
+          description: "OK. Show reports detail page."
