@@ -106,7 +106,7 @@ paths:
               examples:
                 302Success:
                   description: 'Logout succeeded. Redirecting to home page (UI01)'
-                  value: '' # update when / is implemented
+                  value: '/'
 
   /register:
     get:
