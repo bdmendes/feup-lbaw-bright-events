@@ -71,10 +71,10 @@ paths:
                 type: string
               examples:
                 302Success:
-                  description: 'Authentication succeeded. Redirecting to user profile.'
+                  description: 'Authentication succeeded. Redirecting to user profile (UI19)'
                   value: '' # update when /users/{id} is implemented
                 302Failure:
-                  description: 'Authentication failed. Redirect to login form'
+                  description: 'Authentication failed. Redirect to login form (UI09)'
                   value: '/login'
             Set-Cookie:
               description: 'Login session cookie'
@@ -105,7 +105,7 @@ paths:
                 type: string
               examples:
                 302Success:
-                  description: 'Logout succeeded. Redirecting to home page'
+                  description: 'Logout succeeded. Redirecting to home page (UI01)'
                   value: '' # update when / is implemented
 
   /register:
@@ -163,10 +163,10 @@ paths:
                 type: string
               examples:
                 302Success:
-                  description: 'Authentication succeeded. Redirect to user profile'
+                  description: 'Authentication succeeded. Redirect to user profile (UI19)'
                   value: '' # update when /user/{id} is implemented
                 302Failure:
-                  description: 'Authentication failed. Redirect to register form'
+                  description: 'Authentication failed. Redirect to register form (UI08)'
                   value: '/register'
             Set-Cookie:
               description: 'Login session cookie'
