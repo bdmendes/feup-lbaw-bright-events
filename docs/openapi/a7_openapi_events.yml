@@ -8,9 +8,9 @@ servers:
   - url: https://api.server.test/v1
 
 tags:
-  - name: 'M01: Authentication and Personal Profile'
-  - name: 'M02: User Search and User Profiles'
-  - name: 'M03: Events and Event-related Content'
+  - name: 'M01: Authentication'
+  - name: 'M02: Users and Personal Profiles'
+  - name: 'M03: Events and Event Content'
   - name: 'M04: Static Pages'
   - name: 'M05: Administration Management'
 
@@ -34,7 +34,7 @@ paths:
       summary: 'R301: Create event'
       description: 'Create event: Access: AU'
       tags:
-        - 'M03: Events and Event-related Content'
+        - 'M03: Events and Event Content'
       requestBody:
         required: true
         content:
@@ -64,7 +64,7 @@ paths:
       operationId: R302
       summary: "R302: Event's details"
       tags:
-        - 'M03: Events and Event-related Content'
+        - 'M03: Events and Event Content'
       responses:
         '404':
           description: 'Event not found'
@@ -87,7 +87,7 @@ paths:
       summary: 'R301: Create comment'
       description: 'Create comment: Access: AU AUO '
       tags:
-        - 'M03: Events and Event-related Content'
+        - 'M03: Events and Event Content'
       requestBody:
         required: true
         content:
@@ -134,7 +134,7 @@ paths:
       operationId: R301
       summary: "R301: Event's list"
       tags:
-        - 'M03: Events and Event-related Content'
+        - 'M03: Events and Event Content'
       responses:
         '200':
           description: 'OK, Show list of events'
@@ -194,7 +194,7 @@ paths:
       operationId: "R305"
       summary: "Get event's comments"
       tags:
-        - 'M03: Events and Event-related Content'
+        - 'M03: Events and Event Content'
       parameters:
         - in: query
           name: eventId
@@ -223,7 +223,7 @@ paths:
       summary: 'R310: Create comment'
       description: 'Create comment: Access: AU AUO '
       tags:
-        - 'M03: Events and Event-related Content'
+        - 'M03: Events and Event Content'
       requestBody:
         required: true
         content:
@@ -252,7 +252,7 @@ paths:
       operationId: "R306"
       summary: "R306: Get event's attendees"
       tags:
-        - 'M03: Events and Event-related Content'
+        - 'M03: Events and Event Content'
       
       parameters:
         - in: query
@@ -281,7 +281,7 @@ paths:
       operationId: "R307"
       summary: "R307: Get event's pending invites"
       tags:
-        - 'M03: Events and Event-related Content'
+        - 'M03: Events and Event Content'
       
       parameters:
         - in: query
@@ -314,7 +314,7 @@ paths:
       operationId: "R307"
       summary: "R307: Get event's pending join requests"
       tags:
-        - 'M03: Events and Event-related Content'
+        - 'M03: Events and Event Content'
       
       parameters:
         - in: query

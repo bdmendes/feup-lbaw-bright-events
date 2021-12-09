@@ -1,0 +1,508 @@
+openapi: '3.0.2'
+
+info:
+  title: Bright Events
+  version: '1.0'
+
+servers:
+  - url: http://lbaw2134.lbaw.fe.up.pt
+
+tags:
+  - name: 'M01: Authentication'
+  - name: 'M02: Users and Personal Profiles'
+  - name: 'M03: Events and Event Content'
+  - name: 'M04: Static Pages'
+  - name: 'M05: Administration Management'
+
+# Permissions
+# NAU - Non-authenticated User
+# AU - Authenticated User
+# AUO - User that organizes an event
+# ADM - System administrator
+
+security:
+  - cookieAuth: []
+
+paths:
+
+  ### Static pages ###
+  /:
+    get:
+      operationId: R401
+      summary: 'R401: Home Page'
+      description: 'Provide home page. Accessible by NAU, AU, AUO, ADM'
+      tags:
+        - 'M04: Static Pages'
+      responses:
+        '200':
+          description: 'OK. Show home page (UI01)'
+  
+  /privacy-policy:
+    get:
+      operationId: R402
+      summary: 'R402: Privacy Policy Page'
+      description: 'Provide privacy policy page. Accessible by NAU, AU, AUO, ADM'
+      tags:
+        - 'M04: Static Pages'
+      responses:
+        '200':
+          description: 'OK. Show privacy policy page (UI02)'
+
+  /terms-and-conditions:
+    get:
+      operationId: R403
+      summary: 'R403: Terms and Conditions Page'
+      description: 'Provide terms and conditions page. Accessible by NAU, AU, AUO, ADM'
+      tags:
+        - 'M04: Static Pages'
+      responses:
+        '200':
+          description: 'OK. Show terms and conditions page (UI03)'
+
+  /faq:
+    get:
+      operationId: R404
+      summary: 'R404: FAQ Page'
+      description: 'Provide frequently asked questions page. Accessible by NAU, AU, AUO, ADM'
+      tags:
+        - 'M04: Static Pages'
+      responses:
+        '200':
+          description: 'OK. Show FAQ page (UI04)'
+
+  /about:
+    get:
+      operationId: R405
+      summary: 'R405: About Page'
+      description: 'Provide about page. Accessible by NAU, AU, AUO, ADM'
+      tags:
+        - 'M04: Static Pages'
+      responses:
+        '200':
+          description: 'OK. Show about page (UI05)'
+
+  /contact-us:
+    get:
+      operationId: R406
+      summary: 'R406: Contact Us Page'
+      description: 'Provide contact us page. Accessible by NAU, AU, AUO, ADM'
+      tags:
+        - 'M04: Static Pages'
+      responses:
+        '200':
+          description: 'OK. Show contact us page (UI06)'
+
+  ### Users ###
+  /users:
+    get:
+      operationId: R201
+      summary: "R201: Browse Users Page"
+      tags:
+        - 'M02: Users and Personal Profiles'
+      responses:
+        '200':
+          description: 'OK. Show Browse/Search Users UI (UI10)'
+      parameters:
+        - in: query
+          name: query
+          schema:
+            type: string
+          description: "Full text search keyword"
+        - in: query
+          name: sort_by
+          schema:
+            type: string
+            enum: ['name','username']
+            default: 'username'
+          description: "Defines the value of which the users should be ordered"
+        - in : query
+          name: order
+          schema:
+            type: string
+            enum: ['ascending', 'descending']
+            default: 'ascending'
+          description: "Defines if it's ascending order or descending order"
+
+  /users/view:
+    get:
+      operationId: R202
+      summary: 'R202: User Profile Page'
+      description: 'Show user profile page. Access: NAU'
+      tags:
+        - 'M02: Users and Personal Profiles'
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show User Profile UI (UI11)'
+        '404':
+          description: 'User not found'
+
+  /profile:
+    get:
+      operationId: R203
+      summary: 'R203: Personal User Profile Page'
+      description: 'Show personal user profile page. Access: AU'
+      tags:
+        - 'M02: Users and Personal Profiles'
+      responses:
+        '200':
+          description: 'Ok. Show Personal User Profile UI (UI19)'
+        '401':
+          description: 'Unauthorized. Not logged in'
+
+  /profile/edit:
+    get:
+      operationId: R204
+      summary: 'R204: Edit User Profile Page'
+      description: 'Provide edit user profile form. Access: AU'
+      tags:
+        - 'M02: Users and Personal Profiles'
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses: 
+        '200':
+          description: 'Ok. Show Edit User Profile UI'
+        '404':
+          description: 'User not found'
+        '401':
+          description: 'Unauthorized. User must be logged in'
+    post:
+      operationId: R205
+      summary: 'R205: Edit User Profile Action'
+      description: 'Process the new user profile information. Access: AU'
+      tags:
+        - 'M02: Users and Personal Profiles'
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  format: password
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                birth_date:
+                  type: string
+                  format: date
+                bio:
+                  type: string
+                picture:
+                  type: string
+                  format: binary
+      responses: 
+        '200':
+          description: 'Ok. Show Edit User Profile UI (UI22)'
+        '404':
+          description: 'User not found'
+        '401':
+          description: 'Unauthorized. User must be logged in'
+        '500':
+          description: 'Internal server error. Invalid data'
+
+  /api/users:
+    get:
+      operationId: R206
+      summary: "R206: Users List"
+      description: "Retrieve users from database. Access: NAU"
+      tags:
+        - 'M02: Users and Personal Profiles'
+      responses:
+        '200':
+          description: 'OK'
+      parameters:
+        - in: query
+          name: query
+          schema:
+            type: string
+          description: "Full text search keyword"
+        - in: query
+          name: sort_by
+          schema:
+            type: string
+            enum: ['name','username']
+            default: 'username'
+          description: "Defines the value of which the users should be ordered"
+        - in : query
+          name: order
+          schema:
+            type: string
+            enum: ['ascending', 'descending']
+            default: 'ascending'
+          description: "Defines if it's ascending order or descending order"
+    delete:
+      operationId: R207
+      summary: "207: Delete User"
+      description: "Delete user from database. Access: ADM"
+      tags:
+        - 'M02: Users and Personal Profiles'
+      responses:
+        '200':
+          description: 'OK. Deletion successful'
+        '401':
+          description: 'Unauthorized. Not enough permissions'
+        '404':
+          description: 'User not found'
+    put:
+      operationId: R208
+      summary: 'R208: Create/Edit User'
+      description: 'Process the new user profile information. Access: AU'
+      tags:
+        - 'M02: Users and Personal Profiles'
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  format: password
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                birth_date:
+                  type: string
+                  format: date
+                bio:
+                  type: string
+                picture:
+                  type: string
+                  format: binary
+      responses: 
+        '200':
+          description: 'Ok. User information edited.'
+        '404':
+          description: 'User not found'
+        '401':
+          description: 'Unauthorized. User must be logged in'
+        '500':
+          description: 'Internal server error. Invalid data'
+
+  ### Auth ###
+  /login:
+    get:
+      operationId: R101
+      summary: 'R101: Login Page'
+      description: 'Provide login form. Access: NAU'
+      tags:
+        - 'M01: Authentication'
+      responses:
+        '200':
+          description: 'OK. Show login form (UI09)'
+    post:
+      operationId: R102
+      summary: 'R102: Login Action'
+      description: 'Process the login form. Access: NAU'
+      tags:
+        - 'M01: Authentication'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                  format: password
+              required:
+                - email
+                - password
+      responses:
+        '302':
+          description: 'Post credentials processing redirect'
+          headers:
+            Location:
+              description: 'Redirect path'
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Authentication succeeded. Redirecting to user profile (UI19)'
+                  value: '/users/view'
+                302Failure:
+                  description: 'Authentication failed. Redirect to login form (UI09)'
+                  value: '/login'
+            Set-Cookie:
+              description: 'Login session cookie'
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description:  'Current user login session JSESSIONID'
+                  value: JSESSIONID=cookie; Path=/; HttpOnly
+                302Failure:
+                  description: 'Invalid login session'
+                  value: ''
+
+  /logout:
+    post:
+      operationId: R103
+      summary: 'R103: Logout Action'
+      description: 'Logout the currently authenticated user. Access: AU, ADM'
+      tags:
+        - 'M01: Authentication'
+      security:
+        - cookieAuth: []
+      responses:
+        '302':
+          description: 'Success: Post logout redirect'
+          headers:
+            Location:
+              description: 'Redirect path'
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Logout succeeded. Redirecting to home page (UI01)'
+                  value: '/'
+        '401':
+          description: 'Unauthorized. User is not logged in'
+          headers:
+            Location:
+              description: 'Redirect path'
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Logout failed. Redirecting to home page (UI01)'
+                  value: '/'
+
+  /register:
+    get:
+      operationId: R104
+      summary: 'R104: Register Page'
+      description: 'Provide Register form. Access: NAU'
+      tags:
+        - 'M01: Authentication'
+      responses:
+        '200':
+          description: 'OK. Show register form (UI08)'
+    post:
+      operationId: R105
+      summary: 'R105: Register Action'
+      description: 'Process the Register form. Access: NAU'
+      tags:
+        - 'M01: Authentication'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                gender:
+                  type: string
+                  enum: ['Male, Female, Other']
+              required:
+                - name
+                - username
+                - email
+                - password
+                - gender
+      responses:
+        '302':
+          description: 'Post credentials processing redirect'
+          headers:
+            Location:
+              description: 'Redirect path'
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Authentication succeeded. Redirect to user profile (UI19)'
+                  value: '/users/view'
+                302Failure:
+                  description: 'Authentication failed. Redirect to register form (UI08)'
+                  value: '/register'
+            Set-Cookie:
+              description: 'Login session cookie'
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description:  'Current user login session JSESSIONID'
+                  value: JSESSIONID=cookie; Path=/; HttpOnly
+                302Failure:
+                  description: 'Invalid login session'
+                  value: ''
+
+  /recover:
+    post:
+      operationId: R105
+      summary: 'R105: Register Action'
+      description: 'Process the Recover Password form. Accessible by NAU'
+      tags:
+        - 'M01: Authentication'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+              required:
+                - username
+                - email
+      responses:
+        '302':
+          description: 'Success: Post recover credentials processing redirect'
+          headers:
+            Location:
+              description: 'Redirect path'
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Recover succeeded. Redirect to home page (UI01)'
+                  value: '/'
+                302Failure:
+                  description: 'Recover failed. Redirect to login form (UI09)'
+                  value: '/login'
