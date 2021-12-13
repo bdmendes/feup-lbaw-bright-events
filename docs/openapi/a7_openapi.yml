@@ -123,19 +123,13 @@ paths:
             default: 'ascending'
           description: "Defines if it's ascending order or descending order"
 
-  /users/view:
+  /users/{id}:
     get:
       operationId: R202
       summary: 'R202: User Profile Page'
       description: 'Show user profile page. Access: NAU'
       tags:
         - 'M02: Users and Personal Profiles'
-      parameters:
-        - in: query
-          name: id
-          schema:
-            type: integer
-          required: true
       responses:
         '200':
           description: 'Ok. Show User Profile UI (UI11)'
@@ -162,12 +156,6 @@ paths:
       description: 'Provide edit user profile form. Access: AU'
       tags:
         - 'M02: Users and Personal Profiles'
-      parameters:
-        - in: query
-          name: id
-          schema:
-            type: integer
-          required: true
       responses: 
         '200':
           description: 'Ok. Show Edit User Profile UI'
@@ -181,12 +169,6 @@ paths:
       description: 'Process the new user profile information. Access: AU'
       tags:
         - 'M02: Users and Personal Profiles'
-      parameters:
-        - in: query
-          name: id
-          schema:
-            type: integer
-          required: true
       requestBody:
         required: true
         content:
@@ -250,6 +232,8 @@ paths:
             enum: ['ascending', 'descending']
             default: 'ascending'
           description: "Defines if it's ascending order or descending order"
+
+  /api/users/{id}:
     delete:
       operationId: R207
       summary: "207: Delete User"
@@ -269,12 +253,6 @@ paths:
       description: 'Process the new user profile information. Access: AU'
       tags:
         - 'M02: Users and Personal Profiles'
-      parameters:
-        - in: query
-          name: id
-          schema:
-            type: integer
-          required: true
       requestBody:
         required: true
         content:
