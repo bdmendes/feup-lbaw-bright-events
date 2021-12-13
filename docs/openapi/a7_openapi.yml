@@ -104,7 +104,7 @@ paths:
           description: 'OK. Show Browse/Search Users UI (UI10)'
       parameters:
         - in: query
-          name: query
+          name: global
           schema:
             type: string
           description: "Full text search keyword"
@@ -115,13 +115,25 @@ paths:
             enum: ['name','username']
             default: 'username'
           description: "Defines the value of which the users should be ordered"
-        - in : query
+        - in: query
           name: order
           schema:
             type: string
             enum: ['ascending', 'descending']
             default: 'ascending'
           description: "Defines if it's ascending order or descending order"
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+          description: "Starting index of user list"
+        - in: query
+          name: size
+          required: false
+          schema:
+            type: integer
+          description: "Size of sublist to show"
 
   /users/{id}:
     get:
@@ -214,7 +226,7 @@ paths:
           description: 'OK'
       parameters:
         - in: query
-          name: query
+          name: global
           schema:
             type: string
           description: "Full text search keyword"
@@ -232,6 +244,18 @@ paths:
             enum: ['ascending', 'descending']
             default: 'ascending'
           description: "Defines if it's ascending order or descending order"
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+          description: "Starting index of user list"
+        - in: query
+          name: size
+          required: false
+          schema:
+            type: integer
+          description: "Size of sublist to show"
 
   /api/users/{id}:
     delete:
