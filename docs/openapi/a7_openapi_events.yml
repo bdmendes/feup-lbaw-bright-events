@@ -21,13 +21,6 @@ tags:
 # ADM - System administrator
 
 paths:
-
-  #/events:
-    
-
-
-        
-
   /events/create:
     post:
       operationId: R301
@@ -59,7 +52,7 @@ paths:
         '200':
           description: "Ok. show event creation page"
               
-  /events/view:
+  /events/view/{id}:
     get:
       operationId: R302
       summary: "R302: Event's details"
@@ -74,42 +67,10 @@ paths:
           description: "Event requires authentication to be viewed"
         '200':
           description: "OK. Show event's details"
-        
-      parameters:
-        - in: query
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: ID of event
-    post:
-      operationId: R308
-      summary: 'R301: Create comment'
-      description: 'Create comment: Access: AU AUO '
-      tags:
-        - 'M03: Events and Event Content'
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                body:
-                  type: string
-                user:
-                  type: integer
-                event:
-                  type: integer
-                author:
-                  type: integer
-      responses:
-        '200':
-          description: ""
     
     
   
-  /events/edit:
+  /events/edit/{id}:
     get:
       operationId: R304
       summary: "R304: Edit event "
@@ -120,12 +81,36 @@ paths:
           description: "Event not found"
         '200':
           description: "Ok. show event's details"
-      parameters:
-        - in: query
-          name: id
-          schema:
-            type: integer
-          description: ID of Event
+    put:
+      operationId: R308
+      summary: 'R301: Create event'
+      description: 'Create event: Access: AU '
+      tags:
+        - 'M03: Events and Event Content'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: integer
+                isprivate:
+                  type: boolean
+                  default: false
+                organizer:
+                  type: integer
+              required: [title, description, isprivate, organizer]
+      responses:
+        '200':
+          description: 'Ok. Event created.'
+        '401':
+          description: 'Unauthorized. User must be logged in'
+        '500':
+          description: 'Internal server error. Invalid data'
   
 
   
@@ -213,7 +198,7 @@ paths:
         '200':
           description: "OK, show event's comments "
     
-    post:
+    put:
       operationId: R310
       summary: 'R310: Create comment'
       description: 'Create comment: Access: AU AUO '
@@ -234,11 +219,15 @@ paths:
                   type: integer
                 author:
                   type: integer
+              required: [body, user, event, author]
       responses:
-        
-        
         '200':
-          description: "OK, "
+          description: 'Ok. Comment created.'
+        '401':
+          description: 'Unauthorized. User must be an attendee or organizer'
+        '500':
+          description: 'Internal server error. Invalid data'
+  
         
 
 
@@ -270,28 +259,8 @@ paths:
           description: "Event not found"
         '200':
           description: "OK, show event's attendees "
-    post:
-      operationId: R308
-      summary: "R308: Submit an invite"
-      tags:
-        - "M05: Administration Management"
-      requestBody:
-        description: 'Invite information'
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                event_id:
-                  type: integer
-                attendee_id: 
-                  type: integer
-      responses:
-        '400':
-          description: "A"
-        '200':
-          description: "Ok. Event reported. Show message?"
+    
+  
 
 
   /api/events/invites/{id}:
@@ -326,7 +295,7 @@ paths:
           description: "Event not found"
         '200':
           description: "OK, show event's invites "
-    post:
+    put:
       operationId: R308
       summary: "R308: Submit an invite"
       tags:
@@ -343,15 +312,18 @@ paths:
                   type: integer
                 attendee_id: 
                   type: integer
+              required: [event_id, attendee_id]
       responses:
-        '400':
-          description: "A"
         '200':
-          description: "Ok. Event reported. Show message?"
+          description: 'Ok. Invite created.'
+        '401':
+          description: 'Unauthorized. User must be an organizer'
+        '500':
+          description: 'Internal server error. Invalid data'
     delete:
       operationId: R307
-      summary: "307: Delete Join request"
-      description: "Delete Join request from database. Access: Event's organizer (AU)"
+      summary: "307: Delete Invite"
+      description: "Delete Invite from database. Access: AUO"
       tags:
         - 'M03: Events and Event Content'
       responses:
@@ -360,7 +332,7 @@ paths:
         '401':
           description: 'Unauthorized. Not enough permissions'
         '404':
-          description: 'Invite not found'
+          description: 'Join request not found'
 
 
   /api/events/join_requests/{id}:
@@ -391,7 +363,7 @@ paths:
         '200':
           description: "OK, show event's join requests "
     
-    post:
+    put:
       operationId: R308
       summary: "R308: Submit a join request"
       tags:
@@ -408,11 +380,14 @@ paths:
                   type: integer
                 attendee_id: 
                   type: integer
+              required: [event_id, attendee_id]
       responses:
-        '400':
-          description: "A"
         '200':
-          description: "Ok. Join request submited"
+          description: 'OK. Deletion successful'
+        '401':
+          description: 'Unauthorized. Not enough permissions'
+        '404':
+          description: 'Join request not found'
     delete:
       operationId: R307
       summary: "307: Delete Join request"
