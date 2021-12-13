@@ -171,7 +171,6 @@ paths:
           description: "No authentication found. Please login."
         "403":
           description: "You don't have permission to make this request."
-
         "200":
           description: "OK. Answer with reports list"
           content:
@@ -259,7 +258,7 @@ paths:
     post:
       operationId: R505
       summary: "R505: Change report state"
-      description: "Change report state, manipulating the resource availability"
+      description: "Change report state, manipulating the resource availability. Access: ADM"
       tags:
         - "M05: Administration Management"
       parameters:
@@ -285,6 +284,8 @@ paths:
           description: "No authentication found. Please login."
         "403":
           description: "You don't have permission to make this request."
+        "404":
+          description: "Id not found"
         "500":
           description: "Internal server failiure."
 
