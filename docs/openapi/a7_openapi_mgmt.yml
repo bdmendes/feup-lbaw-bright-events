@@ -5,10 +5,10 @@ info:
   version: "1.0"
 
 servers:
-  - url: https://api.server.test/v1
+  - url: ...
     description: "Mock for url"
 
-  - url: http://lbaw21gg.lbaw.fe.up.pt/
+  - url: ...
     description: "Production server"
 
 tags:
@@ -26,14 +26,16 @@ tags:
 
 paths:
   # M05: Administration Management
-  /api/report/event/:
+
+  /api/report/event:
     post:
-      operationId: R501
-      summary: "R501: Report an event"
+      operationId: R500
+      summary: "R500: Report event"
+      description: "Report an event. Access: AU with event visibility"
       tags:
         - "M05: Administration Management"
       requestBody:
-        description: 'Id of the event to report'
+        description: "Report Form"
         required: true
         content:
           application/x-www-form-urlencoded:
@@ -42,37 +44,285 @@ paths:
               properties:
                 id:
                   type: integer
-                motive: 
+                motive:
                   type: string
-                  enum: ['Sexual harassment', 'Violence or bodily harm', 'Nudity or explicit content', 'Hate speech', 'Other']
+                  enum:
+                    [
+                      "Sexual harassment",
+                      "Violence or bodily harm",
+                      "Nudity or explicit content",
+                      "Hate speech",
+                      "Other",
+                    ]
                 description:
                   type: string
                 timestamp:
                   type: string
                   format: date-time
+              required: [id, motive, description, timestamp]
 
       responses:
-        '400':
-          description: "A"
-        '200':
-          description: "Ok. Event reported. Show message?"
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to make this request."
+        "404":
+          description: "Id not found"
+        "201":
+          description: "OK. Event report created."
 
-  /reports:
+  /api/report/user:
+    post:
+      operationId: R501
+      summary: "R501: Report user."
+      description: "Report an user. Access: AU with user visibility"
+      tags:
+        - "M05: Administration Management"
+      requestBody:
+        description: "Id of the user to report"
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                motive:
+                  type: string
+                  enum:
+                    [
+                      "Sexual harassment",
+                      "Violence or bodily harm",
+                      "Nudity or explicit content",
+                      "Hate speech",
+                      "Other",
+                    ]
+                description:
+                  type: string
+                timestamp:
+                  type: string
+                  format: date-time
+              required: [id, motive, description, timestamp]
+
+      responses:
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to make this request."
+        "404":
+          description: "Id not found"
+        "201":
+          description: "User report created."
+
+  /api/report/message:
+    post:
+      operationId: R502
+      summary: "R502: Report message."
+      description: "Report a messge. Access: AU with message visibility"
+      tags:
+        - "M05: Administration Management"
+      requestBody:
+        description: "Id of the message to report"
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                motive:
+                  type: string
+                  enum:
+                    [
+                      "Sexual harassment",
+                      "Violence or bodily harm",
+                      "Nudity or explicit content",
+                      "Hate speech",
+                      "Other",
+                    ]
+                description:
+                  type: string
+                timestamp:
+                  type: string
+                  format: date-time
+              required: [id, motive, description, timestamp]
+
+      responses:
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to make this request."
+        "404":
+          description: "Id not found"
+        "201":
+          description: "Message report created."
+
+  /api/report:
     get:
-      operationId: R5XX
-      summary: "R501: Get reports list page. Accessible by ADM"
+      operationId: R503
+      summary: "R503: Get reports"
+      description: "Retrieve reports list"
       tags:
         - "M05: Administration Management"
       responses:
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to make this request."
+
+        "200":
+          description: "OK. Answer with reports list"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                      enum: [Event, User, Message]
+                    motive:
+                      type: string
+                      enum:
+                        [
+                          "Sexual harassment",
+                          "Violence or bodily harm",
+                          "Nudity or explicit content",
+                          "Hate speech",
+                          "Other",
+                        ]
+                    creation:
+                      type: string
+                      format: date-time
+                    reporter:
+                      type: string
+                    handler:
+                      type: string
+
+  /api/report/{reportId}:
+    get:
+      operationId: R504
+      summary: "R504: Get report details"
+      description: "Answer with report details"
+      tags:
+        - "M05: Administration Management"
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to make this request."
+        "404":
+          description: "Id not found"
+        "200":
+          description: "OK. Aswering with report details"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  type:
+                    type: string
+                    enum: [Event, User, Message]
+                  motive:
+                    type: string
+                    enum:
+                      [
+                        "Sexual harassment",
+                        "Violence or bodily harm",
+                        "Nudity or explicit content",
+                        "Hate speech",
+                        "Other",
+                      ]
+                  creation:
+                    type: string
+                    format: date-time
+                  reporter:
+                    type: string
+                  handler:
+                    type: string
+                  description:
+                    type: string
+
+    post:
+      operationId: R505
+      summary: "R505: Change report state"
+      description: "Change report state, manipulating the resource availability"
+      tags:
+        - "M05: Administration Management"
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          schema:
+            type: integer
+        
+      requestBody:
+        description: "Action to take"
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: string
+              enum: ["Ignore", "Hide/Block", "Delete"]
+
+      responses:
+        "200":
+          description: "OK. Action taken"
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to make this request."
+        "500":
+          description: "Internal server failiure."
+
+  /reports/:
+    get:
+      operationId: R506
+      summary: "R506: Reports list page."
+      description: "Show reports list page.  Accessible by ADM."
+      tags:
+        - "M05: Administration Management"
+      responses:
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to access this page."
         "200":
           description: "OK. Show reports list page (UI07)"
 
-  /reports/{reportId}:
+  /reports/view:
     get:
-      operationId: R5XX
-      summary: "R502: Get selected reports detail page. Accessible by ADM"
+      operationId: R507
+      summary: "R507: Report details page."
+      description: "Show report details page. Accessible by ADM."
       tags:
         - "M05: Administration Management"
+      parameters:
+        - name: reportId
+          in: query
+          description: Id of the report to view
+          required: true
+          schema:
+            type: integer
       responses:
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to access this page."
+        "404":
+          description: "Id not found"
         "200":
-          description: "OK. Show reports detail page."
+          description: "OK. Show report details page (UI07)"
