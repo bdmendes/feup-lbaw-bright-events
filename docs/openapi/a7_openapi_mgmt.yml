@@ -27,7 +27,7 @@ tags:
 paths:
   # M05: Administration Management
 
-  /api/report/event:
+  /api/reports/event:
     post:
       operationId: R500
       summary: "R500: Report event"
@@ -71,7 +71,7 @@ paths:
         "201":
           description: "OK. Event report created."
 
-  /api/report/user:
+  /api/reports/user:
     post:
       operationId: R501
       summary: "R501: Report user."
@@ -115,7 +115,7 @@ paths:
         "201":
           description: "User report created."
 
-  /api/report/message:
+  /api/reports/message:
     post:
       operationId: R502
       summary: "R502: Report message."
@@ -159,13 +159,38 @@ paths:
         "201":
           description: "Message report created."
 
-  /api/report:
+  /api/reports:
     get:
       operationId: R503
       summary: "R503: Get reports"
       description: "Retrieve reports list"
       tags:
         - "M05: Administration Management"
+      parameters:
+        - name: sort_by
+          in: query
+          schema:
+            type: string
+            enum: [date, handler]
+            default: date
+        - name: order
+          in: query
+          schema:
+            type: string
+            enum: [ascending, descending]
+            default: descending
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+          description: "Starting index of user list"
+        - in: query
+          name: size
+          schema:
+            type: integer
+          description: "Size of sublist to show"
+          
       responses:
         "401":
           description: "No authentication found. Please login."
@@ -203,7 +228,7 @@ paths:
                     handler:
                       type: string
 
-  /api/report/{reportId}:
+  /api/reports/{reportId}:
     get:
       operationId: R504
       summary: "R504: Get report details"
@@ -255,7 +280,7 @@ paths:
                   description:
                     type: string
 
-    post:
+    put:
       operationId: R505
       summary: "R505: Change report state"
       description: "Change report state, manipulating the resource availability. Access: ADM"
@@ -267,7 +292,7 @@ paths:
           required: true
           schema:
             type: integer
-        
+
       requestBody:
         description: "Action to take"
         required: true
@@ -289,7 +314,7 @@ paths:
         "500":
           description: "Internal server failiure."
 
-  /reports/:
+  /reports:
     get:
       operationId: R506
       summary: "R506: Reports list page."
@@ -304,7 +329,7 @@ paths:
         "200":
           description: "OK. Show reports list page (UI07)"
 
-  /reports/view:
+  /reports/{reportId}:
     get:
       operationId: R507
       summary: "R507: Report details page."
@@ -313,7 +338,7 @@ paths:
         - "M05: Administration Management"
       parameters:
         - name: reportId
-          in: query
+          in: path
           description: Id of the report to view
           required: true
           schema:
