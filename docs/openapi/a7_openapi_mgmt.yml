@@ -38,7 +38,7 @@ paths:
         description: "Report Form"
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
               properties:
@@ -82,7 +82,7 @@ paths:
         description: "Id of the user to report"
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
               properties:
@@ -126,7 +126,7 @@ paths:
         description: "Id of the message to report"
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
               properties:
@@ -297,7 +297,7 @@ paths:
         description: "Action to take"
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: string
               enum: ["Ignore", "Hide/Block", "Delete"]
