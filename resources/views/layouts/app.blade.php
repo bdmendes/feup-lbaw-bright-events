@@ -24,7 +24,7 @@
     <main>
       <nav>
         <div class="logo">
-          Bright events logo
+          <a class="button" href="{{url ('home')}}">Bright events logo</a>
         </div>
         <div class="menuNavigation">
           <a class="button" href="{{ url('events')}}">Events </a>

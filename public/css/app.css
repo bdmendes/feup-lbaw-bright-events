@@ -1,33 +1,93 @@
+html{
+  height:100%;
+  
+  
+
+}
+body{
+  height:100%;
+  margin: 0;
+}
+
+main{
+  height:100%;
+}
+
 nav{
   height: 5%;
   width: 100%;
-  float:left;
-  border: 2px solid #000;
   display:flex;
+  align-content: flex-end;
 }
 
 nav > .logo{
-  height: 100%;
-  border: 1px dashed #000;
+  flex: 2;
 }
 
 nav > .menuNavigation {
+  flex: 1 1 40%;
+}
+nav > * {
+  height: fit-content;
 }
 
 #content{
-  height:90%;
+  min-height:90%;
   width:100%;
+  display:padding-box;
+  padding-top:15px;
 }
 
-footer{
+.homeBackground{
+  align-content: center;
+  width:100%;
+  height:fit-content;
+  position:relative;
+}
+
+.homeBackground > img{
+  width:100%;
+}
+.homeBackground > .backgroundSlogan {
   position:absolute;
-  bottom: 0;
+  bottom:50px;
+  left:0;
+  right:0;
+  margin: auto;
+  width:fit-content;
+
+  font-size:40px;
+  font-weight: bold;
+  color: #FFF;
+  background-color:rgba(0, 0, 0, 200);
+}
+footer{
   display: flex;
+  align-items: flex-end;
+  height:5%;
+}
+
+.footerPages{
+  justify-content: right;
+  display:flex;
+  flex: 3;
+}
+.footerPages > *{
+  margin: 0 5px;
 }
 
 footer > span {
   flex: 1;
 }
-.footerPages{
-  flex: 3;
+
+.button {margin-bottom: 0;}
+
+
+.homeContent{
+  display:padding-box;
+  padding: 10px 30px;
+}
+.homeContent > div {
+  width:80%;
+  margin:auto;
 }
