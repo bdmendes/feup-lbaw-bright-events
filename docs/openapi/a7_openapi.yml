@@ -147,20 +147,7 @@ paths:
         '404':
           description: 'User not found'
 
-  /profile:
-    get:
-      operationId: R203
-      summary: 'R203: Personal User Profile Page'
-      description: 'Show personal user profile page. Access: AU'
-      tags:
-        - 'M02: Users and Personal Profiles'
-      responses:
-        '200':
-          description: 'Ok. Show Personal User Profile UI (UI19)'
-        '401':
-          description: 'Unauthorized. Not logged in'
-
-  /profile/edit:
+  /users/{id}/edit:
     get:
       operationId: R204
       summary: 'R204: Edit User Profile Page'
@@ -377,7 +364,13 @@ paths:
                 gender:
                   type: string
                   enum: ['Male, Female, Other']
-      responses: 
+                disabled:
+                  type: boolean
+                  default: false
+                blocked:
+                  type: boolean
+                  default: false
+      responses:
         '200':
           description: 'Ok. User information edited.'
         '404':
@@ -431,7 +424,7 @@ paths:
               examples:
                 302Success:
                   description: 'Authentication succeeded. Redirecting to user profile (UI19)'
-                  value: '/users/view'
+                  value: '/users/{id}'
                 302Failure:
                   description: 'Authentication failed. Redirect to login form (UI09)'
                   value: '/login'
