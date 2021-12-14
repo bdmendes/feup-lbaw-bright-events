@@ -838,43 +838,6 @@ paths:
                   description:
                     type: string
 
-    patch:
-      operationId: R505
-      summary: "R505: Change report state"
-      description: "Change report state, manipulating the resource availability. Access: ADM"
-      tags:
-        - "M05: Administration Management"
-      parameters:
-        - name: reportId
-          in: path
-          required: true
-          schema:
-            type: integer
-
-      requestBody:
-        description: "Action to take"
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                action:
-                  type: string
-                  enum: ["Ignore", "Hide-Block", "Delete"]
-              required: [action]
-      responses:
-        "200":
-          description: "OK. Action taken"
-        "401":
-          description: "No authentication found. Please login."
-        "403":
-          description: "You don't have permission to make this request."
-        "404":
-          description: "Id not found"
-        "500":
-          description: "Internal server failiure."
-
   /reports:
     get:
       operationId: R506
@@ -913,3 +876,40 @@ paths:
           description: "Id not found"
         "200":
           description: "OK. Show report details page (UI07)"
+
+    post:
+      operationId: R505
+      summary: "R505: Change report state"
+      description: "Change report state, manipulating the resource availability. Access: ADM"
+      tags:
+        - "M05: Administration Management"
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: "Action to take"
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: ["Ignore", "Hide-Block", "Delete"]
+              required: [action]
+      responses:
+        "200":
+          description: "OK. Action taken"
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to make this request."
+        "404":
+          description: "Id not found"
+        "500":
+          description: "Internal server failiure."
