@@ -1,0 +1,31 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Docker start",
+            "type": "shell",
+            "command": "sudo systemctl start docker && sudo docker-compose up",
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker stop",
+            "type": "shell",
+            "command": "sudo docker stop repo-pgadmin-1 && sudo docker stop repo-postgres-1",
+            "problemMatcher": []
+        },
+        {
+            "label": "Populate/Update db",
+            "type": "shell",
+            "command": "php artisan db:seed",
+            "problemMatcher": []
+        },
+        {
+            "label": "Webapp",
+            "type": "shell",
+            "command": "php artisan serve",
+            "problemMatcher": []
+        }
+    ]
+}

@@ -147,20 +147,7 @@ paths:
         '404':
           description: 'User not found'
 
-  /profile:
-    get:
-      operationId: R203
-      summary: 'R203: Personal User Profile Page'
-      description: 'Show personal user profile page. Access: AU'
-      tags:
-        - 'M02: Users and Personal Profiles'
-      responses:
-        '200':
-          description: 'Ok. Show Personal User Profile UI (UI19)'
-        '401':
-          description: 'Unauthorized. Not logged in'
-
-  /profile/edit:
+  /users/{id}/edit:
     get:
       operationId: R204
       summary: 'R204: Edit User Profile Page'
@@ -377,7 +364,13 @@ paths:
                 gender:
                   type: string
                   enum: ['Male, Female, Other']
-      responses: 
+                disabled:
+                  type: boolean
+                  default: false
+                blocked:
+                  type: boolean
+                  default: false
+      responses:
         '200':
           description: 'Ok. User information edited.'
         '404':
@@ -589,3 +582,334 @@ paths:
                 302Failure:
                   description: 'Recover failed. Redirect to login form (UI09)'
                   value: '/login'
+
+  # M05: Administration Management
+
+  /api/reports/event:
+    post:
+      operationId: R500
+      summary: "R500: Report event"
+      description: "Report an event. Access: AU with event visibility"
+      tags:
+        - "M05: Administration Management"
+      requestBody:
+        description: "Report Form"
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                motive:
+                  type: string
+                  enum:
+                    [
+                      "Sexual harassment",
+                      "Violence or bodily harm",
+                      "Nudity or explicit content",
+                      "Hate speech",
+                      "Other",
+                    ]
+                description:
+                  type: string
+                timestamp:
+                  type: string
+                  format: date-time
+              required: [id, motive, description, timestamp]
+
+      responses:
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to make this request."
+        "404":
+          description: "Id not found"
+        "201":
+          description: "OK. Event report created."
+
+  /api/reports/user:
+    post:
+      operationId: R501
+      summary: "R501: Report user."
+      description: "Report an user. Access: AU with user visibility"
+      tags:
+        - "M05: Administration Management"
+      requestBody:
+        description: "Report form"
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                motive:
+                  type: string
+                  enum:
+                    [
+                      "Sexual harassment",
+                      "Violence or bodily harm",
+                      "Nudity or explicit content",
+                      "Hate speech",
+                      "Other",
+                    ]
+                description:
+                  type: string
+                timestamp:
+                  type: string
+                  format: date-time
+              required: [id, motive, description, timestamp]
+
+      responses:
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to make this request."
+        "404":
+          description: "Id not found"
+        "201":
+          description: "User report created."
+
+  /api/reports/comment:
+    post:
+      operationId: R502
+      summary: "R502: Report comment."
+      description: "Report a comment. Access: AU with comment visibility"
+      tags:
+        - "M05: Administration Management"
+      requestBody:
+        description: "Report form"
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                motive:
+                  type: string
+                  enum:
+                    [
+                      "Sexual harassment",
+                      "Violence or bodily harm",
+                      "Nudity or explicit content",
+                      "Hate speech",
+                      "Other",
+                    ]
+                description:
+                  type: string
+                timestamp:
+                  type: string
+                  format: date-time
+              required: [id, motive, description, timestamp]
+
+      responses:
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to make this request."
+        "404":
+          description: "Id not found"
+        "201":
+          description: "Message report created."
+
+  /api/reports:
+    get:
+      operationId: R503
+      summary: "R503: Get reports"
+      description: "Retrieve reports list"
+      tags:
+        - "M05: Administration Management"
+      parameters:
+        - name: sort_by
+          in: query
+          schema:
+            type: string
+            enum: [date, handler]
+            default: date
+        - name: order
+          in: query
+          schema:
+            type: string
+            enum: [ascending, descending]
+            default: descending
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+          description: "Starting index of user list"
+        - in: query
+          name: size
+          schema:
+            type: integer
+          description: "Size of sublist to show"
+          
+      responses:
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to make this request."
+        "200":
+          description: "OK. Answer with reports list"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                      enum: [Event, User, Message]
+                    motive:
+                      type: string
+                      enum:
+                        [
+                          "Sexual harassment",
+                          "Violence or bodily harm",
+                          "Nudity or explicit content",
+                          "Hate speech",
+                          "Other",
+                        ]
+                    creation:
+                      type: string
+                      format: date-time
+                    reporter:
+                      type: string
+                    handler:
+                      type: string
+
+  /api/reports/{reportId}:
+    get:
+      operationId: R504
+      summary: "R504: Get report details"
+      description: "Answer with report details"
+      tags:
+        - "M05: Administration Management"
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to make this request."
+        "404":
+          description: "Id not found"
+        "200":
+          description: "OK. Aswering with report details"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  type:
+                    type: string
+                    enum: [Event, User, Message]
+                  motive:
+                    type: string
+                    enum:
+                      [
+                        "Sexual harassment",
+                        "Violence or bodily harm",
+                        "Nudity or explicit content",
+                        "Hate speech",
+                        "Other",
+                      ]
+                  creation:
+                    type: string
+                    format: date-time
+                  reporter:
+                    type: string
+                  handler:
+                    type: string
+                  description:
+                    type: string
+
+  /reports:
+    get:
+      operationId: R506
+      summary: "R506: Reports list page."
+      description: "Show reports list page.  Accessible by ADM."
+      tags:
+        - "M05: Administration Management"
+      responses:
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to access this page."
+        "200":
+          description: "OK. Show reports list page (UI07)"
+
+  /reports/{reportId}:
+    get:
+      operationId: R507
+      summary: "R507: Report details page."
+      description: "Show report details page. Accessible by ADM."
+      tags:
+        - "M05: Administration Management"
+      parameters:
+        - name: reportId
+          in: path
+          description: Id of the report to view
+          required: true
+          schema:
+            type: integer
+      responses:
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to access this page."
+        "404":
+          description: "Id not found"
+        "200":
+          description: "OK. Show report details page (UI07)"
+
+    post:
+      operationId: R505
+      summary: "R505: Change report state"
+      description: "Change report state, manipulating the resource availability. Access: ADM"
+      tags:
+        - "M05: Administration Management"
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: "Action to take"
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: ["Ignore", "Hide-Block", "Delete"]
+              required: [action]
+      responses:
+        "200":
+          description: "OK. Action taken"
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to make this request."
+        "404":
+          description: "Id not found"
+        "500":
+          description: "Internal server failiure."
