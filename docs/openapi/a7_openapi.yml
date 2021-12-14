@@ -114,7 +114,7 @@ paths:
             type: string
             enum: ['name','username']
             default: 'username'
-          description: "Defines the value of which the users should be ordered"
+          description: "Defines the value by which the users should be ordered"
         - in: query
           name: order
           schema:
@@ -130,7 +130,6 @@ paths:
           description: "Starting index of user list"
         - in: query
           name: size
-          required: false
           schema:
             type: integer
           description: "Size of sublist to show"
@@ -204,6 +203,9 @@ paths:
                 picture:
                   type: string
                   format: binary
+                gender:
+                  type: string
+                  enum: ['Male, Female, Other']
       responses: 
         '200':
           description: 'Ok. Show Edit User Profile UI (UI22)'
@@ -224,6 +226,34 @@ paths:
       responses:
         '200':
           description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    username:
+                      type: string
+                    password:
+                      type: string
+                      format: password
+                    name:
+                      type: string
+                    email:
+                      type: string
+                      format: email
+                    birth_date:
+                      type: string
+                      format: date
+                    bio:
+                      type: string
+                    picture:
+                      type: string
+                      format: binary
+                    gender:
+                      type: string
+                      enum: ['Male, Female, Other']
       parameters:
         - in: query
           name: global
@@ -252,28 +282,12 @@ paths:
           description: "Starting index of user list"
         - in: query
           name: size
-          required: false
           schema:
             type: integer
           description: "Size of sublist to show"
-
-  /api/users/{id}:
-    delete:
-      operationId: R207
-      summary: "207: Delete User"
-      description: "Delete user from database. Access: ADM"
-      tags:
-        - 'M02: Users and Personal Profiles'
-      responses:
-        '200':
-          description: 'OK. Deletion successful'
-        '401':
-          description: 'Unauthorized. Not enough permissions'
-        '404':
-          description: 'User not found'
-    put:
-      operationId: R208
-      summary: 'R208: Create/Edit User'
+    post:
+      operationId: R209
+      summary: 'R209: Create User'
       description: 'Process the new user profile information. Access: AU'
       tags:
         - 'M02: Users and Personal Profiles'
@@ -283,7 +297,10 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
+              required: [username, password, name, email, gender]
               properties:
+                username:
+                  type: string
                 password:
                   type: string
                   format: password
@@ -300,6 +317,66 @@ paths:
                 picture:
                   type: string
                   format: binary
+                gender:
+                  type: string
+                  enum: ['Male, Female, Other']
+      responses:
+        '200':
+          description: 'Ok. User created.'
+        '404':
+          description: 'User not found'
+        '500':
+          description: 'Internal server error. Invalid data'
+
+  /api/users/{id}:
+    delete:
+      operationId: R208
+      summary: "R208: Delete User"
+      description: "Delete user from database. Access: ADM"
+      tags:
+        - 'M02: Users and Personal Profiles'
+      responses:
+        '200':
+          description: 'OK. Deletion successful'
+        '401':
+          description: 'Unauthorized. Not enough permissions'
+        '404':
+          description: 'User not found'
+    put:
+      operationId: R209
+      summary: 'R209: Edit User'
+      description: 'Process the new user profile information. Access: AU'
+      tags:
+        - 'M02: Users and Personal Profiles'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [username, password, name, email, gender]
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                  format: password
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                birth_date:
+                  type: string
+                  format: date
+                bio:
+                  type: string
+                picture:
+                  type: string
+                  format: binary
+                gender:
+                  type: string
+                  enum: ['Male, Female, Other']
       responses: 
         '200':
           description: 'Ok. User information edited.'
@@ -336,6 +413,7 @@ paths:
               properties:
                 email:
                   type: string
+                  format: email
                 password:
                   type: string
                   format: password
@@ -424,26 +502,29 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
+              required: [username, password, name, email, gender]
               properties:
-                name:
-                  type: string
                 username:
+                  type: string
+                password:
+                  type: string
+                  format: password
+                name:
                   type: string
                 email:
                   type: string
                   format: email
-                password:
+                birth_date:
                   type: string
-                  format: password
+                  format: date
+                bio:
+                  type: string
+                picture:
+                  type: string
+                  format: binary
                 gender:
                   type: string
                   enum: ['Male, Female, Other']
-              required:
-                - name
-                - username
-                - email
-                - password
-                - gender
       responses:
         '302':
           description: 'Post credentials processing redirect'
@@ -455,7 +536,7 @@ paths:
               examples:
                 302Success:
                   description: 'Authentication succeeded. Redirect to user profile (UI19)'
-                  value: '/users/view'
+                  value: '/users/{id}'
                 302Failure:
                   description: 'Authentication failed. Redirect to register form (UI08)'
                   value: '/register'
