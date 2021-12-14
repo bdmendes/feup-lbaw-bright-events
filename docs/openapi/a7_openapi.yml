@@ -431,7 +431,7 @@ paths:
               examples:
                 302Success:
                   description: 'Authentication succeeded. Redirecting to user profile (UI19)'
-                  value: '/users/view'
+                  value: '/users/{id}'
                 302Failure:
                   description: 'Authentication failed. Redirect to login form (UI09)'
                   value: '/login'
