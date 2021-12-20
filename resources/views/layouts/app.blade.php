@@ -22,15 +22,36 @@
   </head>
   <body>
     <main>
-      <header>
-        <h1><a href="{{ url('/cards') }}">Thingy!</a></h1>
-        @if (Auth::check())
-        <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
-        @endif
-      </header>
+      <nav>
+        <div class="logo">
+          <a class="button" href="{{url ('home')}}">Bright events logo</a>
+        </div>
+        <div class="menuNavigation">
+          <a class="button" href="{{ url('events')}}">Events </a>
+          <a class="button" href="{{ url('users')}}">Users </a>
+        </div>
+        <div class="menuUser">
+          @if (Auth::check())
+          <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
+          @else
+          <a class="button" href="{{url('login') }}"> Sign-in </a>
+          @endif
+        </div>
+    </nav>
       <section id="content">
         @yield('content')
       </section>
+
+      <footer>
+        <span>
+          @Bright Events 2021
+        </span>
+        <div class="footerPages">
+          <a class="button" href="{{ url('contact')}}">Contact Us </a>
+          <a class="button" href="{{ url('faq')}}">FAQ </a>
+          <a class="button" href="{{ url('about')}}">About </a>
+        </div>
+      </footer>
     </main>
   </body>
 </html>

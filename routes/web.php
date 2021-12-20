@@ -12,7 +12,12 @@
 */
 // Home
 Route::get('/', 'Auth\LoginController@home');
+Route::get('/home', 'Home\HomeController@home');
 
+//Static
+Route::get('/faq', 'Static\StaticPagesController@faq');
+Route::get('/about', 'Static\StaticPagesController@about');
+Route::get('/contact', 'Static\StaticPagesController@contact');
 // Cards
 Route::get('cards', 'CardController@list');
 Route::get('cards/{id}', 'CardController@show');

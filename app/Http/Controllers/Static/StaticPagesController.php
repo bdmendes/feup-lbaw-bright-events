@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Static;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
-class LoginController extends Controller
-{
+class StaticPagesController extends Controller{
+
     /*
     |--------------------------------------------------------------------------
     | Login Controller
@@ -18,31 +18,15 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
+    public function faq(){
+        return view('pages.faq');
     }
-
-    public function getUser(){
-        return $request->user();
+    public function about(){
+        return view('pages.about');
     }
-
-    public function home() {
-        return redirect('/home');
+    public function contact(){
+        return view('pages.contact');
     }
-
 }
+
+?>
