@@ -1,19 +1,19 @@
-openapi: '3.0.2'
+openapi: "3.0.2"
 
 info:
   title: Bright Events
-  version: '1.0'
+  version: "1.0"
 
 servers:
   - url: http://lbaw2134.lbaw.fe.up.pt
 
 tags:
-  - name: 'M01: Authentication'
-  - name: 'M02: Users and Personal Profiles'
-  - name: 'M03: Events and Event Content'
-  - name: 'M04: Static Pages'
-  - name: 'M05: Administration Management'
-  - name: 'M06: Notifications'
+  - name: "M01: Authentication"
+  - name: "M02: Users and Personal Profiles"
+  - name: "M03: Events and Event Content"
+  - name: "M04: Static Pages"
+  - name: "M05: Administration Management"
+  - name: "M06: Notifications"
 
 # Permissions
 # NAU - Non-authenticated User
@@ -29,68 +29,68 @@ paths:
   /:
     get:
       operationId: R401
-      summary: 'R401: Home page'
-      description: 'Provide home page. Access: NAU, AU, AUO, ADM'
+      summary: "R401: Home page"
+      description: "Provide home page. Access: NAU, AU, AUO, ADM"
       tags:
-        - 'M04: Static Pages'
+        - "M04: Static Pages"
       responses:
-        '200':
-          description: 'OK. Show home page (UI01)'
-  
+        "200":
+          description: "OK. Show home page (UI01)"
+
   /privacy-policy:
     get:
       operationId: R402
-      summary: 'R402: Privacy Policy page'
-      description: 'Provide privacy policy page. Access: NAU, AU, AUO, ADM'
+      summary: "R402: Privacy Policy page"
+      description: "Provide privacy policy page. Access: NAU, AU, AUO, ADM"
       tags:
-        - 'M04: Static Pages'
+        - "M04: Static Pages"
       responses:
-        '200':
-          description: 'OK. Show privacy policy page (UI02)'
+        "200":
+          description: "OK. Show privacy policy page (UI02)"
 
   /terms-and-conditions:
     get:
       operationId: R403
-      summary: 'R403: Terms and Conditions page'
-      description: 'Provide terms and conditions page. Access: NAU, AU, AUO, ADM'
+      summary: "R403: Terms and Conditions page"
+      description: "Provide terms and conditions page. Access: NAU, AU, AUO, ADM"
       tags:
-        - 'M04: Static Pages'
+        - "M04: Static Pages"
       responses:
-        '200':
-          description: 'OK. Show terms and conditions page (UI03)'
+        "200":
+          description: "OK. Show terms and conditions page (UI03)"
 
   /faq:
     get:
       operationId: R404
-      summary: 'R404: FAQ page'
-      description: 'Provide frequently asked questions page. Access: NAU, AU, AUO, ADM'
+      summary: "R404: FAQ page"
+      description: "Provide frequently asked questions page. Access: NAU, AU, AUO, ADM"
       tags:
-        - 'M04: Static Pages'
+        - "M04: Static Pages"
       responses:
-        '200':
-          description: 'OK. Show FAQ page (UI04)'
+        "200":
+          description: "OK. Show FAQ page (UI04)"
 
   /about:
     get:
       operationId: R405
-      summary: 'R405: About page'
-      description: 'Provide about page. Access: NAU, AU, AUO, ADM'
+      summary: "R405: About page"
+      description: "Provide about page. Access: NAU, AU, AUO, ADM"
       tags:
-        - 'M04: Static Pages'
+        - "M04: Static Pages"
       responses:
-        '200':
-          description: 'OK. Show About page (UI05)'
+        "200":
+          description: "OK. Show About page (UI05)"
 
   /contact-us:
     get:
       operationId: R406
-      summary: 'R406: Contact Us page'
-      description: 'Provide Contact Us page. Access: NAU, AU, AUO, ADM'
+      summary: "R406: Contact Us page"
+      description: "Provide Contact Us page. Access: NAU, AU, AUO, ADM"
       tags:
-        - 'M04: Static Pages'
+        - "M04: Static Pages"
       responses:
-        '200':
-          description: 'OK. Show Contact Us page (UI06)'
+        "200":
+          description: "OK. Show Contact Us page (UI06)"
 
   ### Users ###
   /users:
@@ -98,10 +98,10 @@ paths:
       operationId: R201
       summary: "R201: Browse Users page"
       tags:
-        - 'M02: Users and Personal Profiles'
+        - "M02: Users and Personal Profiles"
       responses:
-        '200':
-          description: 'OK. Show Browse/Search Users UI (UI10)'
+        "200":
+          description: "OK. Show Browse/Search Users UI (UI10)"
       parameters:
         - in: query
           name: global
@@ -112,15 +112,15 @@ paths:
           name: sort_by
           schema:
             type: string
-            enum: ['name','username']
-            default: 'username'
+            enum: ["name", "username"]
+            default: "username"
           description: "Defines the value by which the users should be ordered"
         - in: query
           name: order
           schema:
             type: string
-            enum: ['ascending', 'descending']
-            default: 'ascending'
+            enum: ["ascending", "descending"]
+            default: "ascending"
           description: "Defines if it's ascending order or descending order"
         - in: query
           name: offset
@@ -137,8 +137,8 @@ paths:
   /users/{id}:
     get:
       operationId: R202
-      summary: 'R202: User Profile page'
-      description: 'Show user profile page. Access: NAU'
+      summary: "R202: User Profile page"
+      description: "Show user profile page. Access: NAU"
       parameters:
         - name: id
           in: path
@@ -146,18 +146,18 @@ paths:
           schema:
             type: integer
       tags:
-        - 'M02: Users and Personal Profiles'
+        - "M02: Users and Personal Profiles"
       responses:
-        '200':
-          description: 'Ok. Show User Profile UI (UI11)'
-        '404':
-          description: 'User not found'
+        "200":
+          description: "Ok. Show User Profile UI (UI11)"
+        "404":
+          description: "User not found"
 
   /users/{id}/edit:
     get:
       operationId: R204
-      summary: 'R204: Edit User Profile page'
-      description: 'Provide edit user profile form. Access: AU'
+      summary: "R204: Edit User Profile page"
+      description: "Provide edit user profile form. Access: AU"
       parameters:
         - name: id
           in: path
@@ -165,24 +165,24 @@ paths:
           schema:
             type: integer
       tags:
-        - 'M02: Users and Personal Profiles'
-      responses: 
-        '200':
-          description: 'Ok. Show Edit Personal Information UI (UI22)'
-        '404':
-          description: 'User not found'
-        '401':
-          description: 'Unauthorized. User must be logged in'
+        - "M02: Users and Personal Profiles"
+      responses:
+        "200":
+          description: "Ok. Show Edit Personal Information UI (UI22)"
+        "404":
+          description: "User not found"
+        "401":
+          description: "Unauthorized. User must be logged in"
     post:
       operationId: R205
-      summary: 'R205: Edit User Profile action'
-      description: 'Process the new user profile information. Access: AU'
+      summary: "R205: Edit User Profile action"
+      description: "Process the new user profile information. Access: AU"
       tags:
-        - 'M02: Users and Personal Profiles'
+        - "M02: Users and Personal Profiles"
       requestBody:
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -204,16 +204,16 @@ paths:
                   format: binary
                 gender:
                   type: string
-                  enum: ['male, female, other']
-      responses: 
-        '200':
-          description: 'Ok. Show Edit User Profile UI (UI22)'
-        '404':
-          description: 'User not found'
-        '401':
-          description: 'Unauthorized. User must be logged in'
-        '500':
-          description: 'Internal server error. Invalid data'
+                  enum: ["male, female, other"]
+      responses:
+        "200":
+          description: "Ok. Show Edit User Profile UI (UI22)"
+        "404":
+          description: "User not found"
+        "401":
+          description: "Unauthorized. User must be logged in"
+        "500":
+          description: "Internal server error. Invalid data"
 
   /api/users:
     get:
@@ -221,10 +221,10 @@ paths:
       summary: "R206: Users list"
       description: "Retrieve users from database. Access: NAU"
       tags:
-        - 'M02: Users and Personal Profiles'
+        - "M02: Users and Personal Profiles"
       responses:
-        '200':
-          description: 'OK'
+        "200":
+          description: "OK"
           content:
             application/json:
               schema:
@@ -252,7 +252,7 @@ paths:
                       format: binary
                     gender:
                       type: string
-                      enum: ['male, female, other']
+                      enum: ["male, female, other"]
       parameters:
         - in: query
           name: global
@@ -263,15 +263,15 @@ paths:
           name: sort_by
           schema:
             type: string
-            enum: ['name','username']
-            default: 'username'
+            enum: ["name", "username"]
+            default: "username"
           description: "Defines the value of which the users should be ordered"
         - in: query
           name: order
           schema:
             type: string
-            enum: ['ascending', 'descending']
-            default: 'ascending'
+            enum: ["ascending", "descending"]
+            default: "ascending"
           description: "Defines if it's ascending order or descending order"
         - in: query
           name: offset
@@ -286,14 +286,14 @@ paths:
           description: "Size of sublist to show"
     post:
       operationId: R207
-      summary: 'R207: Create User action'
-      description: 'Process the new user profile information. Access: AU'
+      summary: "R207: Create User action"
+      description: "Process the new user profile information. Access: AU"
       tags:
-        - 'M02: Users and Personal Profiles'
+        - "M02: Users and Personal Profiles"
       requestBody:
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               required: [username, password, name, email, gender]
@@ -318,14 +318,14 @@ paths:
                   format: binary
                 gender:
                   type: string
-                  enum: ['male, female, other']
+                  enum: ["male, female, other"]
       responses:
-        '200':
-          description: 'Ok. User created.'
-        '404':
-          description: 'User not found'
-        '500':
-          description: 'Internal server error. Invalid data'
+        "200":
+          description: "Ok. User created."
+        "404":
+          description: "User not found"
+        "500":
+          description: "Internal server error. Invalid data"
 
   /api/users/{id}:
     delete:
@@ -339,18 +339,18 @@ paths:
           schema:
             type: integer
       tags:
-        - 'M02: Users and Personal Profiles'
+        - "M02: Users and Personal Profiles"
       responses:
-        '200':
-          description: 'OK. Deletion successful'
-        '401':
-          description: 'Unauthorized. Not enough permissions'
-        '404':
-          description: 'User not found'
+        "200":
+          description: "OK. Deletion successful"
+        "401":
+          description: "Unauthorized. Not enough permissions"
+        "404":
+          description: "User not found"
     patch:
       operationId: R209
-      summary: 'R209: Edit User action'
-      description: 'Process the new user profile information. Access: AU'
+      summary: "R209: Edit User action"
+      description: "Process the new user profile information. Access: AU"
       parameters:
         - name: id
           in: path
@@ -358,11 +358,11 @@ paths:
           schema:
             type: integer
       tags:
-        - 'M02: Users and Personal Profiles'
+        - "M02: Users and Personal Profiles"
       requestBody:
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               required: [username, password, name, email, gender]
@@ -387,7 +387,7 @@ paths:
                   format: binary
                 gender:
                   type: string
-                  enum: ['male, female, other']
+                  enum: ["male, female, other"]
                 disabled:
                   type: boolean
                   default: false
@@ -395,36 +395,36 @@ paths:
                   type: boolean
                   default: false
       responses:
-        '200':
-          description: 'Ok. User information edited.'
-        '404':
-          description: 'User not found'
-        '401':
-          description: 'Unauthorized. User must be logged in'
-        '500':
-          description: 'Internal server error. Invalid data'
+        "200":
+          description: "Ok. User information edited."
+        "404":
+          description: "User not found"
+        "401":
+          description: "Unauthorized. User must be logged in"
+        "500":
+          description: "Internal server error. Invalid data"
 
   ### Authentication ###
   /login:
     get:
       operationId: R101
-      summary: 'R101: Login page'
-      description: 'Provide login form. Access: NAU'
+      summary: "R101: Login page"
+      description: "Provide login form. Access: NAU"
       tags:
-        - 'M01: Authentication'
+        - "M01: Authentication"
       responses:
-        '200':
-          description: 'OK. Show login form (UI09)'
+        "200":
+          description: "OK. Show login form (UI09)"
     post:
       operationId: R102
-      summary: 'R102: Login action'
-      description: 'Process the login form. Access: NAU'
+      summary: "R102: Login action"
+      description: "Process the login form. Access: NAU"
       tags:
-        - 'M01: Authentication'
+        - "M01: Authentication"
       requestBody:
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -438,85 +438,85 @@ paths:
                 - email
                 - password
       responses:
-        '302':
-          description: 'Post credentials processing redirect'
+        "302":
+          description: "Post credentials processing redirect"
           headers:
             Location:
-              description: 'Redirect path'
+              description: "Redirect path"
               schema:
                 type: string
               examples:
                 302Success:
-                  description: 'Authentication succeeded. Redirecting to user profile (UI19)'
-                  value: '/users/{id}'
+                  description: "Authentication succeeded. Redirecting to user profile (UI19)"
+                  value: "/users/{id}"
                 302Failure:
-                  description: 'Authentication failed. Redirect to login form (UI09)'
-                  value: '/login'
+                  description: "Authentication failed. Redirect to login form (UI09)"
+                  value: "/login"
             Set-Cookie:
-              description: 'Login session cookie'
+              description: "Login session cookie"
               schema:
                 type: string
               examples:
                 302Success:
-                  description:  'Current user login session JSESSIONID'
+                  description: "Current user login session JSESSIONID"
                   value: JSESSIONID=cookie; Path=/; HttpOnly
                 302Failure:
-                  description: 'Invalid login session'
-                  value: ''
+                  description: "Invalid login session"
+                  value: ""
 
   /logout:
     post:
       operationId: R103
-      summary: 'R103: Logout action'
-      description: 'Logout the currently authenticated user. Access: AU, ADM'
+      summary: "R103: Logout action"
+      description: "Logout the currently authenticated user. Access: AU, ADM"
       tags:
-        - 'M01: Authentication'
+        - "M01: Authentication"
       security:
         - cookieAuth: []
       responses:
-        '302':
-          description: 'Success: Post logout redirect'
+        "302":
+          description: "Success: Post logout redirect"
           headers:
             Location:
-              description: 'Redirect path'
+              description: "Redirect path"
               schema:
                 type: string
               examples:
                 302Success:
-                  description: 'Logout succeeded. Redirecting to home page (UI01)'
-                  value: '/'
-        '401':
-          description: 'Unauthorized. User is not logged in'
+                  description: "Logout succeeded. Redirecting to home page (UI01)"
+                  value: "/"
+        "401":
+          description: "Unauthorized. User is not logged in"
           headers:
             Location:
-              description: 'Redirect path'
+              description: "Redirect path"
               schema:
                 type: string
               examples:
                 302Success:
-                  description: 'Logout failed. Redirecting to home page (UI01)'
-                  value: '/'
+                  description: "Logout failed. Redirecting to home page (UI01)"
+                  value: "/"
 
   /register:
     get:
       operationId: R104
-      summary: 'R104: Register page'
-      description: 'Provide Register form. Access: NAU'
+      summary: "R104: Register page"
+      description: "Provide Register form. Access: NAU"
       tags:
-        - 'M01: Authentication'
+        - "M01: Authentication"
       responses:
-        '200':
-          description: 'OK. Show register form (UI08)'
+        "200":
+          description: "OK. Show register form (UI08)"
     post:
       operationId: R105
-      summary: 'R105: Register action'
-      description: 'Process the Register form. Access: NAU'
+      summary: "R105: Register action"
+      description: "Process the Register form. Access: NAU"
       tags:
-        - 'M01: Authentication'
+        - "M01: Authentication"
       requestBody:
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               required: [username, password, name, email, gender]
@@ -541,54 +541,54 @@ paths:
                   format: binary
                 gender:
                   type: string
-                  enum: ['male, female, other']
+                  enum: ["male, female, other"]
       responses:
-        '302':
-          description: 'Post credentials processing redirect'
+        "302":
+          description: "Post credentials processing redirect"
           headers:
             Location:
-              description: 'Redirect path'
+              description: "Redirect path"
               schema:
                 type: string
               examples:
                 302Success:
-                  description: 'Authentication succeeded. Redirect to user profile (UI19)'
-                  value: '/users/{id}'
+                  description: "Authentication succeeded. Redirect to user profile (UI19)"
+                  value: "/users/{id}"
                 302Failure:
-                  description: 'Authentication failed. Redirect to register form (UI08)'
-                  value: '/register'
+                  description: "Authentication failed. Redirect to register form (UI08)"
+                  value: "/register"
             Set-Cookie:
-              description: 'Login session cookie'
+              description: "Login session cookie"
               schema:
                 type: string
               examples:
                 302Success:
-                  description: 'Current user login session JSESSIONID'
+                  description: "Current user login session JSESSIONID"
                   value: JSESSIONID=cookie; Path=/; HttpOnly
                 302Failure:
-                  description: 'Invalid login session'
-                  value: ''
+                  description: "Invalid login session"
+                  value: ""
 
   /recover:
     get:
       operationId: R106
-      summary: 'R106: Recover Password page'
-      description: 'Provide Recover Password form. Access: NAU'
+      summary: "R106: Recover Password page"
+      description: "Provide Recover Password form. Access: NAU"
       tags:
-        - 'M01: Authentication'
+        - "M01: Authentication"
       responses:
-        '200':
-          description: 'OK. Show recover password form (UI23)'
+        "200":
+          description: "OK. Show recover password form (UI23)"
     post:
       operationId: R107
-      summary: 'R107: Recover Password action'
-      description: 'Process the Recover Password form. Access: NAU'
+      summary: "R107: Recover Password action"
+      description: "Process the Recover Password form. Access: NAU"
       tags:
-        - 'M01: Authentication'
+        - "M01: Authentication"
       requestBody:
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -601,20 +601,20 @@ paths:
                 - username
                 - email
       responses:
-        '302':
-          description: 'Success: Post recover credentials processing redirect'
+        "302":
+          description: "Success: Post recover credentials processing redirect"
           headers:
             Location:
-              description: 'Redirect path'
+              description: "Redirect path"
               schema:
                 type: string
               examples:
                 302Success:
-                  description: 'Recover succeeded. Redirect to home page (UI01)'
-                  value: '/'
+                  description: "Recover succeeded. Redirect to home page (UI01)"
+                  value: "/"
                 302Failure:
-                  description: 'Recover failed. Redirect to login form (UI09)'
-                  value: '/login'
+                  description: "Recover failed. Redirect to login form (UI09)"
+                  value: "/login"
 
   ### Administration ###
   /api/reports/event:
@@ -628,7 +628,7 @@ paths:
         description: "Report form"
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -671,7 +671,7 @@ paths:
         description: "Report form"
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -714,7 +714,7 @@ paths:
         description: "Report form"
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -891,7 +891,7 @@ paths:
         description: "Action to take"
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -911,7 +911,7 @@ paths:
         "500":
           description: "Internal server failure."
 
-### Events ###
+  ### Events ###
   /events:
     get:
       operationId: R301
@@ -920,29 +920,29 @@ paths:
         - "M03: Events and Event Content"
       description: "Show Browse Events page. Access: NAU"
       responses:
-        '200':
+        "200":
           description: "Ok. Show Browse Events page (UI12)"
 
   /events/create:
     get:
       operationId: R302
-      summary: 'R302: Create Event page'
+      summary: "R302: Create Event page"
       description: "Show Create Event form. Access: AU"
       tags:
-        - 'M03: Events and Event Content'
+        - "M03: Events and Event Content"
       responses:
-        '200':
+        "200":
           description: "Ok. Show Create Event form (UI17)"
     post:
       operationId: R303
-      summary: 'R303: Create Event action'
-      description: 'Submit create event form. Access: AU'
+      summary: "R303: Create Event action"
+      description: "Submit create event form. Access: AU"
       tags:
-        - 'M03: Events and Event Content'
+        - "M03: Events and Event Content"
       requestBody:
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -957,18 +957,18 @@ paths:
                 organizer:
                   type: integer
       responses:
-        '401':
+        "401":
           description: "Event creation requires authentication"
-        '200':
+        "200":
           description: "Ok. show event creation page"
-              
+
   /events/{id}:
     get:
       operationId: R304
       summary: "R304: Event Details page"
       description: "Show Event page. Access: NAU"
       tags:
-        - 'M03: Events and Event Content'
+        - "M03: Events and Event Content"
       parameters:
         - name: id
           in: path
@@ -976,13 +976,13 @@ paths:
           schema:
             type: integer
       responses:
-        '404':
-          description: 'Event not found'
-        '403':
+        "404":
+          description: "Event not found"
+        "403":
           description: "User doesn't have permission to view event"
-        '401':
+        "401":
           description: "Event requires authentication to be viewed"
-        '200':
+        "200":
           description: "OK. Show event details"
           content:
             application/json:
@@ -1008,11 +1008,11 @@ paths:
                     event_state:
                       type: string
                       enum:
-                      - "cancelled"
-                      - "finished"
-                      - "on_going"
-                      - "due"
-                    cover-image: 
+                        - "cancelled"
+                        - "finished"
+                        - "on_going"
+                        - "due"
+                    cover-image:
                       type: integer
                     organizer:
                       type: integer
@@ -1033,14 +1033,14 @@ paths:
       tags:
         - "M03: Events and Event Content"
       responses:
-        '404' : 
+        "404":
           description: "Event not found"
-        '200':
+        "200":
           description: "Ok. Show event edition page (UI18)"
     post:
       operationId: R306
-      summary: 'R306: Edit Event action'
-      description: 'Update event details. Access: AUO'
+      summary: "R306: Edit Event action"
+      description: "Update event details. Access: AUO"
       parameters:
         - name: id
           in: path
@@ -1048,11 +1048,11 @@ paths:
           schema:
             type: integer
       tags:
-        - 'M03: Events and Event Content'
+        - "M03: Events and Event Content"
       requestBody:
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -1068,12 +1068,12 @@ paths:
                   format: binary
               required: [title, description]
       responses:
-        '200':
-          description: 'Ok. Event updated.'
-        '401':
+        "200":
+          description: "Ok. Event updated."
+        "401":
           description: "Unauthorized. User must be the event organizer"
-        '500':
-          description: 'Internal server error. Invalid data'
+        "500":
+          description: "Internal server error. Invalid data"
 
   /api/events:
     get:
@@ -1081,10 +1081,10 @@ paths:
       summary: "R307: Events list"
       description: "Browse Events page. Access: NAU"
       tags:
-        - 'M03: Events and Event Content'
+        - "M03: Events and Event Content"
       responses:
-        '200':
-          description: 'OK. Show list of events'
+        "200":
+          description: "OK. Show list of events"
           content:
             application/json:
               schema:
@@ -1107,12 +1107,12 @@ paths:
                       type: string
                     state:
                       type: string
-                      enum: 
-                      - "cancelled"
-                      - "finished"
-                      - "on-going"
-                      - "due"
-                    cover_image: 
+                      enum:
+                        - "cancelled"
+                        - "finished"
+                        - "on-going"
+                        - "due"
+                    cover_image:
                       type: integer
                     organizer:
                       type: integer
@@ -1123,18 +1123,18 @@ paths:
           name: sort_by
           schema:
             type: string
-            enum: ['date', 'attendees']
+            enum: ["date", "attendees"]
           description: "Defines the value by which the events should be ordered"
-        - in : query
+        - in: query
           name: order
           schema:
             type: string
-            enum: ['ascending', 'descending']
+            enum: ["ascending", "descending"]
           description: "Defines if it's ascending order or descending order"
         - in: query
           name: global
           schema:
-            type: string 
+            type: string
           description: "Filters events via title and description"
         - in: query
           name: location
@@ -1167,20 +1167,20 @@ paths:
   /api/events/{id}:
     patch:
       operationId: R308
-      summary: 'R308: Edit Event action'
+      summary: "R308: Edit Event action"
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: integer
-      description: 'Update event details. Access: AUO'
+      description: "Update event details. Access: AUO"
       tags:
-        - 'M03: Events and Event Content'
+        - "M03: Events and Event Content"
       requestBody:
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -1195,19 +1195,19 @@ paths:
                   type: integer
               required: [title, description, is_private, organizer]
       responses:
-        '200':
-          description: 'Ok. Event update.'
-        '401':
+        "200":
+          description: "Ok. Event update."
+        "401":
           description: "Unauthorized. User must be the event organizer"
-        '500':
-          description: 'Internal server error. Invalid data' 
+        "500":
+          description: "Internal server error. Invalid data"
 
   /api/events/{id}/attendees:
-    get: 
+    get:
       operationId: "R309"
       summary: "R309: Event Attendees list"
       tags:
-        - 'M03: Events and Event Content'
+        - "M03: Events and Event Content"
       parameters:
         - in: query
           name: id
@@ -1225,9 +1225,9 @@ paths:
             type: integer
           description: "Determines the number of attendees given"
       responses:
-        '404':
+        "404":
           description: "Event not found"
-        '200':
+        "200":
           description: "OK. Show event attendees"
           content:
             application/json:
@@ -1262,11 +1262,11 @@ paths:
             type: integer
           description: "Attendance id"
       responses:
-        '200':
-          description: 'Ok. Attendance deleted.'
-        '404':
-          description: 'Attendance not found'
-        '403':
+        "200":
+          description: "Ok. Attendance deleted."
+        "404":
+          description: "Attendance not found"
+        "403":
           description: "User doesn't have permission to remove attendance"
 
   /api/events/{id}/comments:
@@ -1275,14 +1275,14 @@ paths:
       summary: "R311: Event Comments list"
       description: "Retrieve event comments. Access: NAU"
       tags:
-        - 'M03: Events and Event Content'
+        - "M03: Events and Event Content"
       responses:
-        '200':
+        "200":
           description: "Ok. Show event comments"
     post:
       operationId: R312
-      summary: 'R312: Comment Event action'
-      description: 'Create comment. Access: AU'
+      summary: "R312: Comment Event action"
+      description: "Create comment. Access: AU"
       parameters:
         - name: id
           in: path
@@ -1290,11 +1290,11 @@ paths:
           schema:
             type: integer
       tags:
-        - 'M03: Events and Event Content'
+        - "M03: Events and Event Content"
       requestBody:
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -1308,19 +1308,19 @@ paths:
                   type: integer
               required: [body, user, event, author]
       responses:
-        '200':
-          description: 'Ok. Comment created'
-        '401':
-          description: 'Unauthorized. User must be an attendee or organizer'
-        '500':
-          description: 'Internal server error. Invalid data'
+        "200":
+          description: "Ok. Comment created"
+        "401":
+          description: "Unauthorized. User must be an attendee or organizer"
+        "500":
+          description: "Internal server error. Invalid data"
 
   /api/events/{eventId}/comments/{commentId}:
-    get: 
+    get:
       operationId: "R313"
       summary: "R313: Event Comment details"
       tags:
-        - 'M03: Events and Event Content'
+        - "M03: Events and Event Content"
       parameters:
         - name: eventId
           in: path
@@ -1343,9 +1343,9 @@ paths:
             type: integer
           description: "Determines the number of comments given"
       responses:
-        '404':
+        "404":
           description: "Event not found"
-        '200':
+        "200":
           description: "OK, show event comments "
           content:
             application/json:
@@ -1378,22 +1378,22 @@ paths:
           schema:
             type: integer
       tags:
-        - 'M03: Events and Event Content'
+        - "M03: Events and Event Content"
       responses:
-        '200':
-          description: 'OK. Deletion successful'
-        '401':
-          description: 'Unauthorized. Not enough permissions'
-        '404':
-          description: 'Comment not found'
+        "200":
+          description: "OK. Deletion successful"
+        "401":
+          description: "Unauthorized. Not enough permissions"
+        "404":
+          description: "Comment not found"
 
   /api/events/{id}/invites:
-    get: 
+    get:
       operationId: "R314"
       summary: "R314: Event Invites list"
       description: "Show event invites. Access: AUO"
       tags:
-        - 'M03: Events and Event Content'
+        - "M03: Events and Event Content"
       parameters:
         - in: query
           name: id
@@ -1411,13 +1411,13 @@ paths:
             type: integer
           description: "Determines the number of invites given"
       responses:
-        '403':
+        "403":
           description: "User doesn't have permission to view event invites"
-        '402':
+        "402":
           description: "Requires authentication to view event invites"
-        '404':
+        "404":
           description: "Event not found"
-        '200':
+        "200":
           description: "OK, show event invites "
           content:
             application/json:
@@ -1437,25 +1437,25 @@ paths:
       summary: "R315: Invite User action"
       description: "Invite user to event. Access: AUO"
       tags:
-        - 'M03: Events and Event Content'
+        - "M03: Events and Event Content"
       requestBody:
-        description: 'Invite information'
+        description: "Invite information"
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
-                attendee_id: 
+                attendee_id:
                   type: integer
               required: [attendee_id]
       responses:
-        '200':
-          description: 'Ok. Invite created.'
-        '401':
-          description: 'Unauthorized. User must be an organizer'
-        '500':
-          description: 'Internal server error. Invalid data'
+        "200":
+          description: "Ok. Invite created."
+        "401":
+          description: "Unauthorized. User must be an organizer"
+        "500":
+          description: "Internal server error. Invalid data"
 
   /api/events/{eventId}/invites/{requestId}:
     delete:
@@ -1474,21 +1474,21 @@ paths:
           schema:
             type: integer
       tags:
-        - 'M03: Events and Event Content'
+        - "M03: Events and Event Content"
       responses:
-        '200':
-          description: 'OK. Deletion successful'
-        '401':
-          description: 'Unauthorized. Not enough permissions'
-        '404':
-          description: 'Invite not found'
+        "200":
+          description: "OK. Deletion successful"
+        "401":
+          description: "Unauthorized. Not enough permissions"
+        "404":
+          description: "Invite not found"
 
   /api/events/{id}/join-requests:
-    get: 
+    get:
       operationId: "R317"
       summary: "R317: Event Join Requests list"
       tags:
-        - 'M03: Events and Event Content'  
+        - "M03: Events and Event Content"
       parameters:
         - name: id
           in: path
@@ -1511,13 +1511,13 @@ paths:
             type: integer
           description: "Determines the number of join requests given"
       responses:
-        '403':
+        "403":
           description: "User doesn't have permission to view event join requests"
-        '402':
+        "402":
           description: "Requires authentication to view event join requests"
-        '404':
+        "404":
           description: "Event not found"
-        '200':
+        "200":
           description: "OK, show event join requests"
           content:
             application/json:
@@ -1543,23 +1543,23 @@ paths:
           schema:
             type: integer
       tags:
-        - 'M03: Events and Event Content'
+        - "M03: Events and Event Content"
       requestBody:
-        description: 'Join request information'
+        description: "Join request information"
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
-                attendee_id: 
+                attendee_id:
                   type: integer
               required: [attendee_id]
       responses:
-        '200':
-          description: 'OK. Request created'
-        '401':
-          description: 'Unauthorized. Not enough permissions'
+        "200":
+          description: "OK. Request created"
+        "401":
+          description: "Unauthorized. Not enough permissions"
 
   /api/events/{eventId}/join-requests/{requestId}:
     delete:
@@ -1578,14 +1578,14 @@ paths:
           schema:
             type: integer
       tags:
-        - 'M03: Events and Event Content'
+        - "M03: Events and Event Content"
       responses:
-        '200':
-          description: 'OK. Deletion successful'
-        '401':
-          description: 'Unauthorized. Not enough permissions'
-        '404':
-          description: 'Join request not found'
+        "200":
+          description: "OK. Deletion successful"
+        "401":
+          description: "Unauthorized. Not enough permissions"
+        "404":
+          description: "Join request not found"
 
   /api/events/{id}/polls:
     get:
@@ -1601,8 +1601,8 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
-          description: 'Ok. Show polls list'
+        "200":
+          description: "Ok. Show polls list"
           content:
             application/json:
               schema:
@@ -1626,8 +1626,8 @@ paths:
                             description: Voter id
                     items:
                       type: string
-        '404':
-          description: 'Event not found'
+        "404":
+          description: "Event not found"
     post:
       operationId: "R321"
       summary: "R321: Create Event Poll action"
@@ -1641,10 +1641,10 @@ paths:
           schema:
             type: integer
       requestBody:
-        description: 'Poll information'
+        description: "Poll information"
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -1656,14 +1656,14 @@ paths:
                   type: array
                   items:
                     type: string
-              required: [title, description]
+              required: [title, description, options]
       responses:
-        '200':
-          description: 'Ok. Poll created'
-        '404':
-          description: 'Event not found'
-        '401':
-          description: 'Not enough permissions'
+        "200":
+          description: "Ok. Poll created"
+        "404":
+          description: "Event not found"
+        "401":
+          description: "Not enough permissions"
 
   /api/events/{eventId}/polls/{pollId}:
     patch:
@@ -1684,10 +1684,10 @@ paths:
           schema:
             type: integer
       requestBody:
-        description: 'Poll information'
+        description: "Poll information"
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -1699,14 +1699,13 @@ paths:
                   type: array
                   items:
                     type: string
-              required: [title, description]
       responses:
-        '200':
-          description: 'Ok. Poll edited'
-        '404':
-          description: 'Poll not found'
-        '401':
-          description: 'Not enough permissions'
+        "200":
+          description: "Ok. Poll edited"
+        "404":
+          description: "Poll not found"
+        "401":
+          description: "Not enough permissions"
     delete:
       operationId: "R323"
       summary: "R323: Delete Event Poll action"
@@ -1725,12 +1724,12 @@ paths:
           schema:
             type: integer
       responses:
-        '404':
-          description: 'Poll not found'
-        '200':
-          description: 'Poll removed'
-        '401':
-          description: 'Not enough permissions'
+        "404":
+          description: "Poll not found"
+        "200":
+          description: "Poll removed"
+        "401":
+          description: "Not enough permissions"
 
   /api/events/{eventId}/polls/{pollId}/{pollOption}:
     post:
@@ -1756,12 +1755,12 @@ paths:
           schema:
             type: integer
       responses:
-        '404':
-          description: 'Poll option not found'
-        '200':
-          description: 'Poll option vote registered'
-        '401':
-          description: 'User is not logged in'
+        "404":
+          description: "Poll option not found"
+        "200":
+          description: "Poll option vote registered"
+        "401":
+          description: "User is not logged in"
     delete:
       operationId: "R325"
       summary: "R325: Poll Option Vote action"
@@ -1785,12 +1784,12 @@ paths:
           schema:
             type: integer
       responses:
-        '404':
-          description: 'Poll option not found'
-        '200':
-          description: 'Poll option vote removed'
-        '401':
-          description: 'User did not vote on this poll option'
+        "404":
+          description: "Poll option not found"
+        "200":
+          description: "Poll option vote removed"
+        "401":
+          description: "User did not vote on this poll option"
 
   ### Notifications ###
   /api/notifications:
@@ -1821,18 +1820,19 @@ paths:
                       format: date-time
                     type:
                       type: string
-                      enum: [
-                        "disabled_event", 
-                        "cancelled_event", 
-                        "join_request", 
-                        "accepted_request", 
-                        "declined_request", 
-                        "invite", 
-                        "accepted_invite", 
-                        "declined_invite", 
-                        "new_comment", 
-                        "new_poll", 
-                        "poll_closed",
+                      enum:
+                        [
+                          "disabled_event",
+                          "cancelled_event",
+                          "join_request",
+                          "accepted_request",
+                          "declined_request",
+                          "invite",
+                          "accepted_invite",
+                          "declined_invite",
+                          "new_comment",
+                          "new_poll",
+                          "poll_closed",
                         ]
                     asset_type:
                       type: string
@@ -1856,7 +1856,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
