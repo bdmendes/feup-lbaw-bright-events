@@ -14,20 +14,24 @@ class Event extends Model
    * The event organizer is
    */
   public function organizer() {
-    return $this->belongsTo('App\Models\User');
+    return $this->belongsTo(User::class, 'organizer');
   }
 
   /**
    * The cover image file is
    */
   public function image() {
-    return $this->belongsTo('App\Models\File');
+    return $this->belongsTo(File::class, 'cover_image');
+  }
+
+  public function location() {
+    return $this->belongsTo(Location::class, 'location');
   }
 
   /**
    * Comments of event
    */
   public function comments() {
-    return $this->hasMany('App\Models\Comment');
+    return $this->hasMany(Comment::class);
   }
 }
