@@ -322,6 +322,160 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
+
+-- 'Disabled event', 'Cancelled event', 'Join request', 'Accepted request', 'Declined request', 'Invite', 'Accepted invite', 'Declined invite', 'New comment', 'New poll', 'Poll closed'
+
+CREATE FUNCTION disable_event_notification() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.is_disabled THEN
+        INSERT INTO notification 
+        (notification_type, event, attendance_request, comment, addressee) 
+        SELECT * FROM (
+            (VALUES ('Disabled event', NEW.id, NULL, NULL)) 
+            CROSS JOIN
+            (
+                SELECT attendee
+                FROM attendance
+                WHERE event = NEW.id
+            ) 
+        );
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION cancelled_event_notification() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.event_state = 'Cancelled' THEN
+        INSERT INTO notification 
+        (notification_type, event, attendance_request, comment, addressee) 
+        SELECT * FROM (
+            (VALUES ('Cancelled event', NEW.id, NULL, NULL)) 
+            CROSS JOIN
+            (
+                SELECT attendee
+                FROM attendance
+                WHERE event = NEW.id
+            ) 
+        );
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION join_request_notification() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.is_invite = FALSE THEN
+        INSERT INTO notification 
+        (notification_type, event, attendance_request, comment, addressee) 
+        VALUES ('Join request', NULL, NEW.id, NULL, NEW.attendee);
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION accepted_request_notification() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.is_invite = FALSE AND NEW.is_accepted = TRUE THEN
+        INSERT INTO notification 
+        (notification_type, event, attendance_request, comment, addressee) 
+        VALUES ('Accepted request', NULL, NEW.id, NULL, NEW.attendee);
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION invite_notification() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.is_invite = TRUE THEN
+        INSERT INTO notification 
+        (notification_type, event, attendance_request, comment, addressee) 
+        VALUES ('Invite', NULL, NEW.id, NULL, NEW.attendee);
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION accepted_invite_notification() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.is_invite = TRUE and NEW.is_accepted = TRUE THEN
+        INSERT INTO notification 
+        (notification_type, event, attendance_request, comment, addressee) 
+        VALUES ('Accepted invite', NULL, NEW.id, NULL, NEW.attendee);
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+--CREATE FUNCTION new_comment_notification() RETURNS TRIGGER AS
+--$BODY$
+--BEGIN
+--    RETURN NEW;
+--END
+--$BODY$
+--LANGUAGE plpgsql;
+
+CREATE FUNCTION new_poll_notification() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.is_open = TRUE THEN
+        INSERT INTO notification
+        (notification_type, event, attendance_request, comment, addressee)
+        SELECT * FROM (
+            (VALUES ('New poll', NEW.event, NULL, NULL)) 
+            CROSS JOIN
+            (
+                SELECT attendee
+                FROM attendance
+                WHERE event = NEW.event
+            ) 
+        );
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+-- currently adds a notification for all voters of the poll
+-- supports multiple votes in the same poll
+CREATE FUNCTION closed_poll_notification() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.is_open = FALSE THEN
+        INSERT INTO notification
+        (notification_type, event, attendance_request, comment, addressee)
+        SELECT * FROM (
+            (VALUES ('New poll', NEW.event, NULL, NULL)) 
+            CROSS JOIN
+            (
+                SELECT DISTINCT voter
+                FROM user_poll_option
+                JOIN (
+                    SELECT * 
+                    FROM poll_option
+                    WHERE poll = NEW.id
+                )
+                ON user_poll_option.poll_option=poll_option.id
+            ) 
+        );
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
 ----------------------------------------------------
 -------------------- Triggers ----------------------
 ----------------------------------------------------
@@ -370,6 +524,46 @@ CREATE TRIGGER voter_is_attendee
     BEFORE INSERT OR UPDATE ON user_poll_option
     FOR EACH ROW
     EXECUTE PROCEDURE voter_is_attendee();
+
+CREATE TRIGGER disable_event_notification
+    BEFORE UPDATE ON event
+    FOR EACH ROW
+    EXECUTE PROCEDURE disable_event_notification();
+
+CREATE TRIGGER cancelled_event_notification
+    BEFORE UPDATE ON event
+    FOR EACH ROW
+    EXECUTE PROCEDURE cancelled_event_notification();
+
+CREATE TRIGGER join_request_notification
+    BEFORE INSERT ON attendance_request
+    FOR EACH ROW
+    EXECUTE PROCEDURE join_request_notification();
+
+CREATE TRIGGER accepted_request_notification
+    BEFORE UPDATE ON attendance_request
+    FOR EACH ROW
+    EXECUTE PROCEDURE accepted_request_notification();
+
+CREATE TRIGGER invite_notification
+    BEFORE INSERT ON attendance_request
+    FOR EACH ROW
+    EXECUTE PROCEDURE invite_notification();
+
+CREATE TRIGGER accepted_invite_notification
+    BEFORE UPDATE ON attendance_request
+    FOR EACH ROW
+    EXECUTE PROCEDURE accepted_invite_notification();
+
+CREATE TRIGGER new_poll_notification
+    BEFORE INSERT ON poll
+    FOR EACH ROW
+    EXECUTE PROCEDURE new_poll_notification();
+
+CREATE TRIGGER closed_poll_notification
+    BEFORE UPDATE ON attendance_request
+    FOR EACH ROW
+    EXECUTE PROCEDURE closed_poll_notification();
 
 ----------------------------------------------------
 ------------ Full-text search indexes --------------
