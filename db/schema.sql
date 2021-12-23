@@ -352,13 +352,13 @@ BEGIN
         INSERT INTO notification 
         (notification_type, event, attendance_request, comment, addressee) 
         SELECT * FROM (
-            (VALUES ('Disabled event', NEW.id, NULL, NULL)) 
+            (VALUES ('Disabled event', NEW.id, NULL, NULL)) AS foo
             CROSS JOIN
             (
                 SELECT attendee
                 FROM attendance
                 WHERE event = NEW.id
-            ) 
+            ) AS bar
         );
     END IF;
     RETURN NEW;
@@ -373,13 +373,13 @@ BEGIN
         INSERT INTO notification 
         (notification_type, event, attendance_request, comment, addressee) 
         SELECT * FROM (
-            (VALUES ('Cancelled event', NEW.id, NULL, NULL)) 
+            (VALUES ('Cancelled event', NEW.id, NULL, NULL)) AS foo
             CROSS JOIN
             (
                 SELECT attendee
                 FROM attendance
                 WHERE event = NEW.id
-            ) 
+            ) AS bar
         );
     END IF;
     RETURN NEW;
@@ -454,13 +454,13 @@ BEGIN
         INSERT INTO notification
         (notification_type, event, attendance_request, comment, addressee)
         SELECT * FROM (
-            (VALUES ('New poll', NEW.event, NULL, NULL)) 
+            (VALUES ('New poll', NEW.event, NULL, NULL)) AS foo
             CROSS JOIN
             (
                 SELECT attendee
                 FROM attendance
                 WHERE event = NEW.event
-            ) 
+            ) AS bar
         );
     END IF;
     RETURN NEW;
@@ -477,7 +477,7 @@ BEGIN
         INSERT INTO notification
         (notification_type, event, attendance_request, comment, addressee)
         SELECT * FROM (
-            (VALUES ('New poll', NEW.event, NULL, NULL)) 
+            (VALUES ('New poll', NEW.event, NULL, NULL)) AS foo
             CROSS JOIN
             (
                 SELECT DISTINCT voter
@@ -486,9 +486,9 @@ BEGIN
                     SELECT * 
                     FROM poll_option
                     WHERE poll = NEW.id
-                )
+                ) AS poll_option
                 ON user_poll_option.poll_option=poll_option.id
-            ) 
+            ) AS bar
         );
     END IF;
     RETURN NEW;
