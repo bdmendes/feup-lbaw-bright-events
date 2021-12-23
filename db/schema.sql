@@ -195,7 +195,7 @@ CREATE TABLE notification (
     poll INTEGER REFERENCES poll ON DELETE CASCADE ON UPDATE CASCADE,
     comment INTEGER REFERENCES comment ON DELETE CASCADE ON UPDATE CASCADE,
     addressee INTEGER REFERENCES users ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
-    CONSTRAINT single_reference CHECK ((attendance_request IS NOT NULL AND event IS NULL AND comment IS NULL) OR (attendance_request IS NULL AND event IS NOT NULL AND comment IS NULL) OR (attendance_request IS NULL AND event IS NULL AND comment IS NOT NULL))
+    CONSTRAINT single_reference CHECK (array_length(array_remove(ARRAY[attendance_request::integer, poll::integer, comment::integer], NULL), 1) = 1)
 );
 
 CREATE TABLE report (
@@ -348,14 +348,14 @@ LANGUAGE plpgsql;
 CREATE FUNCTION disable_event_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF NEW.is_disabled THEN
+    IF NEW.is_disabled = TRUE AND OLD.is_disabled = FALSE THEN
         INSERT INTO notification 
-        (notification_type, event, attendance_request, comment, addressee) 
+        (notification_type, event, poll, comment, attendance_request, addressee) 
         SELECT * FROM (
-            (VALUES ('Disabled event', NEW.id, NULL, NULL)) AS foo
+            (VALUES (CAST('Disabled event' AS notification_type), NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer))) AS foo
             CROSS JOIN
             (
-                SELECT attendee
+                SELECT id as attendance_request_id, attendee
                 FROM attendance
                 WHERE event = NEW.id
             ) AS bar
@@ -369,14 +369,14 @@ LANGUAGE plpgsql;
 CREATE FUNCTION cancelled_event_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF NEW.event_state = 'Cancelled' THEN
+    IF NEW.event_state = 'Cancelled' AND OLD.event_state != 'Cancelled' THEN
         INSERT INTO notification 
-        (notification_type, event, attendance_request, comment, addressee) 
+        (notification_type, event, poll, comment, attendance_request, addressee) 
         SELECT * FROM (
-            (VALUES ('Cancelled event', NEW.id, NULL, NULL)) AS foo
+            (VALUES (CAST('Cancelled event' AS notification_type), NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer))) AS foo
             CROSS JOIN
             (
-                SELECT attendee
+                SELECT id as attendance_request_id, attendee
                 FROM attendance
                 WHERE event = NEW.id
             ) AS bar
@@ -391,9 +391,9 @@ CREATE FUNCTION join_request_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.is_invite = FALSE THEN
-        INSERT INTO notification 
-        (notification_type, event, attendance_request, comment, addressee) 
-        VALUES ('Join request', NULL, NEW.id, NULL, NEW.attendee);
+        INSERT INTO notification
+        (notification_type, event, attendance_request, poll, comment, addressee) 
+        VALUES (CAST('Join request' AS notification_type), NEW.event, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee);
     END IF;
     RETURN NEW;
 END
@@ -403,10 +403,10 @@ LANGUAGE plpgsql;
 CREATE FUNCTION accepted_request_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF NEW.is_invite = FALSE AND NEW.is_accepted = TRUE THEN
+    IF NEW.is_invite = FALSE AND NEW.is_accepted = TRUE AND OLD.is_accepted = FALSE THEN
         INSERT INTO notification 
-        (notification_type, event, attendance_request, comment, addressee) 
-        VALUES ('Accepted request', NULL, NEW.id, NULL, NEW.attendee);
+        (notification_type, event, attendance_request, poll, comment, addressee) 
+        VALUES (CAST('Accepted request' AS notification_type), NEW.event, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee);
     END IF;
     RETURN NEW;
 END
@@ -418,8 +418,8 @@ $BODY$
 BEGIN
     IF NEW.is_invite = TRUE THEN
         INSERT INTO notification 
-        (notification_type, event, attendance_request, comment, addressee) 
-        VALUES ('Invite', NULL, NEW.id, NULL, NEW.attendee);
+        (notification_type, event, attendance_request, poll, comment, addressee) 
+        VALUES (CAST('Invite' AS notification_type), NEW.event, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee);
     END IF;
     RETURN NEW;
 END
@@ -429,10 +429,10 @@ LANGUAGE plpgsql;
 CREATE FUNCTION accepted_invite_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF NEW.is_invite = TRUE and NEW.is_accepted = TRUE THEN
+    IF NEW.is_invite = TRUE AND NEW.is_accepted = TRUE AND OLD.is_accepted = FALSE THEN
         INSERT INTO notification 
-        (notification_type, event, attendance_request, comment, addressee) 
-        VALUES ('Accepted invite', NULL, NEW.id, NULL, NEW.attendee);
+        (notification_type, event, attendance_request, poll, comment, addressee) 
+        VALUES (CAST('Accepted Invite' AS notification_type), NEW.event, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee);
     END IF;
     RETURN NEW;
 END
@@ -452,9 +452,9 @@ $BODY$
 BEGIN
     IF NEW.is_open = TRUE THEN
         INSERT INTO notification
-        (notification_type, event, attendance_request, comment, addressee)
+        (notification_type, event, attendance_request, poll, comment, addressee)
         SELECT * FROM (
-            (VALUES ('New poll', NEW.event, NULL, NULL)) AS foo
+            (VALUES (CAST('New poll' AS notification_type), NEW.event, CAST(NULL AS Integer), NEW.id, CAST(NULL AS Integer))) AS foo
             CROSS JOIN
             (
                 SELECT attendee
@@ -473,11 +473,11 @@ LANGUAGE plpgsql;
 CREATE FUNCTION closed_poll_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF NEW.is_open = FALSE THEN
+    IF NEW.is_open = FALSE AND OLD.is_open = TRUE THEN
         INSERT INTO notification
-        (notification_type, event, attendance_request, comment, addressee)
+        (notification_type, event, attendance_request, poll, comment, addressee)
         SELECT * FROM (
-            (VALUES ('New poll', NEW.event, NULL, NULL)) AS foo
+            (VALUES ('New poll', NEW.event, NULL, NEW.id, NULL)) AS foo
             CROSS JOIN
             (
                 SELECT DISTINCT voter
@@ -546,42 +546,42 @@ CREATE TRIGGER voter_is_attendee
     EXECUTE PROCEDURE voter_is_attendee();
 
 CREATE TRIGGER disable_event_notification
-    BEFORE UPDATE ON event
+    AFTER UPDATE ON event
     FOR EACH ROW
     EXECUTE PROCEDURE disable_event_notification();
 
 CREATE TRIGGER cancelled_event_notification
-    BEFORE UPDATE ON event
+    AFTER UPDATE ON event
     FOR EACH ROW
     EXECUTE PROCEDURE cancelled_event_notification();
 
 CREATE TRIGGER join_request_notification
-    BEFORE INSERT ON attendance_request
+    AFTER INSERT ON attendance_request
     FOR EACH ROW
     EXECUTE PROCEDURE join_request_notification();
 
 CREATE TRIGGER accepted_request_notification
-    BEFORE UPDATE ON attendance_request
+    AFTER UPDATE ON attendance_request
     FOR EACH ROW
     EXECUTE PROCEDURE accepted_request_notification();
 
 CREATE TRIGGER invite_notification
-    BEFORE INSERT ON attendance_request
+    AFTER INSERT ON attendance_request
     FOR EACH ROW
     EXECUTE PROCEDURE invite_notification();
 
 CREATE TRIGGER accepted_invite_notification
-    BEFORE UPDATE ON attendance_request
+    AFTER UPDATE ON attendance_request
     FOR EACH ROW
     EXECUTE PROCEDURE accepted_invite_notification();
 
 CREATE TRIGGER new_poll_notification
-    BEFORE INSERT ON poll
+    AFTER INSERT ON poll
     FOR EACH ROW
     EXECUTE PROCEDURE new_poll_notification();
 
 CREATE TRIGGER closed_poll_notification
-    BEFORE UPDATE ON attendance_request
+    AFTER UPDATE ON poll
     FOR EACH ROW
     EXECUTE PROCEDURE closed_poll_notification();
 
