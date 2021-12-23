@@ -130,7 +130,7 @@ CREATE TABLE attendance (
 CREATE TABLE attendance_request (
     id SERIAL PRIMARY KEY,
     event INTEGER REFERENCES event ON DELETE CASCADE ON UPDATE CASCADE, 
-    addressee INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
+    attendee INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
     is_accepted BOOLEAN DEFAULT FALSE NOT NULL,
     is_invite BOOLEAN NOT NULL
 );
@@ -257,8 +257,8 @@ LANGUAGE plpgsql;
 CREATE FUNCTION block_admin_request() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF NEW.addressee IS NOT NULL THEN
-        IF EXISTS (SELECT * FROM users WHERE id = NEW.addressee AND is_admin = TRUE) THEN 
+    IF NEW.attendee IS NOT NULL THEN
+        IF EXISTS (SELECT * FROM users WHERE id = NEW.attendee AND is_admin = TRUE) THEN 
             RAISE EXCEPTION 'Admins cannot be the recipient of requests';
         END IF;
     END IF;
@@ -296,8 +296,8 @@ LANGUAGE plpgsql;
 CREATE FUNCTION request_diff_users() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF NEW.addressee IS NOT NULL THEN
-        IF EXISTS (SELECT * FROM event WHERE organizer = NEW.addressee AND id = NEW.event) THEN
+    IF NEW.attendee IS NOT NULL THEN
+        IF EXISTS (SELECT * FROM event WHERE organizer = NEW.attendee AND id = NEW.event) THEN
             RAISE EXCEPTION 'Requests for a certain event can not be sent to the organizer of that same event'; 
         END IF;
     END IF;
