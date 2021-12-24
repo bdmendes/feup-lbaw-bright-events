@@ -1,0 +1,7 @@
+{
+    "recommendations": [
+        "onecentlin.laravel-blade",
+        "onecentlin.laravel5-snippets",
+        "junstyle.php-cs-fixer"
+    ]
+}
