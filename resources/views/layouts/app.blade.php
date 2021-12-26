@@ -13,6 +13,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/milligram.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script type="text/javascript">
         // Fix for Firefox autofocus CSS bug
         // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
@@ -21,37 +22,14 @@
 </script>
   </head>
   <body>
-    <main>
-      <nav>
-        <div class="logo">
-          <a class="button" href="{{url ('home')}}">Bright events logo</a>
-        </div>
-        <div class="menuNavigation">
-          <a class="button" href="{{ url('events')}}">Events </a>
-          <a class="button" href="{{ url('users')}}">Users </a>
-        </div>
-        <div class="menuUser">
-          @if (Auth::check())
-          <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
-          @else
-          <a class="button" href="{{url('login') }}"> Sign-in </a>
-          @endif
-        </div>
-    </nav>
-      <section id="content">
-        @yield('content')
-      </section>
+    @include('layouts.navbar')
+    <section id="content">
+    @yield('content')
+    </section>
 
-      <footer>
-        <span>
-          @Bright Events 2021
-        </span>
-        <div class="footerPages">
-          <a class="button" href="{{ url('contact')}}">Contact Us </a>
-          <a class="button" href="{{ url('faq')}}">FAQ </a>
-          <a class="button" href="{{ url('about')}}">About </a>
-        </div>
-      </footer>
-    </main>
+    @include('layouts.footer')
+    
+    @include('layouts.scripts')
+
   </body>
 </html>
