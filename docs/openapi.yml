@@ -1132,6 +1132,15 @@ paths:
             enum: ["ascending", "descending"]
           description: "Defines if it's ascending order or descending order"
         - in: query
+          name: state
+          schema:
+            type: string
+            enum:
+              - "cancelled"
+              - "finished"
+              - "on-going"
+              - "due"            
+        - in: query
           name: global
           schema:
             type: string
@@ -1139,7 +1148,7 @@ paths:
         - in: query
           name: location
           schema:
-            type: string
+            type: integer
           description: "Filters events via location"
         - in: query
           name: organizer
@@ -1163,6 +1172,17 @@ paths:
             type: string
             format: date
           description: "Show events that started before 'end_date'"
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+          description: "Starting index of user list"
+        - in: query
+          name: size
+          schema:
+            type: integer
+          description: "Size of sublist to show"
 
   /api/events/{id}:
     patch:
@@ -1274,6 +1294,18 @@ paths:
       operationId: "R311"
       summary: "R311: Event Comments list"
       description: "Retrieve event comments. Access: NAU"
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+          description: "Starting index of user list"
+        - in: query
+          name: size
+          schema:
+            type: integer
+          description: "Size of sublist to show"
       tags:
         - "M03: Events and Event Content"
       responses:
@@ -1600,6 +1632,17 @@ paths:
           required: true
           schema:
             type: integer
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+          description: "Starting index of user list"
+        - in: query
+          name: size
+          schema:
+            type: integer
+          description: "Size of sublist to show"
       responses:
         "200":
           description: "Ok. Show polls list"
@@ -1799,6 +1842,18 @@ paths:
       description: "Retrieve user notifications. Access: AU"
       tags:
         - "M06: Notifications"
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+          description: "Starting index of user list"
+        - in: query
+          name: size
+          schema:
+            type: integer
+          description: "Size of sublist to show"
       responses:
         "401":
           description: "Unauthorized. User must be logged in"

@@ -20,7 +20,7 @@ class Event extends Model
      */
     public function organizer()
     {
-        return $this->belongsTo(User::class, 'organizer');
+        return $this->hasOne(User::class, 'organizer');
     }
 
     /**
@@ -42,5 +42,18 @@ class Event extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'event_tag', 'event', 'tag');
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        if (!$search) {
+            return $query;
+        }
+        return $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$search]);
     }
 }
