@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Home;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
-class HomeController extends Controller{
+class HomeController extends Controller
+{
 
     /*
     |--------------------------------------------------------------------------
@@ -18,9 +19,13 @@ class HomeController extends Controller{
     |
     */
 
-    public function home(){
+    public function home()
+    {
         return view('pages.home');
     }
-}
 
-?>
+    public function redirect()
+    {
+        return redirect(route('home'));
+    }
+}

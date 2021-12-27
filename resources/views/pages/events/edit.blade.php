@@ -3,7 +3,7 @@
 @section('title', 'home')
 
 @section('content')
-    <form action="{{ route('createEvent')}}" method="put">
+    <form action="{{ route('createEvent')}}" method="post">
         <div class="d-flex align-items-lg-center flex-column mx-auto col-lg-6 col-md-8 col-sm-10 col-xs-12 p-1 pb-3"
         style="background-color: #91A0AD !important;">
         <div class="p-1 w-100">

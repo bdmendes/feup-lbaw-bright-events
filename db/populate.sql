@@ -13,16 +13,16 @@ INSERT INTO LOCATION values
 	( 111, '5997 Burning Wood Way', 'Mantes-la-Jolie', '48.9990813 1.6899473', 'Manufacturers', 'France' ),
 	( 112, '5 Redwing Center', 'Aco', '-9.3601019 -77.553344', 'Old Shore', 'Peru' );
 INSERT INTO USERS VALUES 
-	 (100, 'danial1978@gmail.com', 'danial1978', '$2y$10$WNIrrB/6C7yPQpvScdXSs.y/mLdxJ8PajD0YxWnugGEfAJsqtCh2e', 'Breanda Marple', False, '', date '1978-09-28', False, 'Female', null ) ,
-	 (101, 'PedroLLiao@rhyta.com', 'pedrolliao', '$2y$10$7clHki3BzBs..oeY/Ym6vuGOfUe7xeahf.JjVBumBxrTp4iNCKjpK', 'Pedro Liao', False, '', date '1954-07-28', False, 'Male', null ) ,
-	 (102, 'MatthewERaleigh@dayrep.com', 'rayleigh', '$2y$10$vgqw.lujkVX0Txekfw0SbegdAb2OdfoUWA8haJVDgb6mG4NpvAAZ2', 'Matthew Raleigh', False, '', date '1998-02-21', False, 'Male', null ) ,
-	 (103, 'JuanitaWPayton@dayrep.com', 'juanitaJuan', '$2y$10$PIxT1sCJn.q6qNc.aJe7nuJ014oLBTKjpFPdKE6Ka.yHy0gCmsXJy', 'Juanita Payton', False, '', date '1982-01-18', False, 'Female', null ) ,
-	 (104, 'LouisJAvelar@jourrapide.com', 'louislit', '$2y$10$svD6JX.6Aoh12j7z1Hlct.oMIwtZKM1K9mvAgTs53XBm17wgvMS9O', 'Louis Avelar', False, '', date '1982-04-01', False, 'Male', null ) ,
-	 (105, 'MaryMHolland@dayrep.com', 'maryland', '$2y$10$zFCrQueN5tCr4s9ZrDCFHuj7nD8ERM1pImghymJpf7LdcG9db6wQa', 'Mary Holland', False, '', date '1991-5-21', False, 'Female', null ) ,
-	 (106, 'WilliamSKing@teleworm.us', 'willking', '$2y$10$x3tHiP27A6F0Jm6f03ZvrOv4Ua1e9vuqbWOi5pW.TbDbc1vSxMoyO', 'William King', False, '', date '1998-06-27', False, 'Male', null ) ,
-	 (107, 'MichaelVJones@jourrapide.com', 'michaelbjones', '$2y$10$YZYNFof5Jwim1OcS.Z8xI.98vbDubcawtkgmkQySddPuSuNLisCGe', 'Michael Jones', False, '', date '1997-12-12', False, 'Male', null ) ,
-	 (108, 'MeredithMFry@jourrapide.com', 'meredithfried', '$2y$10$OqRoswFxgz2xK5wUv78L2eFB2go2.fAmkUIoYsWObuUJiRNShgnZK', 'Meredith Fry', False, '', date '2001-11-20', False, 'Female', null ) ,
-	 (109, 'PeterLWhite@armyspy.com', 'peterpeter', '$2y$10$QUc83MLokA/gh6H7.s6AH.pW2aLjaF/6CeM.mlCiuvjaXKI2iF4Na', 'Peter White', False, '', date '2000-01-09', False, 'Male', null ) ;
+	 (100, 'danial1978@gmail.com', 'danial1978', '$2y$10$WNIrrB/6C7yPQpvScdXSs.y/mLdxJ8PajD0YxWnugGEfAJsqtCh2e', 'Breanda Marple', False, '','null', date '1978-09-28', False, 'Female', null ) ,
+	 (101, 'PedroLLiao@rhyta.com', 'pedrolliao', '$2y$10$7clHki3BzBs..oeY/Ym6vuGOfUe7xeahf.JjVBumBxrTp4iNCKjpK', 'Pedro Liao', False, '','null', date '1954-07-28', False, 'Male', null ) ,
+	 (102, 'MatthewERaleigh@dayrep.com', 'rayleigh', '$2y$10$vgqw.lujkVX0Txekfw0SbegdAb2OdfoUWA8haJVDgb6mG4NpvAAZ2', 'Matthew Raleigh', False, '','null', date '1998-02-21', False, 'Male', null ) ,
+	 (103, 'JuanitaWPayton@dayrep.com', 'juanitaJuan', '$2y$10$PIxT1sCJn.q6qNc.aJe7nuJ014oLBTKjpFPdKE6Ka.yHy0gCmsXJy', 'Juanita Payton', False, '','null', date '1982-01-18', False, 'Female', null ) ,
+	 (104, 'LouisJAvelar@jourrapide.com', 'louislit', '$2y$10$svD6JX.6Aoh12j7z1Hlct.oMIwtZKM1K9mvAgTs53XBm17wgvMS9O', 'Louis Avelar', False, '','null', date '1982-04-01', False, 'Male', null ) ,
+	 (105, 'MaryMHolland@dayrep.com', 'maryland', '$2y$10$zFCrQueN5tCr4s9ZrDCFHuj7nD8ERM1pImghymJpf7LdcG9db6wQa', 'Mary Holland', False, '','null', date '1991-5-21', False, 'Female', null ) ,
+	 (106, 'WilliamSKing@teleworm.us', 'willking', '$2y$10$x3tHiP27A6F0Jm6f03ZvrOv4Ua1e9vuqbWOi5pW.TbDbc1vSxMoyO', 'William King', False, '','null', date '1998-06-27', False, 'Male', null ) ,
+	 (107, 'MichaelVJones@jourrapide.com', 'michaelbjones', '$2y$10$YZYNFof5Jwim1OcS.Z8xI.98vbDubcawtkgmkQySddPuSuNLisCGe', 'Michael Jones', False, '','null', date '1997-12-12', False, 'Male', null ) ,
+	 (108, 'MeredithMFry@jourrapide.com', 'meredithfried', '$2y$10$OqRoswFxgz2xK5wUv78L2eFB2go2.fAmkUIoYsWObuUJiRNShgnZK', 'Meredith Fry', False, '','null', date '2001-11-20', False, 'Female', null ) ,
+	 (109, 'PeterLWhite@armyspy.com', 'peterpeter', '$2y$10$QUc83MLokA/gh6H7.s6AH.pW2aLjaF/6CeM.mlCiuvjaXKI2iF4Na', 'Peter White', False, '','null', date '2000-01-09', False, 'Male', null ) ;
 INSERT INTO EVENT VALUES 
 	 (100, 'Vegan for beginners' ,'More and more people are interested in vegan/plant-based eating. Some are just curious, some want to get their feet wet, and some are ready to come to the V-side!', TO_TIMESTAMP('2021/12/29 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'Due', null, 105, 100) ,
 	 (101, 'Begin your taichi journey' ,'This series does seasonal training to help you develop a wide range of skills which will enhance both your health and your practice. We practices basic Tai Chi skills as posting, walking, breathing, stretching, energy work, bone tapping and hand movements.', TO_TIMESTAMP('2021/12/03 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'Due', null, 109, 101) ,
