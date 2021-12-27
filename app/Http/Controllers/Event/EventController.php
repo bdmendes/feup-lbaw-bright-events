@@ -30,4 +30,13 @@ class EventController extends Controller
 
         return redirect()->route('event', ['id' => $event->id]);
     }
+
+    public function get($id)
+    {
+        $event = Event::find($id);
+        if ($event->is_private) {
+            $this->authorize('view', Auth::user(), $event);
+        }
+        return view("pages.events.view", ['event' => $event]);
+    }
 }

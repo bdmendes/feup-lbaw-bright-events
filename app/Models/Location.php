@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Location extends Model
 {
-  // Don't add create and update timestamps in database.
-  public $timestamps  = false;
-  protected $table = 'location';
+    // Don't add create and update timestamps in database.
+    public $timestamps  = false;
+    protected $table = 'location';
 
-
+    public function pretty_print()
+    {
+        return $this->address . ", " . $this->city . ", " . $this->country;
+    }
 }

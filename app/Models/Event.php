@@ -9,6 +9,7 @@ class Event extends Model
     // Don't add create and update timestamps in database.
     public $timestamps  = false;
     protected $table = 'event';
+    protected $dates = ['date'];
 
     protected $fillable = [
         'title',
@@ -33,7 +34,7 @@ class Event extends Model
 
     public function location()
     {
-        return $this->belongsTo(Location::class, 'location');
+        return $this->belongsTo(Location::class, 'location_id');
     }
 
     /**
