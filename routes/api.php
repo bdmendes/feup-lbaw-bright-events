@@ -13,4 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
+// Middleware
 Route::middleware('auth:api')->get('/user', 'Auth\LoginController@getUser');
+
+// Events
+Route::get('events', "EventApiController@index");
