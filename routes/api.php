@@ -18,3 +18,6 @@ Route::middleware('auth:api')->get('/user', 'Auth\LoginController@getUser');
 
 // Events
 Route::get('events', "EventApiController@index");
+Route::patch('events/{id}', "EventApiController@update");
+Route::get('events/{id}/attendees', "EventApiController@getAttendees");
+Route::get('events/{id}/comments', "EventApiController@getComments");

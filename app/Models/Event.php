@@ -42,12 +42,17 @@ class Event extends Model
      */
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class, 'event');
     }
 
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'event_tag', 'event', 'tag');
+    }
+
+    public function attendees()
+    {
+        return $this->belongsToMany(User::class, 'attendance', 'event', 'attendee');
     }
 
     public function scopeSearch($query, $search)
