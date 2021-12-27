@@ -2,6 +2,8 @@
     "recommendations": [
         "onecentlin.laravel-blade",
         "onecentlin.laravel5-snippets",
-        "junstyle.php-cs-fixer"
+        "junstyle.php-cs-fixer",
+        "amiralizadeh9480.laravel-extra-intellisense",
+        "absszero.vscode-laravel-goto"
     ]
 }
