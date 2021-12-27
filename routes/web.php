@@ -11,8 +11,8 @@
 |
 */
 // Home
-Route::get('/', 'Auth\LoginController@home');
-Route::get('/home', 'Home\HomeController@home');
+Route::get('/', 'Home\HomeController@redirect');
+Route::get('/home', 'Home\HomeController@home')->name('home');
 
 //Static
 Route::get('/faq', 'Static\StaticPagesController@faq');
@@ -23,7 +23,7 @@ Route::get('cards', 'CardController@list');
 Route::get('cards/{id}', 'CardController@show');
 
 //Events
-Route::get('events/create', "Event\EventController@index")->name('createEvent');
+Route::get('events/create', "Event\EventController@indexCreate")->name('createEvent');
 Route::post('events/create', "Event\EventController@create")->name('createEvent');
 
 // API

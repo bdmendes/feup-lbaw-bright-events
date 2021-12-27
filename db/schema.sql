@@ -114,6 +114,7 @@ CREATE TABLE users (
     name TEXT NOT NULL,
     is_admin BOOLEAN NOT NULL,
     bio TEXT,
+	remember_token  TEXT,
     birth_date DATE CHECK (birth_date < CURRENT_DATE),
     is_blocked BOOLEAN NOT NULL DEFAULT FALSE,
     gender gender NOT NULL,
