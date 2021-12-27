@@ -22,6 +22,10 @@ Route::get('/contact', 'Static\StaticPagesController@contact');
 Route::get('cards', 'CardController@list');
 Route::get('cards/{id}', 'CardController@show');
 
+//Events
+Route::get('events/create', "Event\EventController@index")->name('createEvent');
+Route::post('events/create', "Event\EventController@create")->name('createEvent');
+
 // API
 Route::put('api/cards', 'CardController@create');
 Route::delete('api/cards/{card_id}', 'CardController@delete');
