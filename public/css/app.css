@@ -1,6 +1,9 @@
 html {
     height: 100%;
 }
+* {
+    font-size: 14px;
+}
 body {
     height: 100%;
     margin: 0;
@@ -88,4 +91,15 @@ footer > span {
 .homeContent > div {
     width: 80%;
     margin: auto;
+}
+
+li {
+    margin-bottom: 0;
+}
+
+.eventBackground {
+    max-height: 300px;
+    max-width: 100%;
+    width: auto;
+    display: block;
 }

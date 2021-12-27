@@ -103,7 +103,7 @@ CREATE TABLE location (
     city TEXT NOT NULL,
     coords TEXT NOT NULL,
     name TEXT,
-    TYPE Country NOT NULL
+    country Country NOT NULL
 );
 
 CREATE TABLE users (
@@ -130,8 +130,8 @@ CREATE TABLE event (
     is_disabled BOOLEAN NOT NULL DEFAULT FALSE,
     event_state event_state NOT NULL,
     cover_image INTEGER REFERENCES file ON DELETE SET NULL ON UPDATE CASCADE,
-    organizer INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
-    location INTEGER REFERENCES location ON DELETE SET NULL ON UPDATE CASCADE 
+    organizer_id INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
+    location_id INTEGER REFERENCES location ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE tag (
@@ -153,7 +153,7 @@ CREATE TABLE attendance (
 
 CREATE TABLE attendance_request (
     id SERIAL PRIMARY KEY,
-    event INTEGER REFERENCES event ON DELETE CASCADE ON UPDATE CASCADE, 
+    event INTEGER REFERENCES event ON DELETE CASCADE ON UPDATE CASCADE,
     attendee INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
     is_accepted BOOLEAN DEFAULT FALSE NOT NULL,
     is_invite BOOLEAN NOT NULL
@@ -185,7 +185,7 @@ CREATE TABLE comment (
     event INTEGER REFERENCES event ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
     commenter INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
     parent INTEGER REFERENCES comment ON DELETE CASCADE ON UPDATE CASCADE,
-    body TEXT, 
+    body TEXT,
     date TIMESTAMP DEFAULT NOW() NOT NULL
 );
 
@@ -207,8 +207,8 @@ CREATE TABLE report (
     date TIMESTAMP DEFAULT NOW(),
     description VARCHAR(1000),
     report_motive report_motive NOT NULL,
-    handled_by INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE, 
-    reported_event INTEGER REFERENCES event ON DELETE CASCADE ON UPDATE CASCADE, 
+    handled_by INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
+    reported_event INTEGER REFERENCES event ON DELETE CASCADE ON UPDATE CASCADE,
     reported_user INTEGER REFERENCES users ON DELETE CASCADE ON UPDATE CASCADE,
     reported_comment INTEGER REFERENCES comment ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT single_reference CHECK ((reported_event IS NOT NULL AND reported_user IS NULL AND reported_comment IS NULL) OR (reported_event IS NULL AND reported_user IS NOT NULL AND reported_comment IS NULL) OR (reported_event IS NULL AND reported_user IS NULL AND reported_comment IS NOT NULL))
@@ -219,7 +219,7 @@ CREATE TABLE report (
 -------------------------------------------------
 
 CREATE VIEW event_poll AS
-(SELECT poll.id AS poll_id, event 
+(SELECT poll.id AS poll_id, event
 FROM poll JOIN event ON (poll.event = event.id));
 
 ------------------------------------------------------
@@ -243,7 +243,7 @@ CREATE FUNCTION block_admin_comment() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.commenter IS NOT NULL THEN
-        IF EXISTS (SELECT * FROM users WHERE id = NEW.commenter AND is_admin = TRUE) THEN 
+        IF EXISTS (SELECT * FROM users WHERE id = NEW.commenter AND is_admin = TRUE) THEN
             RAISE EXCEPTION 'Admins cannot write comments';
         END IF;
     END IF;
@@ -256,7 +256,7 @@ CREATE FUNCTION block_admin_poll_vote() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.voter IS NOT NULL THEN
-        IF EXISTS (SELECT * FROM users WHERE id = NEW.voter AND is_admin = TRUE) THEN 
+        IF EXISTS (SELECT * FROM users WHERE id = NEW.voter AND is_admin = TRUE) THEN
             RAISE EXCEPTION 'Admins cannot vote in polls';
         END IF;
     END IF;
@@ -269,7 +269,7 @@ CREATE FUNCTION block_admin_attendance() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.attendee IS NOT NULL THEN
-        IF EXISTS (SELECT * FROM users WHERE id = NEW.attendee AND is_admin = TRUE) THEN 
+        IF EXISTS (SELECT * FROM users WHERE id = NEW.attendee AND is_admin = TRUE) THEN
             RAISE EXCEPTION 'Admins cannot attend events';
         END IF;
     END IF;
@@ -282,7 +282,7 @@ CREATE FUNCTION block_admin_request() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.attendee IS NOT NULL THEN
-        IF EXISTS (SELECT * FROM users WHERE id = NEW.attendee AND is_admin = TRUE) THEN 
+        IF EXISTS (SELECT * FROM users WHERE id = NEW.attendee AND is_admin = TRUE) THEN
             RAISE EXCEPTION 'Admins cannot be the recipient of requests';
         END IF;
     END IF;
@@ -294,8 +294,8 @@ LANGUAGE plpgsql;
 CREATE FUNCTION block_admin_organizer() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF NEW.organizer IS NOT NULL THEN
-        IF EXISTS (SELECT * FROM users WHERE id = NEW.organizer AND is_admin = TRUE) THEN 
+    IF NEW.organizer_id IS NOT NULL THEN
+        IF EXISTS (SELECT * FROM users WHERE id = NEW.organizer_id AND is_admin = TRUE) THEN
             RAISE EXCEPTION 'Admins cannot be organizers';
         END IF;
     END IF;
@@ -308,7 +308,7 @@ CREATE FUNCTION request_event_type() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.event IS NOT NULL THEN
-        IF EXISTS (SELECT e.* FROM event e WHERE id = NEW.event AND e.event_state <> 'Due' AND e.event_state <> 'On-going') THEN 
+        IF EXISTS (SELECT e.* FROM event e WHERE id = NEW.event AND e.event_state <> 'Due' AND e.event_state <> 'On-going') THEN
             RAISE EXCEPTION 'Requests can only be sent for due or on-going events';
         END IF;
     END IF;
@@ -321,8 +321,8 @@ CREATE FUNCTION request_diff_users() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.attendee IS NOT NULL THEN
-        IF EXISTS (SELECT * FROM event WHERE organizer = NEW.attendee AND id = NEW.event) THEN
-            RAISE EXCEPTION 'Requests for a certain event can not be sent to the organizer of that same event'; 
+        IF EXISTS (SELECT * FROM event WHERE organizer_id = NEW.attendee AND id = NEW.event) THEN
+            RAISE EXCEPTION 'Requests for a certain event can not be sent to the organizer of that same event';
         END IF;
     END IF;
     RETURN NEW;
@@ -334,9 +334,9 @@ CREATE FUNCTION voter_is_attendee() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.voter IS NOT NULL THEN
-        IF NOT EXISTS (SELECT * 
+        IF NOT EXISTS (SELECT *
         FROM event_poll JOIN attendance a ON (event_poll.event = a.event)
-                        JOIN poll_option po ON (po.poll = event_poll.poll_id) 
+                        JOIN poll_option po ON (po.poll = event_poll.poll_id)
         WHERE po.id = NEW.poll_option AND attendee = NEW.voter) THEN
             RAISE EXCEPTION 'A poll voter must attend the event related to the poll';
         END IF;
@@ -353,8 +353,8 @@ CREATE FUNCTION disable_event_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.is_disabled = TRUE AND OLD.is_disabled = FALSE THEN
-        INSERT INTO notification 
-        (notification_type, event, poll, comment, attendance_request, addressee) 
+        INSERT INTO notification
+        (notification_type, event, poll, comment, attendance_request, addressee)
         SELECT * FROM (
             (VALUES (CAST('Disabled event' AS notification_type), NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer))) AS foo
             CROSS JOIN
@@ -374,8 +374,8 @@ CREATE FUNCTION cancelled_event_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.event_state = 'Cancelled' AND OLD.event_state != 'Cancelled' THEN
-        INSERT INTO notification 
-        (notification_type, event, poll, comment, attendance_request, addressee) 
+        INSERT INTO notification
+        (notification_type, event, poll, comment, attendance_request, addressee)
         SELECT * FROM (
             (VALUES (CAST('Cancelled event' AS notification_type), NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer))) AS foo
             CROSS JOIN
@@ -396,7 +396,7 @@ $BODY$
 BEGIN
     IF NEW.is_invite = FALSE THEN
         INSERT INTO notification
-        (notification_type, event, attendance_request, poll, comment, addressee) 
+        (notification_type, event, attendance_request, poll, comment, addressee)
         VALUES (CAST('Join request' AS notification_type), NEW.event, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee);
     END IF;
     RETURN NEW;
@@ -408,8 +408,8 @@ CREATE FUNCTION accepted_request_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.is_invite = FALSE AND NEW.is_accepted = TRUE AND OLD.is_accepted = FALSE THEN
-        INSERT INTO notification 
-        (notification_type, event, attendance_request, poll, comment, addressee) 
+        INSERT INTO notification
+        (notification_type, event, attendance_request, poll, comment, addressee)
         VALUES (CAST('Accepted request' AS notification_type), NEW.event, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee);
     END IF;
     RETURN NEW;
@@ -421,8 +421,8 @@ CREATE FUNCTION invite_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.is_invite = TRUE THEN
-        INSERT INTO notification 
-        (notification_type, event, attendance_request, poll, comment, addressee) 
+        INSERT INTO notification
+        (notification_type, event, attendance_request, poll, comment, addressee)
         VALUES (CAST('Invite' AS notification_type), NEW.event, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee);
     END IF;
     RETURN NEW;
@@ -434,8 +434,8 @@ CREATE FUNCTION accepted_invite_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.is_invite = TRUE AND NEW.is_accepted = TRUE AND OLD.is_accepted = FALSE THEN
-        INSERT INTO notification 
-        (notification_type, event, attendance_request, poll, comment, addressee) 
+        INSERT INTO notification
+        (notification_type, event, attendance_request, poll, comment, addressee)
         VALUES (CAST('Accepted Invite' AS notification_type), NEW.event, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee);
     END IF;
     RETURN NEW;
@@ -487,7 +487,7 @@ BEGIN
                 SELECT DISTINCT voter
                 FROM user_poll_option
                 JOIN (
-                    SELECT * 
+                    SELECT *
                     FROM poll_option
                     WHERE poll = NEW.id
                 ) AS poll_option

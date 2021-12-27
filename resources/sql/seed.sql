@@ -100,7 +100,7 @@ CREATE TABLE location (
     city TEXT NOT NULL,
     coords TEXT NOT NULL,
     name TEXT,
-    TYPE Country NOT NULL
+    country Country NOT NULL
 );
 
 CREATE TABLE users (
@@ -127,8 +127,8 @@ CREATE TABLE event (
     is_disabled BOOLEAN NOT NULL DEFAULT FALSE,
     event_state event_state NOT NULL,
     cover_image INTEGER REFERENCES file ON DELETE SET NULL ON UPDATE CASCADE,
-    organizer INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
-    location INTEGER REFERENCES location ON DELETE SET NULL ON UPDATE CASCADE 
+    organizer_id INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
+    location_id INTEGER REFERENCES location ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE tag (
@@ -150,7 +150,7 @@ CREATE TABLE attendance (
 
 CREATE TABLE attendance_request (
     id SERIAL PRIMARY KEY,
-    event INTEGER REFERENCES event ON DELETE CASCADE ON UPDATE CASCADE, 
+    event INTEGER REFERENCES event ON DELETE CASCADE ON UPDATE CASCADE,
     attendee INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
     is_accepted BOOLEAN DEFAULT FALSE NOT NULL,
     is_invite BOOLEAN NOT NULL
@@ -182,7 +182,7 @@ CREATE TABLE comment (
     event INTEGER REFERENCES event ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
     commenter INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
     parent INTEGER REFERENCES comment ON DELETE CASCADE ON UPDATE CASCADE,
-    body TEXT, 
+    body TEXT,
     date TIMESTAMP DEFAULT NOW() NOT NULL
 );
 
@@ -204,8 +204,8 @@ CREATE TABLE report (
     date TIMESTAMP DEFAULT NOW(),
     description VARCHAR(1000),
     report_motive report_motive NOT NULL,
-    handled_by INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE, 
-    reported_event INTEGER REFERENCES event ON DELETE CASCADE ON UPDATE CASCADE, 
+    handled_by INTEGER REFERENCES users ON DELETE SET NULL ON UPDATE CASCADE,
+    reported_event INTEGER REFERENCES event ON DELETE CASCADE ON UPDATE CASCADE,
     reported_user INTEGER REFERENCES users ON DELETE CASCADE ON UPDATE CASCADE,
     reported_comment INTEGER REFERENCES comment ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT single_reference CHECK ((reported_event IS NOT NULL AND reported_user IS NULL AND reported_comment IS NULL) OR (reported_event IS NULL AND reported_user IS NOT NULL AND reported_comment IS NULL) OR (reported_event IS NULL AND reported_user IS NULL AND reported_comment IS NOT NULL))
@@ -216,7 +216,7 @@ CREATE TABLE report (
 -------------------------------------------------
 
 CREATE VIEW event_poll AS
-(SELECT poll.id AS poll_id, event 
+(SELECT poll.id AS poll_id, event
 FROM poll JOIN event ON (poll.event = event.id));
 
 ------------------------------------------------------
@@ -240,7 +240,7 @@ CREATE FUNCTION block_admin_comment() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.commenter IS NOT NULL THEN
-        IF EXISTS (SELECT * FROM users WHERE id = NEW.commenter AND is_admin = TRUE) THEN 
+        IF EXISTS (SELECT * FROM users WHERE id = NEW.commenter AND is_admin = TRUE) THEN
             RAISE EXCEPTION 'Admins cannot write comments';
         END IF;
     END IF;
@@ -253,7 +253,7 @@ CREATE FUNCTION block_admin_poll_vote() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.voter IS NOT NULL THEN
-        IF EXISTS (SELECT * FROM users WHERE id = NEW.voter AND is_admin = TRUE) THEN 
+        IF EXISTS (SELECT * FROM users WHERE id = NEW.voter AND is_admin = TRUE) THEN
             RAISE EXCEPTION 'Admins cannot vote in polls';
         END IF;
     END IF;
@@ -266,7 +266,7 @@ CREATE FUNCTION block_admin_attendance() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.attendee IS NOT NULL THEN
-        IF EXISTS (SELECT * FROM users WHERE id = NEW.attendee AND is_admin = TRUE) THEN 
+        IF EXISTS (SELECT * FROM users WHERE id = NEW.attendee AND is_admin = TRUE) THEN
             RAISE EXCEPTION 'Admins cannot attend events';
         END IF;
     END IF;
@@ -279,7 +279,7 @@ CREATE FUNCTION block_admin_request() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.attendee IS NOT NULL THEN
-        IF EXISTS (SELECT * FROM users WHERE id = NEW.attendee AND is_admin = TRUE) THEN 
+        IF EXISTS (SELECT * FROM users WHERE id = NEW.attendee AND is_admin = TRUE) THEN
             RAISE EXCEPTION 'Admins cannot be the recipient of requests';
         END IF;
     END IF;
@@ -291,8 +291,8 @@ LANGUAGE plpgsql;
 CREATE FUNCTION block_admin_organizer() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF NEW.organizer IS NOT NULL THEN
-        IF EXISTS (SELECT * FROM users WHERE id = NEW.organizer AND is_admin = TRUE) THEN 
+    IF NEW.organizer_id IS NOT NULL THEN
+        IF EXISTS (SELECT * FROM users WHERE id = NEW.organizer_id AND is_admin = TRUE) THEN
             RAISE EXCEPTION 'Admins cannot be organizers';
         END IF;
     END IF;
@@ -305,7 +305,7 @@ CREATE FUNCTION request_event_type() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.event IS NOT NULL THEN
-        IF EXISTS (SELECT e.* FROM event e WHERE id = NEW.event AND e.event_state <> 'Due' AND e.event_state <> 'On-going') THEN 
+        IF EXISTS (SELECT e.* FROM event e WHERE id = NEW.event AND e.event_state <> 'Due' AND e.event_state <> 'On-going') THEN
             RAISE EXCEPTION 'Requests can only be sent for due or on-going events';
         END IF;
     END IF;
@@ -318,8 +318,8 @@ CREATE FUNCTION request_diff_users() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.attendee IS NOT NULL THEN
-        IF EXISTS (SELECT * FROM event WHERE organizer = NEW.attendee AND id = NEW.event) THEN
-            RAISE EXCEPTION 'Requests for a certain event can not be sent to the organizer of that same event'; 
+        IF EXISTS (SELECT * FROM event WHERE organizer_id = NEW.attendee AND id = NEW.event) THEN
+            RAISE EXCEPTION 'Requests for a certain event can not be sent to the organizer of that same event';
         END IF;
     END IF;
     RETURN NEW;
@@ -331,9 +331,9 @@ CREATE FUNCTION voter_is_attendee() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.voter IS NOT NULL THEN
-        IF NOT EXISTS (SELECT * 
+        IF NOT EXISTS (SELECT *
         FROM event_poll JOIN attendance a ON (event_poll.event = a.event)
-                        JOIN poll_option po ON (po.poll = event_poll.poll_id) 
+                        JOIN poll_option po ON (po.poll = event_poll.poll_id)
         WHERE po.id = NEW.poll_option AND attendee = NEW.voter) THEN
             RAISE EXCEPTION 'A poll voter must attend the event related to the poll';
         END IF;
@@ -350,8 +350,8 @@ CREATE FUNCTION disable_event_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.is_disabled = TRUE AND OLD.is_disabled = FALSE THEN
-        INSERT INTO notification 
-        (notification_type, event, poll, comment, attendance_request, addressee) 
+        INSERT INTO notification
+        (notification_type, event, poll, comment, attendance_request, addressee)
         SELECT * FROM (
             (VALUES (CAST('Disabled event' AS notification_type), NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer))) AS foo
             CROSS JOIN
@@ -371,8 +371,8 @@ CREATE FUNCTION cancelled_event_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.event_state = 'Cancelled' AND OLD.event_state != 'Cancelled' THEN
-        INSERT INTO notification 
-        (notification_type, event, poll, comment, attendance_request, addressee) 
+        INSERT INTO notification
+        (notification_type, event, poll, comment, attendance_request, addressee)
         SELECT * FROM (
             (VALUES (CAST('Cancelled event' AS notification_type), NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer))) AS foo
             CROSS JOIN
@@ -393,7 +393,7 @@ $BODY$
 BEGIN
     IF NEW.is_invite = FALSE THEN
         INSERT INTO notification
-        (notification_type, event, attendance_request, poll, comment, addressee) 
+        (notification_type, event, attendance_request, poll, comment, addressee)
         VALUES (CAST('Join request' AS notification_type), NEW.event, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee);
     END IF;
     RETURN NEW;
@@ -405,8 +405,8 @@ CREATE FUNCTION accepted_request_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.is_invite = FALSE AND NEW.is_accepted = TRUE AND OLD.is_accepted = FALSE THEN
-        INSERT INTO notification 
-        (notification_type, event, attendance_request, poll, comment, addressee) 
+        INSERT INTO notification
+        (notification_type, event, attendance_request, poll, comment, addressee)
         VALUES (CAST('Accepted request' AS notification_type), NEW.event, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee);
     END IF;
     RETURN NEW;
@@ -418,8 +418,8 @@ CREATE FUNCTION invite_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.is_invite = TRUE THEN
-        INSERT INTO notification 
-        (notification_type, event, attendance_request, poll, comment, addressee) 
+        INSERT INTO notification
+        (notification_type, event, attendance_request, poll, comment, addressee)
         VALUES (CAST('Invite' AS notification_type), NEW.event, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee);
     END IF;
     RETURN NEW;
@@ -431,8 +431,8 @@ CREATE FUNCTION accepted_invite_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.is_invite = TRUE AND NEW.is_accepted = TRUE AND OLD.is_accepted = FALSE THEN
-        INSERT INTO notification 
-        (notification_type, event, attendance_request, poll, comment, addressee) 
+        INSERT INTO notification
+        (notification_type, event, attendance_request, poll, comment, addressee)
         VALUES (CAST('Accepted Invite' AS notification_type), NEW.event, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee);
     END IF;
     RETURN NEW;
@@ -484,7 +484,7 @@ BEGIN
                 SELECT DISTINCT voter
                 FROM user_poll_option
                 JOIN (
-                    SELECT * 
+                    SELECT *
                     FROM poll_option
                     WHERE poll = NEW.id
                 ) AS poll_option
@@ -667,7 +667,7 @@ CREATE INDEX user_notification_idx  ON notification USING HASH (addressee);
 -----------------------------------------------------
 --------------------Populate database----------------
 -----------------------------------------------------
-INSERT INTO LOCATION values 
+INSERT INTO LOCATION values
 	( 100, '484 Weeping Birch Street', 'Soito', '40.4690667 -8.1110545', 'Northview', 'Portugal' ),
 	( 101, '42514 Old Gate Junction', 'Craoteil', '48.7803815 2.4549884', 'Dawn', 'France' ),
 	( 102, '98032 Ronald Regan Point', 'Anchorage', '61.148769 -149.8010811', 'Hollow Ridge', 'United States' ),
@@ -681,7 +681,7 @@ INSERT INTO LOCATION values
 	( 110, '93 Porter Court', 'Paris 02', '43.4945737 5.8978018', 'Comanche', 'France' ),
 	( 111, '5997 Burning Wood Way', 'Mantes-la-Jolie', '48.9990813 1.6899473', 'Manufacturers', 'France' ),
 	( 112, '5 Redwing Center', 'Aco', '-9.3601019 -77.553344', 'Old Shore', 'Peru' );
-INSERT INTO USERS VALUES 
+INSERT INTO USERS VALUES
 	 (100, 'danial1978@gmail.com', 'danial1978', '$2y$10$WNIrrB/6C7yPQpvScdXSs.y/mLdxJ8PajD0YxWnugGEfAJsqtCh2e', 'Breanda Marple', False, '','null', date '1978-09-28', False, 'Female', null ) ,
 	 (101, 'PedroLLiao@rhyta.com', 'pedrolliao', '$2y$10$7clHki3BzBs..oeY/Ym6vuGOfUe7xeahf.JjVBumBxrTp4iNCKjpK', 'Pedro Liao', False, '','null', date '1954-07-28', False, 'Male', null ) ,
 	 (102, 'MatthewERaleigh@dayrep.com', 'rayleigh', '$2y$10$vgqw.lujkVX0Txekfw0SbegdAb2OdfoUWA8haJVDgb6mG4NpvAAZ2', 'Matthew Raleigh', False, '','null', date '1998-02-21', False, 'Male', null ) ,
@@ -692,7 +692,7 @@ INSERT INTO USERS VALUES
 	 (107, 'MichaelVJones@jourrapide.com', 'michaelbjones', '$2y$10$YZYNFof5Jwim1OcS.Z8xI.98vbDubcawtkgmkQySddPuSuNLisCGe', 'Michael Jones', False, '','null', date '1997-12-12', False, 'Male', null ) ,
 	 (108, 'MeredithMFry@jourrapide.com', 'meredithfried', '$2y$10$OqRoswFxgz2xK5wUv78L2eFB2go2.fAmkUIoYsWObuUJiRNShgnZK', 'Meredith Fry', False, '','null', date '2001-11-20', False, 'Female', null ) ,
 	 (109, 'PeterLWhite@armyspy.com', 'peterpeter', '$2y$10$QUc83MLokA/gh6H7.s6AH.pW2aLjaF/6CeM.mlCiuvjaXKI2iF4Na', 'Peter White', False, '','null', date '2000-01-09', False, 'Male', null ) ;
-INSERT INTO EVENT VALUES 
+INSERT INTO EVENT VALUES
 	 (100, 'Vegan for beginners' ,'More and more people are interested in vegan/plant-based eating. Some are just curious, some want to get their feet wet, and some are ready to come to the V-side!', TO_TIMESTAMP('2021/12/29 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'Due', null, 105, 100) ,
 	 (101, 'Begin your taichi journey' ,'This series does seasonal training to help you develop a wide range of skills which will enhance both your health and your practice. We practices basic Tai Chi skills as posting, walking, breathing, stretching, energy work, bone tapping and hand movements.', TO_TIMESTAMP('2021/12/03 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'Due', null, 109, 101) ,
 	 (102, 'Knee pain corrective exercise workshop' ,'If you or a loved one is experiencing hip or knee pain, you wont want to miss this special event. This is an interactive workshop where you will perform the exercises while sitting at your computer.', TO_TIMESTAMP('2021/12/09 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'Due', null, 106, 102) ,
@@ -705,7 +705,7 @@ INSERT INTO EVENT VALUES
 	 (109, 'Lets Talk... Conversations on Race, Equity, & Belonging' ,'There is still SO MUCH to talk about when it comes to systemic racism and often times there is not a safe space with which to have these conversations, ask questions, self reflect, learn from others and identify the next action step.', TO_TIMESTAMP('2021/12/18 00:00', 'YYYY/MM/DD/ HH24:MI'), True, False, 'Due', null, 108, 109) ,
 	 (110, 'Black Singles Virtual Speed Dating' ,'Join the Filter Off free virtual speed dating event! This event is for all ages.', TO_TIMESTAMP('2021/12/17 00:00', 'YYYY/MM/DD/ HH24:MI'), True, False, 'Due', null, 104, 110) ,
 	 (111, 'SocietyX :The Magic Portal: Healing Through the Tarot' ,'Have you ever wanted to learn more about the tarot but didnt know where to start? This year the Magic Portal will be teaching the art of the tarot! Each class for the next 78 weeks will be dedicated to teaching each card of this well known divination practice.', TO_TIMESTAMP('2021/11/29 00:00', 'YYYY/MM/DD/ HH24:MI'), True, False, 'Due', null, 107, 111) ;
-INSERT INTO TAG VALUES 
+INSERT INTO TAG VALUES
 	 (100, 'fun') ,
 	 (101, 'science') ,
 	 (102, 'culture') ,
@@ -718,7 +718,7 @@ INSERT INTO TAG VALUES
 	 (109, 'cars') ,
 	 (110, 'food') ,
 	 (111, 'sports') ;
-INSERT INTO EVENT_TAG VALUES 
+INSERT INTO EVENT_TAG VALUES
 	( 100, 100 ) ,
 	( 101, 101 ) ,
 	( 102, 102 ) ,
@@ -729,7 +729,7 @@ INSERT INTO EVENT_TAG VALUES
 	( 107, 107 ) ,
 	( 108, 108 ) ,
 	( 109, 109 ) ;
-INSERT INTO ATTENDANCE VALUES 
+INSERT INTO ATTENDANCE VALUES
 	( 100, 101 ) ,
 	( 100, 102 ) ,
 	( 100, 103 ) ,
@@ -814,7 +814,7 @@ INSERT INTO ATTENDANCE VALUES
 	( 111, 105 ) ,
 	( 111, 106 ) ,
 	( 111, 108 ) ;
-INSERT INTO ATTENDANCE_REQUEST VALUES 
+INSERT INTO ATTENDANCE_REQUEST VALUES
 	( 100, 108, 101, True, False ) ,
 	( 101, 108, 103, True, False ) ,
 	( 102, 108, 105, True, False ) ,
@@ -843,17 +843,17 @@ INSERT INTO ATTENDANCE_REQUEST VALUES
 	( 125, 111, 105, True, False ) ,
 	( 126, 111, 106, True, False ) ,
 	( 127, 111, 108, True, False ) ;
-INSERT INTO POLL VALUES 
+INSERT INTO POLL VALUES
 	( 100, 103, 109, 'Do you want to change the schedule?',  '' , TO_TIMESTAMP('2021/12/18 00:00', 'YYYY/MM/DD/ HH24:MI'), True ) ,
 	( 101, 111, 107, 'What should we eat',  '' , TO_TIMESTAMP('2021/11/29 00:00', 'YYYY/MM/DD/ HH24:MI'), False ) ;
-INSERT INTO POLL_OPTION VALUES 
+INSERT INTO POLL_OPTION VALUES
 	( 100, 'yes', 100 ) ,
 	( 101, 'no', 100 ) ,
 	( 102, 'Tacos', 101 ) ,
 	( 103, 'Hotdogs', 101 ) ,
 	( 104, 'Pizza', 101 ) ,
 	( 105, 'Salad', 101 ) ;
-INSERT INTO USER_POLL_OPTION  VALUES 
+INSERT INTO USER_POLL_OPTION  VALUES
 	(100, 101 ) ,
 	(101, 100 ) ,
 	(102, 101 ) ,
@@ -867,7 +867,7 @@ INSERT INTO USER_POLL_OPTION  VALUES
 	(104, 105 ) ,
 	(106, 103 ) ,
 	(108, 105 ) ;
-INSERT INTO COMMENT  VALUES 
+INSERT INTO COMMENT  VALUES
 	( 100, 100, 103, null, 'Very nice event', TO_TIMESTAMP('2022/02/19 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
 	( 101, 101, 105, null, 'NiCe event', TO_TIMESTAMP('2021/12/14 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
 	( 102, 101, 106, null, 'Very nice event', TO_TIMESTAMP('2021/12/15 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,

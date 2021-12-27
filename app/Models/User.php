@@ -33,7 +33,13 @@ class User extends Authenticatable
     /**
      * The cards this user owns.
      */
-     public function cards() {
-      return $this->hasMany('App\Models\Card');
+    public function cards()
+    {
+        return $this->hasMany('App\Models\Card');
+    }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
     }
 }
