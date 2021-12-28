@@ -1,12 +1,12 @@
-<footer>
-    <span>
-        @Bright Events 2021
-    </span>
-    <div class="footerPages">
-        <a class="button" href="{{ url('contact')}}">Contact Us </a>
-        <a class="button" href="{{ url('faq')}}">FAQ </a>
-        <a class="button" href="{{ url('about')}}">About </a>
+<div class="container-fluid bg-light mt-5 py-2 d-flex justify-content-between align-items-center">
+    <div class="d-inline-flex align-items-center">
+                @Bright Events 2021
     </div>
-</footer>
+    <div class="p-0 d-inline-flex justify-content-end">
+        <a class="btn" href="{{ url('contact')}}"><h2 class="d-flex flex-no-wrap">Contact Us</h2></a>
+        <a class="btn" href="{{ url('faq')}}"><h2>FAQ</h2></a>
+        <a class="btn" href="{{ url('about')}}"><h2>About</h2></a>
+    </div>
+</div>
 
 @yield('footer')
