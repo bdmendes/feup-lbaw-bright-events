@@ -48,4 +48,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Event::class);
     }
+
+    public function profile_picture()
+    {
+        $this->belongsTo(File::class, 'profile_picture_id');
+    }
 }
