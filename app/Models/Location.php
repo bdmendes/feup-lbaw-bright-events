@@ -8,7 +8,7 @@ class Location extends Model
 {
     // Don't add create and update timestamps in database.
     public $timestamps  = false;
-    protected $table = 'location';
+    protected $table = 'locations';
 
     public function pretty_print()
     {
