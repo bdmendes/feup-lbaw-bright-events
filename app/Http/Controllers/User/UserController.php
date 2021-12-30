@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Crypt;
 
 class UserController extends Controller
 {
+    public function index()
+    {
+        return view('pages.users');
+    }
+
     public function show($id)
     {
         $user = User::findOrFail($id);
