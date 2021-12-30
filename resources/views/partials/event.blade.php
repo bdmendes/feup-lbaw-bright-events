@@ -1,5 +1,5 @@
 <div class="w-100">
-    <img src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F203018239%2F227342121523%2F1%2Foriginal.20211220-101832?w=800&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C24%2C1002%2C501&s=ac1247a6305dd65956da5d4e85685c75" class="eventBackground mx-auto"/>
+    <img src="/{{$event->image->path}}" class="eventBackground mx-auto"/>
 </div>
 <div class="p-1  w-100">
     <div class="p-3  w-100">

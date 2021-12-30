@@ -4,9 +4,9 @@
 
 @section('content')
 
-    <form action="{{ route('createEvent')}}" method="post">
+    <form action="{{ route('createEvent')}}" method="post"  enctype="multipart/form-data">
         @csrf
-        <div class="d-flex align-items-lg-center flex-column mx-auto col-lg-6 col-md-8 col-sm-10 col-12 p-1 pb-3"
+        <div class="d-flex align-items-lg-center flex-column p-1 pb-3"
         style="background-color: #91A0AD !important;">
             <div class="p-1 w-100">
                 <h1>Event creation</h1>
@@ -18,9 +18,19 @@
             </div>
             -->
             <!-- Event title -->
-            <div class="p-3 w-100">
-                <label class="w-100"> Event title:</label>
-                <input id="title" name="title" placeholder="Insert event title"/>
+            <div class="p-3 w-100 content-float">
+                <div class="col-lg-6 col-12 mb-2">
+                    <label class="w-100"> Event title:</label>
+                    <input id="title" name="title" placeholder="Insert event title"/>
+                </div>
+                <div class="col-lg-6 col-12 mb-2">
+                    <label class="w-100">Background image:</label>
+                    <input id="cover_image" name="cover_image" type="file" />
+                </div>
+
+
+
+
             </div>
 
             <div class="p-3 w-100 content-float">
@@ -67,7 +77,8 @@
                             <option data-value="{{$tag->id}}" value="{{$tag->name}}" > </option>
                         @endforeach
                     </datalist>
-                    <button type="button" onclick="addItem('tagsDiv', 'tag', 'tags'); clearValue('tag');"> Add </button>
+                    <button type="button" onclick="addItem('tagsDiv', 'tag', 'tags'); clearValue
+                        ('tag');"> Add </button>
                 </div>
             </div>
 
