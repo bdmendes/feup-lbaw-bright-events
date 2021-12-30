@@ -49,6 +49,11 @@ class User extends Authenticatable
         return $this->hasMany(Event::class, 'organizer_id');
     }
 
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class, 'attendee_id');
+    }
+
     public function profile_picture()
     {
         $this->belongsTo(File::class, 'profile_picture_id');
