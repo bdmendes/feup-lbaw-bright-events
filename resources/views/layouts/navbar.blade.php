@@ -9,7 +9,7 @@
             <a class="nav-item nav-link" href="{{ url('users')}}"><h2>Users</h2></a>
             @if (Auth::check())
             <a class="nav-item nav-link" href="{{ url('/logout') }}"><h2>Logout</h2></a>
-            <a class="nav-item nav-link" href="{{route('profile', ['id' => Auth::user()->id])}}"><h2>{{ Auth::user()->name }}</h2></a>
+            <a class="nav-item nav-link" href="{{route('profile', ['username' => Auth::user()->username])}}"><h2>{{ Auth::user()->name }}</h2></a>
             @else
             <a class="nav-item nav-link" href="{{url('login') }}"><h2>Login</h2></a>
             @endif
