@@ -21,3 +21,10 @@ Route::get('events', "EventApiController@index");
 Route::patch('events/{id}', "EventApiController@update");
 Route::get('events/{id}/attendees', "EventApiController@getAttendees");
 Route::get('events/{id}/comments', "EventApiController@getComments");
+
+// Reports
+Route::post('reports/event', 'Report\ReportAPIController@reportEvent')->name('report');
+Route::post('reports/user', 'ReportAPIController@reportUser');
+Route::post('reports/comment', 'Report\ReportAPIController@reportComment');
+Route::get('reports', 'Report\ReportAPIController@getReports');
+Route::get('reports/{report_id}', 'Report\ReportAPIController@show');

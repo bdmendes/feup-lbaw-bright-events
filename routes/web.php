@@ -13,6 +13,12 @@ Route::get('events', "Event\EventController@index")->name('browseEvents');
 Route::get('events/create', "Event\EventController@indexCreate")->name('createEvent');
 Route::post('events/create', "Event\EventController@create")->name('createEvent');
 Route::get('events/{id}', "Event\EventController@get")->name('event');
+Route::get('events/{id}/edit', 'Event\EventController@indexEdit')->name('editEvent');
+
+// Reports
+Route::get('reports', 'Report\ReportController@index')->name('reports');
+Route::get('reports/{report_id}', 'Report\ReportController@show');
+Route::post('reports/{report_id}', 'Report\ReportController@execute');
 
 // Authentication
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');

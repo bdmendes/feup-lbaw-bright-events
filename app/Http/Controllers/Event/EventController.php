@@ -70,6 +70,12 @@ class EventController extends Controller
         $tags = Tag::all();
         return view("pages.events.edit", ['tags' => $tags]);
     }
+    public function indexEdit($id)
+    {
+        $event = Event::findOrFail($id);
+        $tags = Tag::all();
+        return view("pages.events.edit", ['tags' => $tags, 'event' => $event]);
+    }
 
     public function create(Request $request)
     {
@@ -85,7 +91,7 @@ class EventController extends Controller
         $event = Event::create([
             'organizer_id' => Auth::user()->id,
             'title' => $request->title,
-            'description' => $request->body,
+            'description' => $request->description,
             'event_state' => 'due',
             'date' => $request->date,
             'is_private' => $request->restriction === 'private' ? 'true' : 'false'
