@@ -11,8 +11,7 @@
 |
 */
 // Home
-Route::get('/', 'Home\HomeController@redirect');
-Route::get('/home', 'Home\HomeController@home')->name('home');
+Route::get('/', 'Home\HomeController@home')->name('home');
 
 //Static
 Route::get('/faq', 'Static\StaticPagesController@faq');
