@@ -46,7 +46,7 @@ class User extends Authenticatable
 
     public function events()
     {
-        return $this->hasMany(Event::class);
+        return $this->hasMany(Event::class, 'organizer_id');
     }
 
     public function profile_picture()
