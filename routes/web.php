@@ -34,3 +34,4 @@ Route::post('register', 'Auth\RegisterController@register');
 //Users
 Route::get('{username}', 'User\UserController@show')->name('profile');
 Route::get('{username}/edit', 'User\UserController@edit')->name('editProfile');
+Route::post('{username}/edit', 'User\UserController@editUser')->name('editUser');
