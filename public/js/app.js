@@ -178,3 +178,31 @@ function createItem(item) {
 }
 
 addEventListeners();
+
+/**
+ * Reads from an input that has a datalist, and adds one span and hidden input to div
+ * @param {*} div -> Div to add the new span elem
+ * @param {*} inputId -> Div to read the input from
+ * @param {*} arrayId  -> Array id, to add to the hidden input's name field
+ */
+function addItem(div, inputId, arrayId){
+    let a = document.getElementById(inputId);
+    let value = a.value;
+    let data_value = $("option[value='" + value + "']").data('value');
+    if(data_value == undefined) return;
+    console.log(data_value);
+    div = $("#" + div)[0];
+    let span = div.querySelector("span.hidden");
+    let newSpan = span.cloneNode(true);
+    newSpan.classList.remove("hidden");
+    newSpan.innerHTML = value;
+    div.append(newSpan);
+
+    //Add input to form
+    let inputHtml = "<input type='hidden' name ='" + arrayId + "[]' id='" + data_value + "' value='" + data_value + " '> </input>";
+    div.insertAdjacentHTML('afterBegin', inputHtml);
+}
+
+function clearValue(id){
+    $("#" + id)[0].value = "";
+}

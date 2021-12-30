@@ -233,7 +233,7 @@ CREATE FUNCTION lbaw2134.request_event_type() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.event_id IS NOT NULL THEN
-        IF EXISTS (SELECT e.* FROM lbaw2134.events e WHERE id = NEW.event_id AND e.event_state <> 'due' AND e.event_state <> 'on-going') THEN 
+        IF EXISTS (SELECT e.* FROM lbaw2134.events e WHERE id = NEW.event_id AND e.event_state <> 'due' AND e.event_state <> 'on-going') THEN
             RAISE EXCEPTION 'Requests can only be sent for due or on-going events';
         END IF;
     END IF;
@@ -620,7 +620,7 @@ INSERT INTO lbaw2134.USERS VALUES
 	 (107, 'MichaelVJones@jourrapide.com', 'michaelbjones', '$2y$10$YZYNFof5Jwim1OcS.Z8xI.98vbDubcawtkgmkQySddPuSuNLisCGe', 'Michael Jones', False, '','null', date '1997-12-12', False, 'Male', null ) ,
 	 (108, 'MeredithMFry@jourrapide.com', 'meredithfried', '$2y$10$OqRoswFxgz2xK5wUv78L2eFB2go2.fAmkUIoYsWObuUJiRNShgnZK', 'Meredith Fry', False, '','null', date '2001-11-20', False, 'Female', null ) ,
 	 (109, 'PeterLWhite@armyspy.com', 'peterpeter', '$2y$10$QUc83MLokA/gh6H7.s6AH.pW2aLjaF/6CeM.mlCiuvjaXKI2iF4Na', 'Peter White', False, '','null', date '2000-01-09', False, 'Male', null ) ;
-INSERT INTO lbaw2134.EVENTS VALUES 
+INSERT INTO lbaw2134.EVENTS VALUES
 	 (100, 'Vegan for beginners' ,'More and more people are interested in vegan/plant-based eating. Some are just curious, some want to get their feet wet, and some are ready to come to the V-side!', TO_TIMESTAMP('2021/12/29 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 105, 100) ,
 	 (101, 'Begin your taichi journey' ,'This series does seasonal training to help you develop a wide range of skills which will enhance both your health and your practice. We practices basic Tai Chi skills as posting, walking, breathing, stretching, energy work, bone tapping and hand movements.', TO_TIMESTAMP('2021/12/03 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 109, 101) ,
 	 (102, 'Knee pain corrective exercise workshop' ,'If you or a loved one is experiencing hip or knee pain, you wont want to miss this special event. This is an interactive workshop where you will perform the exercises while sitting at your computer.', TO_TIMESTAMP('2021/12/09 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 106, 102) ,
@@ -633,7 +633,7 @@ INSERT INTO lbaw2134.EVENTS VALUES
 	 (109, 'Lets Talk... Conversations on Race, Equity, & Belonging' ,'There is still SO MUCH to talk about when it comes to systemic racism and often times there is not a safe space with which to have these conversations, ask questions, self reflect, learn from lbaw2134.others and identify the next action step.', TO_TIMESTAMP('2021/12/18 00:00', 'YYYY/MM/DD/ HH24:MI'), True, False, 'due', null, 108, 109) ,
 	 (110, 'Black Singles Virtual Speed Dating' ,'Join the Filter Off free virtual speed dating event! This event is for all ages.', TO_TIMESTAMP('2021/12/17 00:00', 'YYYY/MM/DD/ HH24:MI'), True, False, 'due', null, 104, 110) ,
 	 (111, 'SocietyX :The Magic Portal: Healing Through the Tarot' ,'Have you ever wanted to learn more about the tarot but didnt know where to start? This year the Magic Portal will be teaching the art of the tarot! Each class for the next 78 weeks will be dedicated to teaching each card of this well known divination practice.', TO_TIMESTAMP('2021/11/29 00:00', 'YYYY/MM/DD/ HH24:MI'), True, False, 'due', null, 107, 111) ;
-INSERT INTO lbaw2134.TAGS VALUES 
+INSERT INTO lbaw2134.TAGS VALUES
 	 (100, 'fun') ,
 	 (101, 'science') ,
 	 (102, 'culture') ,

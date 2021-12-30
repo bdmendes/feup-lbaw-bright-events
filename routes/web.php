@@ -18,20 +18,12 @@ Route::get('/home', 'Home\HomeController@home')->name('home');
 Route::get('/faq', 'Static\StaticPagesController@faq');
 Route::get('/about', 'Static\StaticPagesController@about');
 Route::get('/contact', 'Static\StaticPagesController@contact');
-// Cards
-Route::get('cards', 'CardController@list');
-Route::get('cards/{id}', 'CardController@show');
 
 //Events
+Route::get('events', "Event\EventController@index")->name('browseEvents');
 Route::get('events/create', "Event\EventController@indexCreate")->name('createEvent');
 Route::post('events/create', "Event\EventController@create")->name('createEvent');
 Route::get('events/{id}', "Event\EventController@get")->name('event');
-// API
-Route::put('api/cards', 'CardController@create');
-Route::delete('api/cards/{card_id}', 'CardController@delete');
-Route::put('api/cards/{card_id}/', 'ItemController@create');
-Route::post('api/item/{id}', 'ItemController@update');
-Route::delete('api/item/{id}', 'ItemController@delete');
 
 // Authentication
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');

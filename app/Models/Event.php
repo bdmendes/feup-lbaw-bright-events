@@ -14,14 +14,18 @@ class Event extends Model
     protected $fillable = [
         'title',
         'description',
-        'date'
+        'date',
+        'event_state',
+        'is_private',
+        'organizer_id',
+        'tags'
     ];
     /**
      * The event organizer is
      */
     public function organizer()
     {
-        return $this->hasOne(User::class, 'id');
+        return $this->belongsTo(User::class, 'organizer_id');
     }
 
     /**
@@ -47,7 +51,7 @@ class Event extends Model
 
     public function tags()
     {
-        return $this->belongsToMany(Tag::class, 'event_tag', 'event', 'tag');
+        return $this->belongsToMany(Tag::class, 'event_tags', 'event_id', 'tag_id');
     }
 
     public function attendees()

@@ -103,3 +103,18 @@ li {
     width: auto;
     display: block;
 }
+
+.tag {
+    color: #f7fff7;
+    background-color: #2b4162;
+    border-radius: 15px;
+    padding: 5px 10px;
+}
+
+.content-float > * {
+    float: left;
+}
+
+.hidden {
+    display: none;
+}

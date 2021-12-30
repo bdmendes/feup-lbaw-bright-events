@@ -12,13 +12,23 @@
     </div>
     <div class="p-3  w-100">
         <label>Location: </label>
-        {{$event->location->pretty_print()}}
+        @if($event->location ?? '')
+            {{$event->location->pretty_print()}}
+        @else
+            Not defined
+        @endif
+
     </div>
     <div class="p-3  w-100">
         <label> Organizer: </label>
         {{$event->organizer->name}}
     </div>
+    <div class="p-3 w-100">
+        <label> Tags: </label>
+        @include("partials.event.tags", ['event' => $event])
+    </div>
 </div>
+
 
 @include('partials.event.tabview', ['event' => $event])
 

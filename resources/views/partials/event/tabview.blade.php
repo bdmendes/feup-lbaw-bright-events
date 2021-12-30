@@ -15,6 +15,7 @@
     <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#statistics" type="button" role="tab" aria-controls="contact" aria-selected="false">Statistics</button>
     </li>
   </ul>
+
   <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="home-tab">
         <div class="w-100 p-4">
