@@ -14,9 +14,12 @@ class UserController extends Controller
         return view('pages.users');
     }
 
-    public function show($id)
+    public function show($username)
     {
-        $user = User::findOrFail($id);
+        $user = User::where('username', $username)->get()->first();
+        if (is_null($user)) {
+            abort('404', 'User not found');
+        }
         return view('pages.user.view', [
             'user' => $user,
             'attended_events' => $user->attended_events(),

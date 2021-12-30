@@ -16,7 +16,7 @@
                         <h1>{{$user->name}}</h1>
                         @if (Auth::check())
                             @if (Auth::user()->id == $user->id)
-                                <a href="{{route('editProfile', ['id' => Auth::user()->id])}}" class="text-white">
+                                <a href="{{route('editProfile', ['username' => Auth::user()->username])}}" class="text-white">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
                             @endif

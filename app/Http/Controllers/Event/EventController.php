@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Event;
+use App\Models\File;
 use App\Models\Tag;
 
 class EventController extends Controller
@@ -60,7 +61,7 @@ class EventController extends Controller
         } else {
             $events = $events->take(5);
         }
-        
+
         return view('pages.events', ["events" => $events]);
     }
 
@@ -72,10 +73,14 @@ class EventController extends Controller
 
     public function create(Request $request)
     {
+
         $this->validate($request, [
             'title' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'cover_image' => 'mimes:png,jpg,jpe'
         ]);
+
+        $file = null;
 
         $event = Event::create([
             'organizer_id' => Auth::user()->id,
@@ -86,6 +91,19 @@ class EventController extends Controller
             'is_private' => $request->restriction === 'private' ? 'true' : 'false'
         ]);
         $event->tags()->attach($request->tags);
+
+        if ($request->cover_image) {
+            $filename = 'event' . $event->id . '.' . $request->cover_image->extension();
+            $request->cover_image->move(public_path('storage'), $filename);
+            $relativePath = 'storage/' . $filename;
+
+            $file = File::create([
+                'path' => $relativePath,
+                'name' => $request->file('cover_image')->getClientOriginalName()
+            ]);
+            $event->cover_image_id = $file->id;
+            $event->save();
+        }
 
         return redirect()->route('event', ['id' => $event->id]);
     }

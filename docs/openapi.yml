@@ -134,17 +134,17 @@ paths:
             type: integer
           description: "Size of sublist to show"
 
-  /users/{id}:
+  /{username}:
     get:
       operationId: R202
       summary: "R202: User Profile page"
       description: "Show user profile page. Access: NAU"
       parameters:
-        - name: id
+        - name: username
           in: path
           required: true
           schema:
-            type: integer
+            type: string
       tags:
         - "M02: Users and Personal Profiles"
       responses:
@@ -153,17 +153,17 @@ paths:
         "404":
           description: "User not found"
 
-  /users/{id}/edit:
+  /{username}/edit:
     get:
       operationId: R204
       summary: "R204: Edit User Profile page"
       description: "Provide edit user profile form. Access: AU"
       parameters:
-        - name: id
+        - name: username
           in: path
           required: true
           schema:
-            type: integer
+            type: username
       tags:
         - "M02: Users and Personal Profiles"
       responses:
@@ -187,6 +187,9 @@ paths:
               type: object
               properties:
                 password:
+                  type: string
+                  format: password
+                confirm_password:
                   type: string
                   format: password
                 name:
@@ -1139,7 +1142,7 @@ paths:
               - "cancelled"
               - "finished"
               - "on-going"
-              - "due"            
+              - "due"
         - in: query
           name: global
           schema:
