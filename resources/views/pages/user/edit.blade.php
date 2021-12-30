@@ -27,7 +27,7 @@
                         @endif
 
                         <label for="bio">Bio</label>
-                        <textarea class="text-white" type="text" name="bio" id="bio" value="{{Auth::user()->bio}}" placeholder="Bio"></textarea>
+                        <textarea class="text-white" type="text" name="bio" id="bio" value="{{Auth::user()->bio}}" placeholder="Bio">{{Auth::user()->bio}}</textarea>
                         @if ($errors->has('bio'))
                         <span class="error">
                             {{ $errors->first('bio') }}
@@ -71,8 +71,8 @@
                         </span>
                         @endif
 
-                        <label for="confirm-password">Confirm password</label>
-                        <input class="text-white" type="password" name="confirm-password" id="confirm-password" placeholder="Confirm password">
+                        <label for="confirm_password">Confirm password</label>
+                        <input class="text-white" type="password" name="confirm_password" id="confirm_password" placeholder="Confirm password">
 
                         <button type="submit" class="btn-light">
                             Submit

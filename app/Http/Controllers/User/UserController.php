@@ -88,7 +88,17 @@ class UserController extends Controller
         }
 
         if (!is_null($request->password) && $request->password != $user->password) {
+            if (is_null($request->confirm_password)) {
+                $validator->getMessageBag()->add('confirm_password', 'Please confirm your password');
+                return redirect()->route('editProfile', ['username' => Auth::user()->username])->withErrors($validator)->withInput();
+            } elseif ($request->password != $request->confirm_password) {
+                $validator->getMessageBag()->add('confirm_password', 'Passwords do not match');
+                return redirect()->route('editProfile', ['username' => Auth::user()->username])->withErrors($validator)->withInput();
+            }
             $user->password = bcrypt($request->password);
+        } elseif (is_null($request->password) && !is_null($request->confirm_password)) {
+            $validator->getMessageBag()->add('password', 'Please input a password before confirming it.');
+            return redirect()->route('editProfile', ['username' => Auth::user()->username])->withErrors($validator)->withInput();
         }
 
         $user->save();
