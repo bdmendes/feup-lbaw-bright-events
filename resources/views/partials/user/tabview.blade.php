@@ -21,7 +21,17 @@
     </div>
     <div class="tab-pane fade" id="events" role="tabpanel" aria-labelledby="contact-tab">
         <div class="w-100 p-4">
-            Events
+            @foreach ($user->events as $event)
+            <a href="{{ route('event', ['id' => $event->id])}}" class="text-decoration-none">
+                <div class="card bg-light text-dark mt-2">
+                    @if (!is_null($event->cover_image_id))
+                        <img src="{{$event->cover_image_id}}" alt="Event image">
+                    @endif
+                    <h3 class="card-title">{{$event->title}}</h3>
+                    <p class="text-grey">{{date('j F, Y', strtotime($event->date))}}</p>
+                </div>
+            </a>
+            @endforeach
         </div>
     </div>
     <div class="tab-pane fade" id="attendances" role="tabpanel" aria-labelledby="contact-tab">
