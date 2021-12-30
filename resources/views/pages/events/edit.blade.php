@@ -21,15 +21,17 @@
             <div class="p-3 w-100 content-float">
                 <div class="col-lg-6 col-12 mb-2">
                     <label class="w-100"> Event title:</label>
-                    <input id="title" name="title" placeholder="Insert event title"/>
+                    <input id="title" name="title" placeholder="Insert event title"
+                        @if($event ?? '') value="{{$event->title ?: '' }}" @endif/>
                 </div>
                 <div class="col-lg-6 col-12 mb-2">
                     <label class="w-100">Background image:</label>
-                    <input id="cover_image" name="cover_image" type="file" />
+                    <input id="cover_image"
+                         name="cover_image"
+                         type="file"
+
+                         />
                 </div>
-
-
-
 
             </div>
 
@@ -37,7 +39,8 @@
                 <!-- Event date -->
                 <div class="col-lg-6 col-sm-12 col-12 mb-2">
                     <label class="w-100" > Event date: </label>
-                    <input type="date" name="date" id="date"> </input>
+                    <input type="date" name="date" id="date"
+                        @if($event ?? '') value="{{$event->date->format('Y-m-d')}}" @endif/>
                 </div>
                 <!-- Is private -->
                 <div class="col-lg-6 col-sm-12 col-12 mb-2">
@@ -61,7 +64,7 @@
                     <div id="tagsDiv" class="w-100 d-flex justify-content-start flex-wrap">
                         <span class="tag m-1 hidden"> </span>
                         @if($event ?? '' ?? '')
-                            @foreach ($event ?? ''->tags as $tag)
+                            @foreach ($event->tags as $tag)
                                 <span class="tag m-1"> {{$tag->name}}</span>
                             @endforeach
                         @endif
@@ -87,7 +90,10 @@
             <!-- Description -->
             <div class="p-3 w-100">
                 <label class="p-2 w-100"> Description </label>
-                <textarea id="description" name="description" placeholder="Insert description"> </textarea>
+                <textarea id="description"
+                         name="description"
+                         placeholder="Insert description"
+                        >@if($event ?? ''){{$event->description ?: '' }}@endif</textarea>
             </div>
 
             <button type="submit"> Create </button>

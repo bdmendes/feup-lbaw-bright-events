@@ -23,7 +23,7 @@ Route::get('events', "Event\EventController@index")->name('browseEvents');
 Route::get('events/create', "Event\EventController@indexCreate")->name('createEvent');
 Route::post('events/create', "Event\EventController@create")->name('createEvent');
 Route::get('events/{id}', "Event\EventController@get")->name('event');
-
+Route::get('events/{id}/edit', 'Event\EventController@indexEdit')->name('editEvent');
 // Authentication
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');

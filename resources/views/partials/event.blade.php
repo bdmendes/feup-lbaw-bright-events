@@ -1,5 +1,10 @@
 <div class="w-100">
-    <img src="/{{$event->image->path}}" class="eventBackground mx-auto"/>
+    @if($event->image ?? '' && $event->image->path ?? '')
+        <img src="/{{$event->image->path}}" class="eventBackground mx-auto"/>
+    @else
+        <div class="eventBackground mx-auto bg-dark"
+        style="height: 300px" > </div>
+    @endif
 </div>
 <div class="p-1  w-100">
     <div class="p-3  w-100">
@@ -39,9 +44,10 @@
             <button>Attend event</button>
         </form>
         @else
-        <form>
+
             <button>Delete event</button>
-            <button>Edit event</button>
+        <form action="{{route('editEvent', ['id' => $event->id])}}">
+            <button type="submit" >Edit event</button>
         </form>
         @endif
 
