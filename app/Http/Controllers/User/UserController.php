@@ -21,9 +21,12 @@ class UserController extends Controller
         ]);
     }
 
-    public function edit($id)
+    public function edit($username)
     {
-        $user = User::findOrFail($id);
+        $user = User::where('username', $username)->get()->first();
+        if (is_null($user)) {
+            abort('404', 'User not found');
+        }
         return view('pages.user.edit', [
             'user' => $user,
         ]);
