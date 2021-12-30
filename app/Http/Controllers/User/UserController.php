@@ -18,6 +18,14 @@ class UserController extends Controller
         ]);
     }
 
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        return view('pages.user.edit', [
+            'user' => $user,
+        ]);
+    }
+
     public function create($request)
     {
         $this->validate($request, [
