@@ -12,7 +12,7 @@
             {{ $event->location->country }} </p>
         <div class="pt-3 d-flex justify-content-start">
             <div style="padding-right: 1em;">
-                <img class="rounded-circle" style="width:5vw; height:5vw; object-fit:cover;"
+                <img class="rounded-circle" style="width:5ch; height:5ch; object-fit:cover;"
                     src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F203018239%2F227342121523%2F1%2Foriginal.20211220-101832?w=800&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C24%2C1002%2C501&s=ac1247a6305dd65956da5d4e85685c75"
                     alt="Card image cap">
             </div>
