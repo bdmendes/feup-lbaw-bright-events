@@ -1,16 +1,16 @@
 <ul class="nav nav-tabs w-100 nav-fill" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#personal-info" type="button" role="tab" aria-controls="home" aria-selected="true">Personal Info</button>
+      <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#personal-info" type="button" role="tab" aria-controls="home" aria-selected="true">Personal Info</button>
     </li>
     <li class="nav-item" role="presentation">
         @if (Auth::check() && Auth::user()->id == $user->id)
-            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#events" type="button" role="tab" aria-controls="profile" aria-selected="false">My Events</button>
+            <button class="nav-link" id="events-tab" data-bs-toggle="tab" data-bs-target="#events" type="button" role="tab" aria-controls="profile" aria-selected="false">My Events</button>
         @else
-            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#events" type="button" role="tab" aria-controls="profile" aria-selected="false">Organized Events</button>
+            <button class="nav-link" id="events-tab" data-bs-toggle="tab" data-bs-target="#events" type="button" role="tab" aria-controls="profile" aria-selected="false">Organized Events</button>
         @endif
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#attendances" type="button" role="tab" aria-controls="contact" aria-selected="false">Attendances</button>
+        <button class="nav-link" id="attendances-tab" data-bs-toggle="tab" data-bs-target="#attendances" type="button" role="tab" aria-controls="contact" aria-selected="false">Attendances</button>
     </li>
   </ul>
   <div class="tab-content" id="myTabContent">
@@ -30,5 +30,25 @@
         </div>
     </div>
   </div>
+
+  <style>
+      .nav-item .active {
+          border-color: blue !important;
+          color: white !important;
+          background-color: transparent !important;
+          border-top: 0 !important;
+          border-left: 0 !important;
+          border-right: 0 !important;
+          border-top-color: transparent !important;
+          border-left-color: transparent !important;
+          border-right-color: transparent !important;
+      }
+
+      .nav-link:hover {
+          border-top-color: transparent !important;
+          border-left-color: transparent !important;
+          border-right-color: transparent !important;
+      }
+  </style>
 
   @yield('tabview')
