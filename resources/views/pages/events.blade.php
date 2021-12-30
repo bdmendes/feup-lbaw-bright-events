@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'home')
+@section('title', 'events')
 
 @section('content')
-    Poderá contactar o Estaline apartir do mail up201906166@fe.up.pt
+    @foreach ($events as $event)
+        @include('partials.eventcard', ['event' => $event])
+    @endforeach
 @endsection

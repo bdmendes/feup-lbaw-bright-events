@@ -4,6 +4,7 @@
         "onecentlin.laravel5-snippets",
         "junstyle.php-cs-fixer",
         "amiralizadeh9480.laravel-extra-intellisense",
-        "absszero.vscode-laravel-goto"
+        "absszero.vscode-laravel-goto",
+        "shufo.vscode-blade-formatter"
     ]
 }
