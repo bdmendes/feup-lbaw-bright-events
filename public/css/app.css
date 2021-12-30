@@ -4,6 +4,7 @@ html {
 * {
     font-size: 14px;
 }
+
 body {
     height: 100%;
     margin: 0;
@@ -33,7 +34,9 @@ nav > * {
 
 #content {
     min-height: 90%;
-    width: 100%;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
     display: padding-box;
     padding-top: 15px;
 }

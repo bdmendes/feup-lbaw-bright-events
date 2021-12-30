@@ -11,6 +11,59 @@ use App\Models\Tag;
 
 class EventController extends Controller
 {
+    public function index(Request $request)
+    {
+        $events = Event::search($request->query('global'))->get();
+        if ($request->has('sort_by')) {
+            if ($request->query('order') == 'descending') {
+                $events = $events->sortByDesc($request->query('sort_by'));
+            } else {
+                $events = $events->sortBy($request->query('sort_by'));
+            }
+        }
+        if ($request->has('organizer')) {
+            $events = $events->where('organizer_id', $request->query('organizer'));
+        }
+        if ($request->has('location')) {
+            $events = $events->where('location_id', $request->query('location'));
+        }
+        if ($request->has('tag')) {
+            $events = $events->filter(function ($item) use ($request) {
+                foreach ($item->tags as $tag) {
+                    if ($tag->name == $request->query('tag')) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+        }
+        if ($request->has('state')) {
+            $events = $events->where('event_state', $request->query('state'));
+        }
+        if ($request->has('begin_date')) {
+            $date = date('Y-m-d', strtotime($request->query('begin_date')));
+            $events = $events->filter(function ($item) use ($date) {
+                return data_get($item, 'date') >= $date;
+            });
+        }
+        if ($request->has('end_date')) {
+            $date = date('Y-m-d', strtotime($request->query('end_date')));
+            $events = $events->filter(function ($item) use ($date) {
+                return data_get($item, 'date') <= $date;
+            });
+        }
+        if ($request->has('offset')) {
+            $events = $events->skip($request->query('offset'));
+        }
+        if ($request->has('size')) {
+            $events = $events->take($request->query('size'));
+        } else {
+            $events = $events->take(5);
+        }
+        
+        return view('pages.events', ["events" => $events]);
+    }
+
     public function indexCreate()
     {
         $tags = Tag::all();
