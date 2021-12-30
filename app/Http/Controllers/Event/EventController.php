@@ -7,15 +7,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Event;
+use App\Models\Tag;
 
 class EventController extends Controller
 {
     public function indexCreate()
     {
-        return view("pages.events.edit");
+        $tags = Tag::all();
+        return view("pages.events.edit", ['tags' => $tags]);
     }
 
-    public function create($request)
+    public function create(Request $request)
     {
         $this->validate($request, [
             'title' => 'required',
@@ -23,10 +25,14 @@ class EventController extends Controller
         ]);
 
         $event = Event::create([
-            'organizer' => Auth::user()->id,
+            'organizer_id' => Auth::user()->id,
             'title' => $request->title,
-            'body' => $request->body
+            'description' => $request->body,
+            'event_state' => 'due',
+            'date' => $request->date,
+            'is_private' => $request->restriction === 'private' ? 'true' : 'false'
         ]);
+        $event->tags()->attach($request->tags);
 
         return redirect()->route('event', ['id' => $event->id]);
     }
