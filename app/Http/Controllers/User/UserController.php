@@ -11,6 +11,11 @@ use Validator;
 
 class UserController extends Controller
 {
+    public function index()
+    {
+        return view('pages.users');
+    }
+
     public function show($username)
     {
         $user = User::where('username', $username)->get()->first();

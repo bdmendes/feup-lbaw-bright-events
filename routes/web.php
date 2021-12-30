@@ -1,24 +1,14 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 // Home
 Route::get('/', 'Home\HomeController@home')->name('home');
 
-//Static
+// Static
 Route::get('/faq', 'Static\StaticPagesController@faq');
 Route::get('/about', 'Static\StaticPagesController@about');
 Route::get('/contact', 'Static\StaticPagesController@contact');
 
-//Events
+// Events
 Route::get('events', "Event\EventController@index")->name('browseEvents');
 Route::get('events/create', "Event\EventController@indexCreate")->name('createEvent');
 Route::post('events/create', "Event\EventController@create")->name('createEvent');
@@ -32,6 +22,6 @@ Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('re
 Route::post('register', 'Auth\RegisterController@register');
 
 //Users
-Route::get('{username}', 'User\UserController@show')->name('profile');
-Route::get('{username}/edit', 'User\UserController@edit')->name('editProfile');
-Route::post('{username}/edit', 'User\UserController@editUser')->name('editUser');
+Route::get('users/{username}', 'User\UserController@show')->name('profile');
+Route::get('users/{username}/edit', 'User\UserController@edit')->name('editProfile');
+Route::post('users/{username}/edit', 'User\UserController@editUser')->name('editUser');

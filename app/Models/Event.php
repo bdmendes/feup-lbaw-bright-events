@@ -18,7 +18,8 @@ class Event extends Model
         'event_state',
         'is_private',
         'organizer_id',
-        'tags'
+        'tags',
+        'cover_image_id'
     ];
     /**
      * The event organizer is
@@ -33,7 +34,7 @@ class Event extends Model
      */
     public function image()
     {
-        return $this->belongsTo(File::class, 'cover_image');
+        return $this->belongsTo(File::class, 'cover_image_id');
     }
 
     public function location()
