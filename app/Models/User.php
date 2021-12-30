@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Arr;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -52,6 +53,15 @@ class User extends Authenticatable
     public function attendances()
     {
         return $this->hasMany(Attendance::class, 'attendee_id');
+    }
+
+    public function attended_events()
+    {
+        $attended_events = [];
+        foreach ($this->attendances as $attendance) {
+            $attended_events = Arr::add($attended_events, $attendance->event_id, Event::findOrFail($attendance->event_id));
+        }
+        return $attended_events;
     }
 
     public function profile_picture()
