@@ -14,6 +14,8 @@ Route::get('events/create', "Event\EventController@indexCreate")->name('createEv
 Route::post('events/create', "Event\EventController@create")->name('createEvent');
 Route::get('events/{id}', "Event\EventController@get")->name('event');
 Route::get('events/{id}/edit', 'Event\EventController@indexEdit')->name('editEvent');
+Route::post('events/{id}/edit', 'Event\EventController@update')->name('editEvent');
+
 
 // Reports
 Route::get('reports', 'Report\ReportController@index')->name('reports');
@@ -26,6 +28,7 @@ Route::post('login', 'Auth\LoginController@login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register', 'Auth\RegisterController@register');
+
 
 //Users
 Route::get('users/{username}', 'User\UserController@show')->name('profile');

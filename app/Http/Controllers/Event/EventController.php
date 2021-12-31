@@ -79,7 +79,6 @@ class EventController extends Controller
 
     public function create(Request $request)
     {
-
         $this->validate($request, [
             'title' => 'required',
             'description' => 'required',
@@ -87,6 +86,7 @@ class EventController extends Controller
         ]);
 
         $file = null;
+
 
         $event = Event::create([
             'organizer_id' => Auth::user()->id,
@@ -97,7 +97,6 @@ class EventController extends Controller
             'is_private' => $request->restriction === 'private' ? 'true' : 'false'
         ]);
         $event->tags()->attach($request->tags);
-
         if ($request->cover_image) {
             $filename = 'event' . $event->id . '.' . $request->cover_image->extension();
             $request->cover_image->move(public_path('storage'), $filename);
@@ -114,6 +113,39 @@ class EventController extends Controller
         return redirect()->route('event', ['id' => $event->id]);
     }
 
+    public function update($request)
+    {
+        if ($request->id == null) {
+        }
+        $event = Event::find($request->id);
+        if ($event->organizer_id != Auth::user()->id) {
+        }
+        $event->description = $request->description;
+        $event->title = $request->title;
+        $event->date = $request->date;
+        $event->is_private = $request->restriction === 'private' ? 'true' : 'false';
+
+        if ($request->cover_image) {
+
+            $filename = 'event' . $event->id . '.' . $request->cover_image->extension();
+            $request->cover_image->move(public_path('storage'), $filename);
+            $relativePath = 'storage/' . $filename;
+
+            $file = File::create([
+                'path' => $relativePath,
+                'name' => $request->file('cover_image')->getClientOriginalName()
+            ]);
+            if ($event->image != null) {
+                $event->image->delete();
+            }
+            $event->cover_image_id = $file->id;
+        }
+
+        $event->tags = $request->tags;
+
+
+        $event->save();
+    }
     public function get($id)
     {
         $event = Event::find($id);
@@ -121,5 +153,15 @@ class EventController extends Controller
             $this->authorize('view', Auth::user(), $event);
         }
         return view("pages.events.view", ['event' => $event]);
+    }
+
+    public function delete($id)
+    {
+        $event = Event::find($id);
+        if ($event == null) {
+        }
+        if (Auth::user()->id == $event->organizer_id) {
+            $event->delete();
+        }
     }
 }

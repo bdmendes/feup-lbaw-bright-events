@@ -118,6 +118,14 @@ li {
     padding: 5px 10px;
 }
 
+.removable {
+    transition: background-color 0.5s;
+}
+.removable:hover {
+    background-color: #e00;
+    cursor: pointer;
+}
+
 .content-float > * {
     float: left;
 }

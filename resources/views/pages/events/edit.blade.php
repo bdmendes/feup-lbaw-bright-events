@@ -4,8 +4,13 @@
 
 @section('content')
 
-    <form action="{{ route('createEvent')}}" method="post"  enctype="multipart/form-data">
+    <form @if($event ?? '') action="{{route('createEvent')}}"
+          @else action="{{route('editEvent'), ['id' => $event->id]}}"
+          @endif method="post"  enctype="multipart/form-data">
         @csrf
+        @if($event ?? '')
+            <input type="hidden" name="id" id="id" value="{{$event->id}}" />
+        @endif
         <div class="d-flex align-items-lg-center flex-column p-1 pb-3"
         style="background-color: #91A0AD !important;">
             <div class="p-1 w-100">
@@ -62,10 +67,20 @@
                 <div class="col-lg-6 col-sm-12 col-12 mb-2 ">
                     <label class="p-2 w-100"> Tags </label>
                     <div id="tagsDiv" class="w-100 d-flex justify-content-start flex-wrap">
-                        <span class="tag m-1 hidden"> </span>
+                        <span class="tag m-1 hidden removable"
+                        title="Click to remove"
+                         onclick="removeTag(this);"> </span>
                         @if($event ?? '' ?? '')
                             @foreach ($event->tags as $tag)
-                                <span class="tag m-1"> {{$tag->name}}</span>
+                                <input type="hidden" name="tags[]" value="{{$tag->id}}" id="tag{{$tag->id}}"/>
+
+                                <span class="tag m-1 removable"
+                                    title="Click to remove"
+                                    onclick="removeTag(this);"
+                                    value="{{$tag->id}}">
+                                     {{$tag->name}}
+                                </span>
+
                             @endforeach
                         @endif
                     </div>
@@ -96,7 +111,7 @@
                         >@if($event ?? ''){{$event->description ?: '' }}@endif</textarea>
             </div>
 
-            <button type="submit"> Create </button>
+            <button type="submit"> @if($event ?? '') Edit @else Create @endif </button>
 
         </div>
     <form>
