@@ -11,9 +11,10 @@ use Validator;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('pages.users.browse');
+        $users = User::search($request->query('global'));
+        return view('pages.users.browse', ['users' => $users->paginate($request->size ?? 8)->withQueryString(), 'request' => $request]);
     }
 
     public function show($username)
