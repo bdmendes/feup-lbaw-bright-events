@@ -1,3 +1,4 @@
+/*
 function addEventListeners() {
   let itemCheckers = document.querySelectorAll('article.card li.item input[type=checkbox]');
   [].forEach.call(itemCheckers, function(checker) {
@@ -178,6 +179,7 @@ function createItem(item) {
 }
 
 addEventListeners();
+*/
 
 /**
  * Reads from an input that has a datalist, and adds one span and hidden input to div
