@@ -17,7 +17,7 @@ class EventController extends Controller
     public function index(Request $request)
     {
         $events = Event::search($request->query('global'));
-        if ($request->has('sort_by')) {
+        if ($request->filled('sort_by')) {
             if ($request->query('order') == 'descending') {
                 $events = $events->orderBy($request->query('sort_by'), 'desc');
             } else {
@@ -26,23 +26,23 @@ class EventController extends Controller
         } else {
             $events = $events->orderBy('date', 'desc');
         }
-        if ($request->has('organizer')) {
+        if ($request->filled('organizer')) {
             $events = $events->where('organizer_id', '=', $request->query('organizer'));
         }
-        if ($request->has('location')) {
+        if ($request->filled('location')) {
             $events = $events->where('location_id', '=', $request->query('location'));
         }
-        if ($request->has('tag')) {
+        if ($request->filled('tag')) {
             $events = $events->tag($request->query('tag'));
         }
-        if ($request->has('state')) {
+        if ($request->filled('state')) {
             $events = $events->where('event_state', '=', $request->query('state'));
         }
-        if ($request->has('begin_date')) {
+        if ($request->filled('begin_date')) {
             $date = date('Y-m-d', strtotime($request->query('begin_date')));
             $events = $events->where('date', '>=', $date);
         }
-        if ($request->has('end_date')) {
+        if ($request->filled('end_date')) {
             $date = date('Y-m-d', strtotime($request->query('end_date')));
             $events = $events->where('date', '<=', $date);
         }
