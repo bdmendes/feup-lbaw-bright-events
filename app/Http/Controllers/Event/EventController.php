@@ -62,7 +62,7 @@ class EventController extends Controller
             $events = $events->take(5);
         }
 
-        return view('pages.events', ["events" => $events]);
+        return view('pages.events.browse', ["events" => $events]);
     }
 
     public function indexCreate()
@@ -126,7 +126,6 @@ class EventController extends Controller
         $event->is_private = $request->restriction === 'private' ? 'true' : 'false';
 
         if ($request->cover_image) {
-
             $filename = 'event' . $event->id . '.' . $request->cover_image->extension();
             $request->cover_image->move(public_path('storage'), $filename);
             $relativePath = 'storage/' . $filename;

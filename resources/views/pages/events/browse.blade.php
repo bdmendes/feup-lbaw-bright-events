@@ -63,7 +63,7 @@
             <h2>Browse Events</h2>
             @foreach ($events as $event)
                 <div class="mt-4">
-                    @include('partials.eventcard', ['event' => $event])
+                    @include('partials.events.card', ['event' => $event])
                 </div>
             @endforeach
         </div>

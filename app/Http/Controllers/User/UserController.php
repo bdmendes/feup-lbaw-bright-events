@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        return view('pages.users');
+        return view('pages.users.browse');
     }
 
     public function show($username)
@@ -22,7 +22,7 @@ class UserController extends Controller
         if (is_null($user)) {
             abort('404', 'User not found');
         }
-        return view('pages.user.view', [
+        return view('pages.users.view', [
             'user' => $user,
             'attended_events' => $user->attended_events(),
         ]);
@@ -34,7 +34,7 @@ class UserController extends Controller
         if (is_null($user)) {
             abort('404', 'User not found');
         }
-        return view('pages.user.edit', [
+        return view('pages.users.edit', [
             'user' => $user,
         ]);
     }

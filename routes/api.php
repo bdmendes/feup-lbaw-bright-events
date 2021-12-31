@@ -17,10 +17,10 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', 'Auth\LoginController@getUser');
 
 // Events
-Route::get('events', "EventApiController@index");
-Route::patch('events/{id}', "EventApiController@update");
-Route::get('events/{id}/attendees', "EventApiController@getAttendees");
-Route::get('events/{id}/comments', "EventApiController@getComments");
+Route::get('events', "Event\EventApiController@index");
+Route::patch('events/{id}', "Event\EventApiController@update");
+Route::get('events/{id}/attendees', "Event\EventApiController@getAttendees");
+Route::get('events/{id}/comments', "Event\EventApiController@getComments");
 
 // Reports
 Route::post('reports/event', 'Report\ReportAPIController@reportEvent')->name('report');

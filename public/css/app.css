@@ -37,11 +37,10 @@ nav > * {
 }
 
 #content {
-    min-height: 90%;
     width: 90%;
     max-width: 1200px;
+    min-height: 80%;
     margin: 0 auto;
-    display: padding-box;
     padding-top: 15px;
 }
 
