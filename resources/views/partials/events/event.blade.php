@@ -29,12 +29,12 @@
     </div>
     <div class="p-3 w-100">
         <label> Tags: </label>
-        @include("partials.event.tags", ['event' => $event])
+        @include("partials.events.tags", ['event' => $event])
     </div>
 </div>
 
 
-@include('partials.event.tabview', ['event' => $event])
+@include('partials.events.tabview', ['event' => $event])
 
 <div class="p-1 w-100 d-flex justify-content-end">
     @if (Auth::check())

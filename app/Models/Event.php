@@ -67,4 +67,11 @@ class Event extends Model
         }
         return $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$search]);
     }
+
+    public function scopeTag($query, $tag)
+    {
+        return $query->whereHas('tags', function ($query) use ($tag) {
+            $query->where('name', $tag);
+        });
+    }
 }

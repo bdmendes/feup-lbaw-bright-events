@@ -90,6 +90,10 @@ footer > span {
     margin-bottom: 0;
 }
 
+.btn-outline-light:focus {
+    background-color: #a6b2c5;
+}
+
 .homeContent {
     display: padding-box;
     padding: 10px 30px;

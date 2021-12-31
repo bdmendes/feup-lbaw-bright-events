@@ -187,34 +187,41 @@ addEventListeners();
  * @param {*} inputId -> Div to read the input from
  * @param {*} arrayId  -> Array id, to add to the hidden input's name field
  */
-function addItem(div, inputId, arrayId){
+function addItem(div, inputId, arrayId) {
     let a = document.getElementById(inputId);
     let value = a.value;
-    let data_value = $("option[value='" + value + "']").data('value');
-    if(data_value == undefined) return;
+    let data_value = $("option[value='" + value + "']").data("value");
+    if (data_value == undefined) return;
     div = $("#" + div)[0];
     let span = div.querySelector("span.hidden");
 
     let newSpan = span.cloneNode(true);
     newSpan.classList.remove("hidden");
     newSpan.innerHTML = value;
-    if($("#"+inputId + data_value).length > 0){
+    if ($("#" + inputId + data_value).length > 0) {
         return;
     }
     div.append(newSpan);
 
     //Add input to form
-    let inputHtml = "<input type='hidden' name ='" + arrayId + "[]' id='tag" + data_value + "' value='" + data_value + " '> </input>";
-    div.insertAdjacentHTML('afterBegin', inputHtml);
+    let inputHtml =
+        "<input type='hidden' name ='" +
+        arrayId +
+        "[]' id='tag" +
+        data_value +
+        "' value='" +
+        data_value +
+        " '> </input>";
+    div.insertAdjacentHTML("afterBegin", inputHtml);
 }
 
-function removeTag(t){
+function removeTag(t) {
     let tagId = t.attributes["value"].value;
-    let hiddenInput = $("#tag"+tagId);
+    let hiddenInput = $("#tag" + tagId);
     hiddenInput.remove();
     t.remove();
 }
 
-function clearValue(id){
+function clearValue(id) {
     $("#" + id)[0].value = "";
 }

@@ -10,59 +10,48 @@ use App\Models\Event;
 use App\Models\File;
 use App\Models\Tag;
 
+use Illuminate\Support\Facades\DB;
+
 class EventController extends Controller
 {
     public function index(Request $request)
     {
-        $events = Event::search($request->query('global'))->get();
+        $events = Event::search($request->query('global'));
         if ($request->has('sort_by')) {
             if ($request->query('order') == 'descending') {
-                $events = $events->sortByDesc($request->query('sort_by'));
+                $events = $events->orderBy($request->query('sort_by'), 'desc');
             } else {
-                $events = $events->sortBy($request->query('sort_by'));
+                $events = $events->orderBy($request->query('sort_by'), 'asc');
             }
+        } else {
+            $events = $events->orderBy('date', 'desc');
         }
         if ($request->has('organizer')) {
-            $events = $events->where('organizer_id', $request->query('organizer'));
+            $events = $events->where('organizer_id', '=', $request->query('organizer'));
         }
         if ($request->has('location')) {
-            $events = $events->where('location_id', $request->query('location'));
+            $events = $events->where('location_id', '=', $request->query('location'));
         }
         if ($request->has('tag')) {
-            $events = $events->filter(function ($item) use ($request) {
-                foreach ($item->tags as $tag) {
-                    if ($tag->name == $request->query('tag')) {
-                        return true;
-                    }
-                }
-                return false;
-            });
+            $events = $events->tag($request->query('tag'));
         }
         if ($request->has('state')) {
-            $events = $events->where('event_state', $request->query('state'));
+            $events = $events->where('event_state', '=', $request->query('state'));
         }
         if ($request->has('begin_date')) {
             $date = date('Y-m-d', strtotime($request->query('begin_date')));
-            $events = $events->filter(function ($item) use ($date) {
-                return data_get($item, 'date') >= $date;
-            });
+            $events = $events->where('date', '>=', $date);
         }
         if ($request->has('end_date')) {
             $date = date('Y-m-d', strtotime($request->query('end_date')));
-            $events = $events->filter(function ($item) use ($date) {
-                return data_get($item, 'date') <= $date;
-            });
+            $events = $events->where('date', '<=', $date);
         }
-        if ($request->has('offset')) {
-            $events = $events->skip($request->query('offset'));
-        }
-        if ($request->has('size')) {
-            $events = $events->take($request->query('size'));
-        } else {
-            $events = $events->take(5);
-        }
+        return view('pages.events.browse', ['events' => $events->paginate($request->size ?? 5)->withQueryString(), 'request' => $request]);
+    }
 
-        return view('pages.events.browse', ["events" => $events]);
+    public function getCardList($events)
+    {
+        return view('partials.events.cardlist', compact('events'));
     }
 
     public function indexCreate()
