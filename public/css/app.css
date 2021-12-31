@@ -125,3 +125,7 @@ li {
 .hidden {
     display: none;
 }
+
+.row-bg {
+    background-color: lightgray;
+}
