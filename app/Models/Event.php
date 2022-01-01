@@ -65,7 +65,9 @@ class Event extends Model
         if (!$search) {
             return $query;
         }
-        return $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$search]);
+        return $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$search])->orWhereHas('tags', function ($query) use ($search) {
+            $query->where('name', $search);
+        })->orWhereRelation('organizer', 'username', $search);
     }
 
     public function scopeTag($query, $tag)
