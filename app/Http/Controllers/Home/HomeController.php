@@ -14,7 +14,7 @@ class HomeController extends Controller
     {
         $events = Event::all()->take(3);
         $users = User::all()->take(4);
-        return view('pages.static.home', compact('events', 'users'));
+        return view('pages.home', compact('events', 'users'));
     }
 
     public function redirect()

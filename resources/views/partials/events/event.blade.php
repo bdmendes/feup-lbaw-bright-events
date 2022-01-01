@@ -55,4 +55,3 @@
         <button>Need to be logged in to attend</button>
     @endif
 </div>
-(Buttons not working)
