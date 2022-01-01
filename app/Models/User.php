@@ -71,13 +71,14 @@ class User extends Authenticatable
 
     public function scopeSearch($query, $search)
     {
-        if (!$search) {
-            return $query;
+        if ($search) {
+            $search_ = str_replace(" ", "|", implode(explode(" ", $search)));
+            $query= $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', $search_)
+            ->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', $search_)
+            ->orWhere('username', 'like', '%' . $search . '%')
+            ->orWhere('name', 'ilike', '%' . $search . '%');
         }
-        $search_ = str_replace(" ", "|", implode(explode(" ", $search)));
-        return $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', $search_)
-        ->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', $search_)
-        ->orWhere('username', 'like', '%' . $search . '%')
-        ->orWhere('name', 'ilike', '%' . $search . '%');
+        
+        return $query->where('is_admin', 'false');
     }
 }
