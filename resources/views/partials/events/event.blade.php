@@ -38,20 +38,66 @@
 
 <div class="p-1 w-100 d-flex justify-content-end">
     @if (Auth::check())
-        @if ($event->organizer !== null)
-            @if (Auth::user()->id === $event->organizer->id)
-                <button>Delete event</button>
-                <form action="{{ route('editEvent', ['id' => $event->id]) }}">
-                    <button type="submit">Edit event</button>
-                </form>
+        @if (Auth::user()->id !== $event->organizer->id)
+            @if (Auth::user()->attends($event->id))
+                <button class="btn-light" onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }})"
+                    id="button" type="submit">Leave event</button>
             @else
-                <form>
-                    <button>Attend event</button>
-                </form>
+                <button class="btn-light" onclick="addAttendee({{ $event->id }}, {{ Auth::user()->id }})"
+                    id="button">Attend event</button>
             @endif
+        @else
+            <button>Delete event</button>
+            <form action="{{ route('editEvent', ['id' => $event->id]) }}">
+                <button type="submit">Edit event</button>
+            </form>
         @endif
 
     @else
         <button>Need to be logged in to attend</button>
     @endif
 </div>
+
+<script>
+    async function addAttendee(eventId, attendeeId) {
+        var btn = document.getElementById("button");
+        btn.innerHTML = "<div class=\"spinner-border\" role=\"status\"><span class=\"sr-only\"></span></div>";
+        btn.onclick = "";
+
+        var xmlHTTP = new XMLHttpRequest();
+        xmlHTTP.open("POST", "/api/events/" + eventId + "/attendees", false);
+        xmlHTTP.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        xmlHTTP.onreadystatechange = function() {
+            if (xmlHTTP.readyState == 4 && xmlHTTP.status == 200) {
+                btn.innerHTML = "Leave Event";
+                btn.onclick = function() {
+                    removeAttendee(eventId, attendeeId);
+                }
+                return;
+            }
+        }
+        xmlHTTP.send("event_id=" + eventId + "&attendee_id=" + attendeeId);
+    }
+
+    async function removeAttendee(eventId, attendeeId) {
+        var btn = document.getElementById("button");
+        btn.innerHTML = "<div class=\"spinner-border\" role=\"status\"><span class=\"sr-only\"></span></div>";
+        btn.onclick = "";
+
+        var xmlHTTP = new XMLHttpRequest();
+
+        xmlHTTP.open("DELETE", "/api/events/" + eventId + "/attendees", false);
+        xmlHTTP.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        xmlHTTP.onreadystatechange = function() {
+            if (xmlHTTP.readyState == 4 && xmlHTTP.status == 200) {
+                btn.innerHTML = "Attend Event";
+                btn.onclick = function() {
+                    addAttendee(eventId, attendeeId);
+                }
+            }
+        }
+        xmlHTTP.send("event_id=" + eventId + "&attendee_id=" + attendeeId);
+    }
+</script>

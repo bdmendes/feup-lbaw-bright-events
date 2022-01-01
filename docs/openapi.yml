@@ -1266,7 +1266,6 @@ paths:
                     user_picture:
                       type: integer
 
-  /api/events/{eventId}/attendees/{attendanceId}:
     delete:
       operationId: "R310"
       summary: "R310: Remove Attendance action"

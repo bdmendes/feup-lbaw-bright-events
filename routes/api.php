@@ -21,6 +21,8 @@ Route::middleware('auth:api')->get('/user', 'Auth\LoginController@getUser');
 Route::patch('events/{id}', "Event\EventApiController@update"); */
 Route::get('events/{id}/attendees', "Event\EventApiController@getAttendees");
 Route::get('events/{id}/comments', "Event\EventApiController@getComments");
+Route::post('events/{eventId}/attendees', "Event\EventApiController@addAttendee")->name('addAttendee');
+Route::delete('events/{eventId}/attendees', "Event\EventApiController@removeAttendee")->name('removeAttendee');
 
 // Reports
 // Route::post('reports/event', 'Report\ReportAPIController@reportEvent')->name('report');

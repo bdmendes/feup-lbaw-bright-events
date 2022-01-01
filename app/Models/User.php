@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Arr;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Event;
 
 class User extends Authenticatable
 {
@@ -67,6 +68,17 @@ class User extends Authenticatable
     public function profile_picture()
     {
         return $this->belongsTo(File::class, 'profile_picture_id');
+    }
+
+    public function attends($event_id)
+    {
+        foreach ($this->attendances as $attendance) {
+            if ($attendance->event_id == $event_id && $attendance->attendee_id == $this->id) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function scopeSearch($query, $search)

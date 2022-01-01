@@ -71,9 +71,10 @@ CREATE TABLE lbaw2134.event_tags (
 );
 
 CREATE TABLE lbaw2134.attendances (
+    id SERIAL PRIMARY KEY,
     event_id INTEGER REFERENCES lbaw2134.events ON DELETE CASCADE ON UPDATE CASCADE,
-    attendee_id INTEGER REFERENCES lbaw2134.users ON DELETE CASCADE ON UPDATE CASCADE,
-    PRIMARY KEY (event_id, attendee_id)
+    attendee_id INTEGER REFERENCES lbaw2134.users ON DELETE SET NULL ON UPDATE CASCADE,
+    UNIQUE (event_id, attendee_id)
 );
 
 CREATE TABLE lbaw2134.attendance_requests (
@@ -658,7 +659,7 @@ INSERT INTO lbaw2134.EVENT_TAGS VALUES
 	( 107, 107 ) ,
 	( 108, 108 ) ,
 	( 109, 109 ) ;
-INSERT INTO lbaw2134.ATTENDANCES VALUES
+INSERT INTO lbaw2134.ATTENDANCES (event_id, attendee_id) VALUES
 	( 100, 101 ) ,
 	( 100, 102 ) ,
 	( 100, 103 ) ,
