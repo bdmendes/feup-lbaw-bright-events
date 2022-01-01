@@ -72,7 +72,7 @@ CREATE TABLE lbaw2134.event_tags (
 
 CREATE TABLE lbaw2134.attendances (
     event_id INTEGER REFERENCES lbaw2134.events ON DELETE CASCADE ON UPDATE CASCADE,
-    attendee_id INTEGER REFERENCES lbaw2134.users ON DELETE SET NULL ON UPDATE CASCADE,
+    attendee_id INTEGER REFERENCES lbaw2134.users ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (event_id, attendee_id)
 );
 
@@ -610,7 +610,7 @@ INSERT INTO lbaw2134.LOCATIONS values
 	( 111, '5997 Burning Wood Way', 'Mantes-la-Jolie', '48.9990813 1.6899473', 'Manufacturers', 'France' ),
 	( 112, '5 Redwing Center', 'Aco', '-9.3601019 -77.553344', 'Old Shore', 'Peru' );
 INSERT INTO lbaw2134.USERS VALUES
-	 (110, 'admin@email.com', 'admin', '$2y$10$2ZQsdg13mHYK6QeLEVjPPOp5sJmAjlOrUU7tRlIpa8tMKB6EW5Ef2', 'Jose', True, '','null', date '1978-09-28', False, 'Male', null ) ,
+	 (110, 'admin@admin.com', 'admin', '$2y$10$2ZQsdg13mHYK6QeLEVjPPOp5sJmAjlOrUU7tRlIpa8tMKB6EW5Ef2', 'LBAW2134', True, '','null', date '1978-09-28', False, 'Male', null ) ,
      (100, 'danial1978@gmail.com', 'danial1978', '$2y$10$WNIrrB/6C7yPQpvScdXSs.y/mLdxJ8PajD0YxWnugGEfAJsqtCh2e', 'Breanda Marple', False, '','null', date '1978-09-28', False, 'Female', null ) ,
 	 (101, 'PedroLLiao@rhyta.com', 'pedrolliao', '$2y$10$7clHki3BzBs..oeY/Ym6vuGOfUe7xeahf.JjVBumBxrTp4iNCKjpK', 'Pedro Liao', False, '','null', date '1954-07-28', False, 'Male', null ) ,
 	 (102, 'MatthewERaleigh@dayrep.com', 'rayleigh', '$2y$10$vgqw.lujkVX0Txekfw0SbegdAb2OdfoUWA8haJVDgb6mG4NpvAAZ2', 'Matthew Raleigh', False, '','null', date '1998-02-21', False, 'Male', null ) ,

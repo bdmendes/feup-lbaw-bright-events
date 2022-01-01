@@ -25,7 +25,7 @@
     </div>
     <div class="p-3  w-100">
         <label> Organizer: </label>
-        {{ $event->organizer->name }}
+        {{ $event->organizer->name ?? 'Deleted User' }}
     </div>
     <div class="p-3 w-100">
         <label> Tags: </label>
@@ -38,16 +38,17 @@
 
 <div class="p-1 w-100 d-flex justify-content-end">
     @if (Auth::check())
-        @if (Auth::user()->id !== $event->organizer->id)
-            <form>
-                <button>Attend event</button>
-            </form>
-        @else
-
-            <button>Delete event</button>
-            <form action="{{ route('editEvent', ['id' => $event->id]) }}">
-                <button type="submit">Edit event</button>
-            </form>
+        @if ($event->organizer !== null)
+            @if (Auth::user()->id === $event->organizer->id)
+                <button>Delete event</button>
+                <form action="{{ route('editEvent', ['id' => $event->id]) }}">
+                    <button type="submit">Edit event</button>
+                </form>
+            @else
+                <form>
+                    <button>Attend event</button>
+                </form>
+            @endif
         @endif
 
     @else
