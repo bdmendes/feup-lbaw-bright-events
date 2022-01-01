@@ -31,7 +31,7 @@
                                         <p>Block</p>
                                     </a>
                                 @endif
-                                @if (Auth::user()->id == $user->id)
+                                @if (Auth::user()->id == $user->id || Auth::user()->is_admin)
                                     <a href="{{ route('editProfile', ['username' => Auth::user()->username]) }}"
                                         class="text-white m-3 text-decoration-none d-flex flex-column align-items-center">
                                         <i class="bi bi-pencil-square"></i>
