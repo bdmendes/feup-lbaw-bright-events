@@ -74,6 +74,10 @@ class User extends Authenticatable
         if (!$search) {
             return $query;
         }
-        return $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$search])->orWhere('username', 'like', '%' . $search . '%')->orWhere('name', 'ilike', '%' . $search . '%');
+        $search_ = str_replace(" ", "|", implode(explode(" ", $search)));
+        return $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', $search_)
+        ->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', $search_)
+        ->orWhere('username', 'like', '%' . $search . '%')
+        ->orWhere('name', 'ilike', '%' . $search . '%');
     }
 }

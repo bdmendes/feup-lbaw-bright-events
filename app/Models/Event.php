@@ -65,12 +65,25 @@ class Event extends Model
         if (!$search) {
             return $query;
         }
-        return $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$search])->orWhereHas('tags', function ($query) use ($search) {
-            $query->where('name', $search);
-        })->orWhereRelation('organizer', 'username', $search);
+        $search_ = str_replace(" ", "|", implode(explode(" ", $search)));
+        return $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', $search_)
+        ->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', $search_)
+        ->orWhereRelation('organizer', 'username', 'ilike', '%'.$search.'%')
+        ->orWhereRelation('organizer', 'name', 'ilike', '%'.$search.'%')
+        ->orWhereHas('tags', function ($query) use ($search) {
+            $query->where('name', 'like', '%'.$search.'%');
+        })
+        ->orWhereRelation('location', 'name', 'ilike', '%'.$search.'%')
+        ->orWhereRelation('location', 'city', 'ilike', '%'.$search.'%')
+        ->orWhereRelation('location', 'country', 'ilike', '%'.$search.'%');
     }
 
-    public function scopeTag($query, $tag)
+    public function scopeOrganizer($query, $organizerId)
+    {
+        return $query->where('organizer_id', $id);
+    }
+
+    public function scopeTag($query, $tagName)
     {
         return $query->whereHas('tags', function ($query) use ($tag) {
             $query->where('name', $tag);

@@ -32,12 +32,6 @@
                 </form>
             </div>
 
-            <div data-bs-toggle="collapse" href="#filter-location">Location <i class="bi bi-chevron-down"></i></a>
-            </div>
-            <div class="mb-4 collapse" id="filter-location">
-                a location
-            </div>
-
             <div data-bs-toggle="collapse" href="#filter-organizer">Organizer <i class="bi bi-chevron-down"></i></a>
             </div>
             <div class="collapse {{ $request->filled('organizer') ? 'show' : '' }}" id="filter-organizer">
