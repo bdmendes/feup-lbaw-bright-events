@@ -21,9 +21,10 @@ class UserController extends Controller
     public function show($username)
     {
         $user = User::where('username', $username)->get()->first();
-        if (is_null($user)) {
+        if (is_null($user) || $user->is_admin) {
             abort('404', 'User not found');
         }
+        
         return view('pages.users.view', [
             'user' => $user,
             'attended_events' => $user->attended_events(),
