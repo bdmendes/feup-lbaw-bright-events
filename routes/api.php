@@ -23,8 +23,8 @@ Route::get('events/{id}/attendees', "Event\EventApiController@getAttendees");
 Route::get('events/{id}/comments', "Event\EventApiController@getComments");
 
 // Reports
-Route::post('reports/event', 'Report\ReportAPIController@reportEvent')->name('report');
-Route::post('reports/user', 'ReportAPIController@reportUser');
-Route::post('reports/comment', 'Report\ReportAPIController@reportComment');
-Route::get('reports', 'Report\ReportAPIController@getReports');
-Route::get('reports/{report_id}', 'Report\ReportAPIController@show');
+// Route::post('reports/event', 'Report\ReportAPIController@reportEvent')->name('report');
+// Route::post('reports/user', 'ReportAPIController@reportUser');
+// Route::post('reports/comment', 'Report\ReportAPIController@reportComment');
+// Route::get('reports', 'Report\ReportAPIController@getReports');
+// Route::get('reports/{report_id}', 'Report\ReportAPIController@show');

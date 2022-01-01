@@ -5,10 +5,10 @@
     <div>
         <h2>Reports Dashboard</h2>
         <div class="mt-4">
-            @if ($reports->count())
+            @if (!$reports->isEmpty())
                 <div class="container">
                     <div class="row border-bottom border-1 row-bg">
-                        <div class="col fw-bolder fs-4">Id</div>
+                        <div class="col-1 fw-bolder fs-4">Id</div>
                         <div class="col fw-bolder fs-4">Motive</div>
                         <div class="col fw-bolder fs-4">Date</div>
                         <div class="col fw-bolder fs-4">Handled</div>
@@ -17,7 +17,7 @@
                     </div>
                     @foreach ($reports as $report)
                         <div class="row">
-                            <div class="col">{{ $report->id }} </div>
+                            <div class="col-1">{{ $report->id }} </div>
                             <div class="col">{{ $report->report_motive }} </div>
                             <div class="col">{{ $report->date->diffForHumans() }} </div>
                             <div class="col">
@@ -48,19 +48,21 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-4 collapse" id="r{{ $report->id }}">
-                            <h3>Date</h3>
-                            <p>{{ $report->date->toDateTimeString() }}</p>
-                            <h3>Description</h3>
-                            <p>{{ $report->description }}</p>
-                            <h3>ID</h3>
-                            <p>{{ $type }} {{ $id }}</p>
-                            @if ($report->handled_by_id)
-                                <h3>Handler</h3>
-                                <p>{{ $report->handled_by_id }}</p>
-                            @else
+                        <div class="row collapse border border-1" id="r{{ $report->id }}">
+                            <div class="mb-4 mt-4">
+                                <h3>Date</h3>
+                                <p>{{ $report->date->toDateTimeString() }}</p>
+                                <h3>Description</h3>
+                                <p>{{ $report->description }}</p>
+                                <h3>ID</h3>
+                                <p>{{ $type }} {{ $id }}</p>
+                                @if ($report->handled_by_id)
+                                    <h3>Handler</h3>
+                                    <p>{{ $report->handled_by_id }}</p>
+                                @else
 
-                            @endif
+                                @endif
+                            </div>
                         </div>
                     @endforeach
                 </div>
