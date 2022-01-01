@@ -14,16 +14,17 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $users = User::search($request->query('global'));
+        $users = User::search($request->query('global'))->where('is_admin', 'false');
         return view('pages.users.browse', ['users' => $users->paginate($request->size ?? 10)->withQueryString(), 'request' => $request]);
     }
 
     public function show($username)
     {
         $user = User::where('username', $username)->get()->first();
-        if (is_null($user)) {
+        if (is_null($user) || $user->is_admin) {
             abort('404', 'User not found');
         }
+        
         return view('pages.users.view', [
             'user' => $user,
             'attended_events' => $user->attended_events(),
@@ -147,9 +148,12 @@ class UserController extends Controller
         return redirect()->route('home');
     }
 
-    public function block($request)
+    public function block(Request $request)
     {
         $user = User::where('username', $request)->get()->first();
+        
+        $this->authorize('block', $user);
+        
         if (is_null($user)) {
             abort('404', 'User not found');
         }
@@ -160,7 +164,15 @@ class UserController extends Controller
         return redirect()->route('profile', ['username' => $user->username]);
     }
 
-    public function delete()
+    public function delete(Request $request)
     {
+        $user = User::where('username', $request)->get()->first();
+        $this->authorize('delete', $user);
+
+        if (is_null($user)) {
+            abort('404', 'User not found');
+        }
+        $user->delete();
+        return redirect()->route('browseUsers');
     }
 }

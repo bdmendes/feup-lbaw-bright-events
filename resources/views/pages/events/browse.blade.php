@@ -3,8 +3,8 @@
 @section('title', 'events')
 
 @section('content')
-    <div class="d-flex row gap-4">
-        <div class="col-3 border rounded py-2">
+    <div class="row gap-4">
+        <div class="col-md-3 border rounded py-2">
 
             <h3 class="mb-3">Search</h3>
             <form action="{{ route('browseEvents') }}" method="GET">
@@ -20,7 +20,7 @@
         </div>
 
         <h3 class="mb-3">Filter</h3>
-        <div class="mb-5 d-flex row gap-3">
+        <div class="mb-5 row gap-3">
             <div data-bs-toggle="collapse" href="#filter-date">Date <i class="bi bi-chevron-down"></i></a>
             </div>
             <div class="collapse {{ $request->filled('begin_date') || $request->filled('end_date') ? 'show' : '' }}"
@@ -30,12 +30,6 @@
                     <div>End <input id="date" value="{{ $request->end_date }}" type="date" name="end_date"></div>
                     <input type="submit">
                 </form>
-            </div>
-
-            <div data-bs-toggle="collapse" href="#filter-location">Location <i class="bi bi-chevron-down"></i></a>
-            </div>
-            <div class="mb-4 collapse" id="filter-location">
-                a location
             </div>
 
             <div data-bs-toggle="collapse" href="#filter-organizer">Organizer <i class="bi bi-chevron-down"></i></a>
@@ -95,12 +89,12 @@
     </div>
 
     <div class="col">
-        <h2>Browse Events</h2>
+        <h2 class="mb-4">Browse Events</h2>
         @if ($events->isEmpty())
             No events were found
         @else
             @foreach ($events as $event)
-                <div class="mt-4">
+                <div class="mb-4">
                     @include('partials.events.card', ['event' => $event])
                 </div>
             @endforeach

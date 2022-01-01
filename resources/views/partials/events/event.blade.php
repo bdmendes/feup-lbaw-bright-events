@@ -25,7 +25,7 @@
     </div>
     <div class="p-3  w-100">
         <label> Organizer: </label>
-        {{ $event->organizer->name }}
+        {{ $event->organizer->name ?? 'Deleted User' }}
     </div>
     <div class="p-3 w-100">
         <label> Tags: </label>
