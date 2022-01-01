@@ -16,6 +16,7 @@
                 </div>
         </form>
     </div>
+
     @if ($users->isEmpty())
         No users were found
     @else

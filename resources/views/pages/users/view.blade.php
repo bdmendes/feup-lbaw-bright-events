@@ -19,14 +19,29 @@
                         <div class="d-flex flex-row">
                             @if (Auth::check())
                                 @if (Auth::user()->is_admin)
-                                    <a href="" class="text-white m-3 text-decoration-none d-flex flex-column align-items-center">
-                                        <i class="bi bi-trash"></i>
-                                        <p>Remove</p>
-                                    </a>
-                                    <a href="" class="text-white m-3 text-decoration-none d-flex flex-column align-items-center">
-                                        <i class="bi bi-dash-circle"></i>
-                                        <p>Block</p>
-                                    </a>
+                                    <form method="POST" action="{{ route('profile', ['username' => $user->username]) }}">
+                                        @csrf
+                                        <a onclick="this.parentNode.submit();"
+                                            class="text-white m-3 text-decoration-none d-flex flex-column align-items-center"
+                                            style="cursor: pointer">
+                                            <i class="bi bi-trash"></i>
+                                            <p>Remove</p>
+                                        </a>
+                                    </form>
+                                    <form method="POST" action="{{ route('profile', ['username' => $user->username]) }}"
+                                        style="cursor: pointer">
+                                        @csrf
+                                        <a onclick="this.parentNode.submit();"
+                                            class="text-white m-3 text-decoration-none d-flex flex-column align-items-center">
+                                            @if ($user->is_blocked)
+                                                <i class="bi bi-check-circle"></i>
+                                                <p>Unblock</p>
+                                            @else
+                                                <i class="bi bi-dash-circle"></i>
+                                                <p>Block</p>
+                                            @endif
+                                        </a>
+                                    </form>
                                 @endif
                                 @if (Auth::user()->id == $user->id)
                                     <a href="{{ route('editProfile', ['username' => Auth::user()->username]) }}"

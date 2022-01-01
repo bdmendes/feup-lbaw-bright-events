@@ -18,8 +18,8 @@ Route::post('events/{id}/edit', 'Event\EventController@update')->name('editEvent
 
 // Reports
 Route::get('reports', 'Report\ReportController@index')->name('reports');
-Route::get('reports/{report_id}', 'Report\ReportController@show');
-Route::post('reports/{report_id}', 'Report\ReportController@execute');
+// Route::get('reports/{report_id}', 'Report\ReportController@show');
+// Route::post('reports/{report_id}', 'Report\ReportController@execute');
 
 // Authentication
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
@@ -32,5 +32,7 @@ Route::post('register', 'Auth\RegisterController@register')->name('register');
 //Users
 Route::get('users', 'User\UserController@index')->name('browseUsers');
 Route::get('users/{username}', 'User\UserController@show')->name('profile');
+Route::post('users/{username}', 'User\UserController@block');
+Route::delete('users/{username}', 'User\UserController@delete');
 Route::get('users/{username}/edit', 'User\UserController@edit')->name('editProfile');
 Route::post('users/{username}/edit', 'User\UserController@editUser')->name('editUser');

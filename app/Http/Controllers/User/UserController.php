@@ -14,7 +14,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $users = User::search($request->query('global'));
-        return view('pages.users.browse', ['users' => $users->paginate($request->size ?? 8)->withQueryString(), 'request' => $request]);
+        return view('pages.users.browse', ['users' => $users->paginate($request->size ?? 10)->withQueryString(), 'request' => $request]);
     }
 
     public function show($username)
@@ -127,5 +127,22 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('home');
+    }
+
+    public function block($request)
+    {
+        $user = User::where('username', $request)->get()->first();
+        if (is_null($user)) {
+            abort('404', 'User not found');
+        }
+
+        $user->is_blocked = !$user->is_blocked;
+        $user->save();
+
+        return redirect()->route('profile', ['username' => $user->username]);
+    }
+
+    public function delete()
+    {
     }
 }
