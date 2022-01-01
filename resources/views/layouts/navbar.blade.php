@@ -1,5 +1,5 @@
 <div class="container-fluid bg-light">
-    <nav class="navbar navbar-expand-lg navbar-light py-4" role="navigation">
+    <nav class="navbar navbar-expand-md navbar-light py-4" role="navigation">
         <a class="navbar-brand" href=" {{ route('home') }} ">
             <h1>Bright Events Logo</h1>
         </a>
