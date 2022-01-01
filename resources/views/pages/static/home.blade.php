@@ -3,16 +3,17 @@
 @section('title', 'home')
 
 @section('content')
-    <div class="homeBackground">
-        <img src="https://bomdia.eu/wp-content/uploads/2015/08/estaline.jpg" height="500"> </img>
-        <div class="backgroundSlogan">
-            <h1>Código ligeiro e compacto</h1>
+
+    <div class="container">
+        <img src="https://cdn.pixabay.com/photo/2018/05/10/11/34/concert-3387324_960_720.jpg">
+        <div style="position: relative; bottom: 100px; text-align: center;">
+            <h1 class="text-white">A bright community for bright experiences</h1>
         </div>
     </div>
 
     <br>
 
-    <div class="homeContent">
+    <div>
         <div>
             <h2>Trending Events</h2>
             @foreach ($events as $event)

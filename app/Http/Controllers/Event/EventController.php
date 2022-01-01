@@ -29,9 +29,6 @@ class EventController extends Controller
         if ($request->filled('organizer')) {
             $events = $events->where('organizer_id', '=', $request->query('organizer'));
         }
-        if ($request->filled('location')) {
-            $events = $events->where('location_id', '=', $request->query('location'));
-        }
         if ($request->filled('tag')) {
             $events = $events->tag($request->query('tag'));
         }
@@ -59,6 +56,7 @@ class EventController extends Controller
         $tags = Tag::all();
         return view("pages.events.edit", ['tags' => $tags]);
     }
+
     public function indexEdit($id)
     {
         $event = Event::findOrFail($id);
@@ -75,7 +73,6 @@ class EventController extends Controller
         ]);
 
         $file = null;
-
 
         $event = Event::create([
             'organizer_id' => Auth::user()->id,
