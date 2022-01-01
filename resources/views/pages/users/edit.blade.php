@@ -7,11 +7,11 @@
         <div class="row">
             <div class="col-auto col-6 d- p-3">
                 <h1>Edit User Profile</h1>
-                <form method="POST" action="{{ route('editUser', ['username' => $user->username]) }}">
+                <form method="POST" enctype="multipart/form-data" action="{{ route('editUser', ['username' => $user->username]) }}">
                     @csrf
 
                     <label for="name">Name</label>
-                    <input class="text-white" type="text" name="name" id="name" value="{{ $user->name }}"
+                    <input class="text-white mb-3" type="text" name="name" id="name" value="{{ $user->name }}"
                         placeholder="Name">
                     @if ($errors->has('name'))
                         <span class="error">
@@ -20,7 +20,7 @@
                     @endif
 
                     <label for="username">Username</label>
-                    <input class="text-white" type="text" name="username" id="username"
+                    <input class="text-white mb-3" type="text" name="username" id="username"
                         value="{{ $user->username }}" placeholder="Username">
                     @if ($errors->has('username'))
                         <span class="error">
@@ -38,7 +38,7 @@
                     @endif
 
                     <label for="email">Email</label>
-                    <input class="text-white" type="text" name="email" id="email" value="{{ $user->email }}"
+                    <input class="text-white mb-3" type="text" name="email" id="email" value="{{ $user->email }}"
                         placeholder="Email">
                     @if ($errors->has('email'))
                         <span class="error">
@@ -47,7 +47,7 @@
                     @endif
 
                     <label for="birth_date">Birth Date</label>
-                    <input class="text-dark d-block" type="date" name="birth_date" id="birth_date"
+                    <input class="text-dark mb-3 d-block" type="date" name="birth_date" id="birth_date"
                         value="{{ $user->birth_date }}" placeholder="birth_date">
                     @if ($errors->has('birth_date'))
                         <span class="error">
@@ -56,7 +56,7 @@
                     @endif
 
                     <label for="gender">Gender</label>
-                    <select name="gender" name="gender" id="gender" class="text-white">
+                    <select name="gender" name="gender" id="gender" class="text-white mb-3">
                         <option value="Female" @if (!is_null($user->gender) && $user->gender == 'Female')
                             selected
                             @endif>Female</option>
@@ -69,7 +69,7 @@
                     </select>
 
                     <label for="password">Password</label>
-                    <input class="text-white" type="password" name="password" id="password" placeholder="Password">
+                    <input class="text-white mb-3" type="password" name="password" id="password" placeholder="Password">
                     @if ($errors->has('password'))
                         <span class="error">
                             {{ $errors->first('password') }}
@@ -77,11 +77,14 @@
                     @endif
 
                     <label for="confirm_password">Confirm password</label>
-                    <input class="text-white" type="password" name="confirm_password" id="confirm_password"
+                    <input class="text-white mb-3" type="password" name="confirm_password" id="confirm_password"
                         placeholder="Confirm password">
+                    
+                    <label for=""></label>
+                    <input class="text-white mb-3" type="file" name="profile_picture" id="profile_picture">
 
                     <input type="hidden" name="id" id="id" value="{{$user->id}}">
-                    <button type="submit" class="btn-light">
+                    <button type="submit" class="btn-light d-block my-2">
                         Submit
                     </button>
                 </form>
