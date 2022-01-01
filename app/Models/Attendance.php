@@ -21,11 +21,11 @@ class Attendance extends Model
 
     public function attendee()
     {
-        $this->hasOne(User::class, 'id');
+        return $this->belongsTo(User::class, 'attendee_id');
     }
 
     public function event()
     {
-        $this->hasOne(Event::class, 'id');
+        return $this->belongsTo(Event::class, 'event_id');
     }
 }
