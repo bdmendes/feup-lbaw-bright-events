@@ -66,7 +66,7 @@ class User extends Authenticatable
 
     public function profile_picture()
     {
-        $this->belongsTo(File::class, 'profile_picture_id');
+        return $this->belongsTo(File::class, 'profile_picture_id');
     }
 
     public function scopeSearch($query, $search)
