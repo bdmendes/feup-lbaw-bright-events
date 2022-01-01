@@ -225,3 +225,64 @@ function removeTag(t) {
 function clearValue(id) {
     $("#" + id)[0].value = "";
 }
+
+async function addAttendee(eventId, attendeeId, btn_id) {
+    let btn = document.getElementById(btn_id);
+    
+    if (btn != null) {
+        btn.innerHTML = "<div class=\"spinner-border\" role=\"status\"><span class=\"sr-only\"></span></div>";
+        btn.onclick = "";
+    }
+
+    let xmlHTTP = new XMLHttpRequest();
+    xmlHTTP.open("POST", "/api/events/" + eventId + "/attendees", false);
+    xmlHTTP.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    xmlHTTP.onreadystatechange = function() {
+        if(xmlHTTP.readyState == 4 && xmlHTTP.status == 200) {
+            if (btn != null) {
+                btn.innerHTML = "Leave Event";
+                btn.onclick = function () { removeAttendee(eventId, attendeeId); }
+            }
+        }
+    }
+    xmlHTTP.send("event_id=" + eventId + "&attendee_id=" + attendeeId);
+} 
+
+async function removeAttendee(eventId, attendeeId, btn_id) {
+    let btn = document.getElementById(btn_id);
+    
+    if (btn != null) {
+        btn.innerHTML = "<div class=\"spinner-border\" role=\"status\"><span class=\"sr-only\"></span></div>";
+        btn.onclick = "";
+    }
+
+    let xmlHTTP = new XMLHttpRequest();
+    
+    xmlHTTP.open("DELETE", "/api/events/" + eventId + "/attendees", false);
+    xmlHTTP.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    xmlHTTP.onreadystatechange = function() {
+        if(xmlHTTP.readyState == 4 && xmlHTTP.status == 200) {
+            if (btn != null) {
+                btn.innerHTML = "Attend Event";
+                btn.onclick = function () { addAttendee(eventId, attendeeId, btn_id); }
+            }
+        }
+    }
+    xmlHTTP.send("event_id=" + eventId + "&attendee_id=" + attendeeId);
+}
+
+async function removeAndUpdate(eventId, attendeeId, username) {
+    removeAttendee(eventId, attendeeId, username + "-btn");
+    
+    let div = document.getElementById(username);
+    let parent = div.parentElement;
+    parent.removeChild(div);
+
+    if (!parent.firstElementChild) {
+        let p = document.createElement('p');
+        p.innerHTML = "No attendees around here...";
+        parent.appendChild(p);
+    }
+}

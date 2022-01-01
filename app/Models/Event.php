@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Attendance;
+use Illuminate\Support\Arr;
 
 class Event extends Model
 {
@@ -55,9 +57,18 @@ class Event extends Model
         return $this->belongsToMany(Tag::class, 'event_tags', 'event_id', 'tag_id');
     }
 
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class, 'event_id');
+    }
+
     public function attendees()
     {
-        return $this->belongsToMany(User::class, 'attendance', 'event', 'attendee');
+        $attendees = [];
+        foreach ($this->attendances as $attendance) {
+            $attendees = Arr::add($attendees, $attendance->attendee_id, User::findOrFail($attendance->attendee_id));
+        }
+        return $attendees;
     }
 
     public function scopeSearch($query, $search)
