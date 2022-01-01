@@ -7,11 +7,10 @@
     <div class="row">
         <div class="col-auto d-flex flex-row p-3 w-100">
             @if (is_null($user->profile_picture_id))
-            <img src="https://cdn.pixabay.com/photo/2017/08/10/02/05/tiles-shapes-2617112_960_720.jpg"
-            alt="Generic Profile Picture" class="mb-3 rounded-circle align-self-left"
+                <img src="https://cdn.pixabay.com/photo/2017/08/10/02/05/tiles-shapes-2617112_960_720.jpg" alt="Generic Profile Picture" class="mb-3 rounded-circle align-self-left"
             style="object-fit: cover; width: 300px; height: 300px;">
             @else
-            <img src="/{{ $user->profile_picture->path }}" alt="{{ $user->name }}'s Profile Picture" class="mb-3 rounded-circle align-self-left" style="object-fit: cover; width: 300px; height: 300px;">
+                <img src="/{{ $user->profile_picture->path }}" alt="{{ $user->name }}'s Profile Picture" class="mb-3 rounded-circle align-self-left" style="object-fit: cover; width: 300px; height: 300px;">
             @endif
             <div class="info w-100 px-3">
                 <span class="d-inline-flex align-items-center justify-content-between w-100">
