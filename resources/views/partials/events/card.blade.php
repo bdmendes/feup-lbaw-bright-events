@@ -17,7 +17,7 @@
                     alt="Card image cap">
             </div>
             <div class="align-self-center">
-                <div> {{ $event->organizer->name }} </div>
+                <div> {{ $event->organizer->name ?? 'Deleted User' }} </div>
             </div>
         </div>
     </div>
