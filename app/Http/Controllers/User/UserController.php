@@ -34,6 +34,8 @@ class UserController extends Controller
         $user = User::where('username', $username)->get()->first();
         if (is_null($user)) {
             abort('404', 'User not found');
+        } elseif (!Auth::user()->is_admin && Auth::user()->id != $user->id) {
+            abort('401');
         }
         return view('pages.users.edit', [
             'user' => $user,
@@ -42,6 +44,10 @@ class UserController extends Controller
 
     public function editUser(Request $request)
     {
+        if (!Auth::user()->is_admin && Auth::user()->id != $request->id) {
+            abort('401');
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'string|max:255',
             'username' => 'string|max:255',
@@ -52,7 +58,7 @@ class UserController extends Controller
             'password' => 'nullable|string|min:6|confirmed',
         ]);
 
-        $user = User::findOrFail(Auth::user()->id);
+        $user = User::findOrFail($request->id);
 
         if ($request->name != $user->name) {
             $user->name = $request->name;

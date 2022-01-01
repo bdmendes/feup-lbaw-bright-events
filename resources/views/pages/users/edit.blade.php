@@ -7,11 +7,11 @@
         <div class="row">
             <div class="col-auto col-6 d- p-3">
                 <h1>Edit User Profile</h1>
-                <form method="POST" action="{{ route('editUser', ['username' => Auth::user()->username]) }}">
+                <form method="POST" action="{{ route('editUser', ['username' => $user->username]) }}">
                     @csrf
 
                     <label for="name">Name</label>
-                    <input class="text-white" type="text" name="name" id="name" value="{{ Auth::user()->name }}"
+                    <input class="text-white" type="text" name="name" id="name" value="{{ $user->name }}"
                         placeholder="Name">
                     @if ($errors->has('name'))
                         <span class="error">
@@ -21,7 +21,7 @@
 
                     <label for="username">Username</label>
                     <input class="text-white" type="text" name="username" id="username"
-                        value="{{ Auth::user()->username }}" placeholder="Username">
+                        value="{{ $user->username }}" placeholder="Username">
                     @if ($errors->has('username'))
                         <span class="error">
                             {{ $errors->first('username') }}
@@ -29,8 +29,8 @@
                     @endif
 
                     <label for="bio">Bio</label>
-                    <textarea class="text-white" type="text" name="bio" id="bio" value="{{ Auth::user()->bio }}"
-                        placeholder="Bio">{{ Auth::user()->bio }}</textarea>
+                    <textarea class="text-white" type="text" name="bio" id="bio" value="{{ $user->bio }}"
+                        placeholder="Bio">{{ $user->bio }}</textarea>
                     @if ($errors->has('bio'))
                         <span class="error">
                             {{ $errors->first('bio') }}
@@ -38,7 +38,7 @@
                     @endif
 
                     <label for="email">Email</label>
-                    <input class="text-white" type="text" name="email" id="email" value="{{ Auth::user()->email }}"
+                    <input class="text-white" type="text" name="email" id="email" value="{{ $user->email }}"
                         placeholder="Email">
                     @if ($errors->has('email'))
                         <span class="error">
@@ -48,7 +48,7 @@
 
                     <label for="birth_date">Birth Date</label>
                     <input class="text-dark d-block" type="date" name="birth_date" id="birth_date"
-                        value="{{ Auth::user()->birth_date }}" placeholder="birth_date">
+                        value="{{ $user->birth_date }}" placeholder="birth_date">
                     @if ($errors->has('birth_date'))
                         <span class="error">
                             {{ $errors->first('birth_date') }}
@@ -57,13 +57,13 @@
 
                     <label for="gender">Gender</label>
                     <select name="gender" name="gender" id="gender" class="text-white">
-                        <option value="Female" @if (!is_null(Auth::user()->gender) && Auth::user()->gender == 'Female')
+                        <option value="Female" @if (!is_null($user->gender) && $user->gender == 'Female')
                             selected
                             @endif>Female</option>
-                        <option value="Male" @if (!is_null(Auth::user()->gender) && Auth::user()->gender == 'Male')
+                        <option value="Male" @if (!is_null($user->gender) && $user->gender == 'Male')
                             selected
                             @endif>Male</option>
-                        <option value="Other" @if (!is_null(Auth::user()->gender) && Auth::user()->gender == 'Other')
+                        <option value="Other" @if (!is_null($user->gender) && $user->gender == 'Other')
                             selected
                             @endif>Other</option>
                     </select>
@@ -80,6 +80,7 @@
                     <input class="text-white" type="password" name="confirm_password" id="confirm_password"
                         placeholder="Confirm password">
 
+                    <input type="hidden" name="id" id="id" value="{{$user->id}}">
                     <button type="submit" class="btn-light">
                         Submit
                     </button>
