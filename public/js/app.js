@@ -187,41 +187,26 @@ addEventListeners();
  * @param {*} inputId -> Div to read the input from
  * @param {*} arrayId  -> Array id, to add to the hidden input's name field
  */
-function addItem(div, inputId, arrayId) {
-    let a = document.getElementById(inputId);
-    let value = a.value;
-    let data_value = $("option[value='" + value + "']").data("value");
-    if (data_value == undefined) return;
-    div = $("#" + div)[0];
-    let span = div.querySelector("span.hidden");
+function addTag(selection, tagsDiv) {
+  let selec = document.getElementById(selection)
+  let checkbox = document.getElementById(document.getElementById(selec.value).dataset.id)
 
-    let newSpan = span.cloneNode(true);
-    newSpan.classList.remove("hidden");
-    newSpan.innerHTML = value;
-    if ($("#" + inputId + data_value).length > 0) {
-        return;
-    }
-    div.append(newSpan);
+  if (checkbox.checked !== true) {
+    let node = document.createElement("span");
+    node.classList = 'tag m-1 removable'
+    node.title = "Click to remove"
+    node.textContent = selec.value
+    node.onclick = function () { removeTag(node) }
+    document.getElementById(tagsDiv).append(node)
+    checkbox.checked = true
 
-    //Add input to form
-    let inputHtml =
-        "<input type='hidden' name ='" +
-        arrayId +
-        "[]' id='tag" +
-        data_value +
-        "' value='" +
-        data_value +
-        " '> </input>";
-    div.insertAdjacentHTML("afterBegin", inputHtml);
+  }
+  document.getElementById(selection).value = ''
+
 }
 
-function removeTag(t) {
-    let tagId = t.attributes["value"].value;
-    let hiddenInput = $("#tag" + tagId);
-    hiddenInput.remove();
-    t.remove();
-}
-
-function clearValue(id) {
-    $("#" + id)[0].value = "";
+function removeTag(tag) {
+  let checkbox = document.getElementById(document.getElementById(tag.textContent.replace(/\s+/g, '')).dataset.id)
+  checkbox.checked = false
+  tag.remove()
 }

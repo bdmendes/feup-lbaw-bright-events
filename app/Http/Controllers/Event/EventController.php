@@ -66,6 +66,7 @@ class EventController extends Controller
 
     public function create(Request $request)
     {
+        dd($request);
         $this->validate($request, [
             'title' => 'required',
             'description' => 'required',
@@ -101,6 +102,7 @@ class EventController extends Controller
 
     public function update($request)
     {
+        dd($request);
         if ($request->id == null) {
         }
         $event = Event::find($request->id);
