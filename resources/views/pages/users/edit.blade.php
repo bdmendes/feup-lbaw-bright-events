@@ -95,7 +95,7 @@
                         alt="Generic Profile Picture" class="mb-3 rounded-circle align-self-left"
                         style="object-fit: cover; width: 300px; height: 300px;">
                 @else
-                    <img src="{{ $user->profile_picture_id }}" alt="{{ $user->name }}'s Profile Picture">
+                    <img src="/{{ $user->profile_picture->path }}" alt="{{ $user->name }}'s Profile Picture" class="mb-3 rounded-circle align-self-left" style="object-fit: cover; width: 300px; height: 300px;">
                 @endif
             </div>
         </div>
