@@ -62,11 +62,9 @@ class Event extends Model
 
     public function scopeSearch($query, $search)
     {
-        if (!$search) {
-            return $query;
-        }
-        $search_ = str_replace(" ", "|", implode(explode(" ", $search)));
-        return $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', $search_)
+        if ($search) {
+            $search_ = str_replace(" ", "|", implode(explode(" ", $search)));
+            $query= $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', $search_)
         ->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', $search_)
         ->orWhereRelation('organizer', 'username', 'ilike', '%'.$search.'%')
         ->orWhereRelation('organizer', 'name', 'ilike', '%'.$search.'%')
@@ -76,6 +74,9 @@ class Event extends Model
         ->orWhereRelation('location', 'name', 'ilike', '%'.$search.'%')
         ->orWhereRelation('location', 'city', 'ilike', '%'.$search.'%')
         ->orWhereRelation('location', 'country', 'ilike', '%'.$search.'%');
+        }
+
+        return $query->where('is_private', 'false');
     }
 
     public function scopeOrganizer($query, $organizerId)
