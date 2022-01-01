@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\User;
+use App\Models\File;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Crypt;
@@ -52,6 +53,7 @@ class UserController extends Controller
             'birth_date' => 'nullable|date',
             'gender' => 'string|in:Female,Male,Other',
             'password' => 'nullable|string|min:6|confirmed',
+            'profile_picture' => 'nullable|mimes:png,jpg,jpe',
         ]);
         
         $user = User::findOrFail($request->id);
@@ -104,6 +106,18 @@ class UserController extends Controller
         } elseif (is_null($request->password) && !is_null($request->confirm_password)) {
             $validator->getMessageBag()->add('password', 'Please input a password before confirming it.');
             return redirect()->route('editProfile', ['username' => Auth::user()->username])->withErrors($validator)->withInput();
+        }
+
+        if (!is_null($request->profile_picture)) {
+            $filename = 'user' . $user->id . '.' . $request->profile_picture->extension();
+            $request->profile_picture->move(public_path('storage'), $filename);
+            $relativePath = 'storage/' . $filename;
+
+            $file = File::create([
+                'path' => $relativePath,
+                'name' => $request->file('profile_picture')->getClientOriginalName()
+            ]);
+            $user->profile_picture_id = $file->id;
         }
 
         $user->save();
