@@ -134,7 +134,7 @@ paths:
             type: integer
           description: "Size of sublist to show"
 
-  /{username}:
+  /users/{username}:
     get:
       operationId: R202
       summary: "R202: User Profile page"
@@ -153,7 +153,7 @@ paths:
         "404":
           description: "User not found"
 
-  /{username}/edit:
+  /users/{username}/edit:
     get:
       operationId: R204
       summary: "R204: Edit User Profile page"
@@ -163,7 +163,7 @@ paths:
           in: path
           required: true
           schema:
-            type: username
+            type: string
       tags:
         - "M02: Users and Personal Profiles"
       responses:
@@ -211,195 +211,6 @@ paths:
       responses:
         "200":
           description: "Ok. Show Edit User Profile UI (UI22)"
-        "404":
-          description: "User not found"
-        "401":
-          description: "Unauthorized. User must be logged in"
-        "500":
-          description: "Internal server error. Invalid data"
-
-  /api/users:
-    get:
-      operationId: R206
-      summary: "R206: Users list"
-      description: "Retrieve users from database. Access: NAU"
-      tags:
-        - "M02: Users and Personal Profiles"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    username:
-                      type: string
-                    password:
-                      type: string
-                      format: password
-                    name:
-                      type: string
-                    email:
-                      type: string
-                      format: email
-                    birth_date:
-                      type: string
-                      format: date
-                    bio:
-                      type: string
-                    picture:
-                      type: string
-                      format: binary
-                    gender:
-                      type: string
-                      enum: ["male, female, other"]
-      parameters:
-        - in: query
-          name: global
-          schema:
-            type: string
-          description: "Full text search keyword"
-        - in: query
-          name: sort_by
-          schema:
-            type: string
-            enum: ["name", "username"]
-            default: "username"
-          description: "Defines the value of which the users should be ordered"
-        - in: query
-          name: order
-          schema:
-            type: string
-            enum: ["ascending", "descending"]
-            default: "ascending"
-          description: "Defines if it's ascending order or descending order"
-        - in: query
-          name: offset
-          schema:
-            type: integer
-            default: 0
-          description: "Starting index of user list"
-        - in: query
-          name: size
-          schema:
-            type: integer
-          description: "Size of sublist to show"
-    post:
-      operationId: R207
-      summary: "R207: Create User action"
-      description: "Process the new user profile information. Access: AU"
-      tags:
-        - "M02: Users and Personal Profiles"
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              required: [username, password, name, email, gender]
-              properties:
-                username:
-                  type: string
-                password:
-                  type: string
-                  format: password
-                name:
-                  type: string
-                email:
-                  type: string
-                  format: email
-                birth_date:
-                  type: string
-                  format: date
-                bio:
-                  type: string
-                picture:
-                  type: string
-                  format: binary
-                gender:
-                  type: string
-                  enum: ["male, female, other"]
-      responses:
-        "200":
-          description: "Ok. User created."
-        "404":
-          description: "User not found"
-        "500":
-          description: "Internal server error. Invalid data"
-
-  /api/users/{id}:
-    delete:
-      operationId: R208
-      summary: "R208: Delete User action"
-      description: "Delete user from database. Access: ADM"
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      tags:
-        - "M02: Users and Personal Profiles"
-      responses:
-        "200":
-          description: "OK. Deletion successful"
-        "401":
-          description: "Unauthorized. Not enough permissions"
-        "404":
-          description: "User not found"
-    patch:
-      operationId: R209
-      summary: "R209: Edit User action"
-      description: "Process the new user profile information. Access: AU"
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      tags:
-        - "M02: Users and Personal Profiles"
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              required: [username, password, name, email, gender]
-              properties:
-                username:
-                  type: string
-                password:
-                  type: string
-                  format: password
-                name:
-                  type: string
-                email:
-                  type: string
-                  format: email
-                birth_date:
-                  type: string
-                  format: date
-                bio:
-                  type: string
-                picture:
-                  type: string
-                  format: binary
-                gender:
-                  type: string
-                  enum: ["male, female, other"]
-                disabled:
-                  type: boolean
-                  default: false
-                blocked:
-                  type: boolean
-                  default: false
-      responses:
-        "200":
-          description: "Ok. User information edited."
         "404":
           description: "User not found"
         "401":
@@ -963,7 +774,7 @@ paths:
         "401":
           description: "Event creation requires authentication"
         "200":
-          description: "Ok. show event creation page"
+          description: "Ok. Event created."
 
   /events/{id}:
     get:
@@ -986,41 +797,7 @@ paths:
         "401":
           description: "Event requires authentication to be viewed"
         "200":
-          description: "OK. Show event details"
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    title:
-                      type: string
-                      enum: [Event, User, Message]
-                    description:
-                      type: string
-                    date:
-                      type: string
-                      format: date-time
-                    is_private:
-                      type: string
-                    is_disabled:
-                      type: string
-                    event_state:
-                      type: string
-                      enum:
-                        - "cancelled"
-                        - "finished"
-                        - "on_going"
-                        - "due"
-                    cover-image:
-                      type: integer
-                    organizer:
-                      type: integer
-                    location:
-                      type: integer
+          description: "OK. Show event details page (UI18)"
 
   /events/{id}/edit:
     get:
@@ -1073,153 +850,6 @@ paths:
       responses:
         "200":
           description: "Ok. Event updated."
-        "401":
-          description: "Unauthorized. User must be the event organizer"
-        "500":
-          description: "Internal server error. Invalid data"
-
-  /api/events:
-    get:
-      operationId: R307
-      summary: "R307: Events list"
-      description: "Browse Events page. Access: NAU"
-      tags:
-        - "M03: Events and Event Content"
-      responses:
-        "200":
-          description: "OK. Show list of events"
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    title:
-                      type: string
-                    description:
-                      type: string
-                    date:
-                      type: string
-                      format: date-time
-                    private:
-                      type: string
-                    disabled:
-                      type: string
-                    state:
-                      type: string
-                      enum:
-                        - "cancelled"
-                        - "finished"
-                        - "on-going"
-                        - "due"
-                    cover_image:
-                      type: integer
-                    organizer:
-                      type: integer
-                    location:
-                      type: integer
-      parameters:
-        - in: query
-          name: sort_by
-          schema:
-            type: string
-            enum: ["date", "attendees"]
-          description: "Defines the value by which the events should be ordered"
-        - in: query
-          name: order
-          schema:
-            type: string
-            enum: ["ascending", "descending"]
-          description: "Defines if it's ascending order or descending order"
-        - in: query
-          name: state
-          schema:
-            type: string
-            enum:
-              - "cancelled"
-              - "finished"
-              - "on-going"
-              - "due"
-        - in: query
-          name: global
-          schema:
-            type: string
-          description: "Filters events via title and description"
-        - in: query
-          name: location
-          schema:
-            type: integer
-          description: "Filters events via location"
-        - in: query
-          name: organizer
-          schema:
-            type: integer
-          description: "Filters events via it's organizer"
-        - in: query
-          name: tag
-          schema:
-            type: string
-          description: "Filters events via tag"
-        - in: query
-          name: begin_date
-          schema:
-            type: string
-            format: date
-          description: "Show events that start after 'begin_date'"
-        - in: query
-          name: end_date
-          schema:
-            type: string
-            format: date
-          description: "Show events that started before 'end_date'"
-        - in: query
-          name: offset
-          schema:
-            type: integer
-            default: 0
-          description: "Starting index of user list"
-        - in: query
-          name: size
-          schema:
-            type: integer
-          description: "Size of sublist to show"
-
-  /api/events/{id}:
-    patch:
-      operationId: R308
-      summary: "R308: Edit Event action"
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      description: "Update event details. Access: AUO"
-      tags:
-        - "M03: Events and Event Content"
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: integer
-                is_private:
-                  type: boolean
-                  default: false
-                organizer:
-                  type: integer
-              required: [title, description, is_private, organizer]
-      responses:
-        "200":
-          description: "Ok. Event update."
         "401":
           description: "Unauthorized. User must be the event organizer"
         "500":

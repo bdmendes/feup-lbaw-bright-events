@@ -101,7 +101,7 @@ class EventApiController extends Controller
         dd(json_encode($event->comments, JSON_PRETTY_PRINT));
     }
 
-    public function addAttendee(Request $request)
+    public function attendEventClick(Request $request)
     {
         $this->validate($request, [
             'event_id' => 'required',
@@ -116,7 +116,7 @@ class EventApiController extends Controller
         return response("Successfully joined attendance list.", 200);
     }
 
-    public function removeAttendee(Request $request)
+    public function leaveEventClick(Request $request)
     {
         $this->validate($request, [
             'event_id' => "required",

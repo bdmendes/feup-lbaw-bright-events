@@ -31,11 +31,11 @@
                 @if (Auth::user()->id !== $event->organizer->id)
                     @if (Auth::user()->attends($event->id))
                         <button class="btn-light"
-                            onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, 'attend_button')"
+                            onclick="leaveEventClick({{ $event->id }}, {{ Auth::user()->id }}, 'attend_button')"
                             id="attend_button" type="submit">Leave event</button>
                     @else
                         <button class="btn-light"
-                            onclick="addAttendee({{ $event->id }}, {{ Auth::user()->id }}, 'attend_button')"
+                            onclick="attendEventClick({{ $event->id }}, {{ Auth::user()->id }}, 'attend_button')"
                             id="attend_button">Attend
                             event</button>
                     @endif
@@ -62,12 +62,12 @@
     <div class="tab-pane fade" id="attendees" role="tabpanel" aria-labelledby="contact-tab">
         <div class="p-4 d-flex gap-4 flex-wrap justify-content">
             @forelse ($event->attendees() as $user)
-                <div class="d-flex" style="width: 250px;">
+                <div id="{{ $user->username . '-entry' }}" class="border rounded d-flex p-1" style="width: 250px;">
                     @if (Auth::check() && Auth::user()->id == $event->organizer_id)
                         @include('partials.users.smallCard', compact('user'), compact('event'))
                         <div class="align-self-center" style="margin-left:auto;">
                             <button id="{{ $user->username . '-btn' }}" class="btn btn-light"
-                                onclick="removeAndUpdate({{ $event->id }}, {{ $user->id }}, '{{ $user->username }}')">
+                                onclick="leaveEventClickAndDropSelf({{ $event->id }}, {{ $user->id }}, '{{ $user->username }}')">
                                 <i class="bi bi-x-circle"></i>
                             </button>
                         </div>

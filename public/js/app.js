@@ -43,8 +43,8 @@ function clearValue(id) {
     $("#" + id)[0].value = "";
 }
 
-async function addAttendee(eventId, attendeeId, btn_id) {
-    let btn = document.getElementById(btn_id);
+async function attendEventClick(eventId, attendeeId, btnId) {
+    let btn = document.getElementById(btnId);
 
     if (btn != null) {
         btn.innerHTML =
@@ -64,7 +64,7 @@ async function addAttendee(eventId, attendeeId, btn_id) {
             if (btn != null) {
                 btn.innerHTML = "Leave Event";
                 btn.onclick = function () {
-                    removeAttendee(eventId, attendeeId);
+                    leaveEventClick(eventId, attendeeId);
                 };
             }
         }
@@ -72,7 +72,7 @@ async function addAttendee(eventId, attendeeId, btn_id) {
     xmlHTTP.send("event_id=" + eventId + "&attendee_id=" + attendeeId);
 }
 
-async function removeAttendee(eventId, attendeeId, btn_id) {
+async function leaveEventClick(eventId, attendeeId, btn_id) {
     let btn = document.getElementById(btn_id);
 
     if (btn != null) {
@@ -94,7 +94,7 @@ async function removeAttendee(eventId, attendeeId, btn_id) {
             if (btn != null) {
                 btn.innerHTML = "Attend Event";
                 btn.onclick = function () {
-                    addAttendee(eventId, attendeeId, btn_id);
+                    attendEventClick(eventId, attendeeId, btn_id);
                 };
             }
         }
@@ -102,10 +102,10 @@ async function removeAttendee(eventId, attendeeId, btn_id) {
     xmlHTTP.send("event_id=" + eventId + "&attendee_id=" + attendeeId);
 }
 
-async function removeAndUpdate(eventId, attendeeId, username) {
-    removeAttendee(eventId, attendeeId, username + "-btn");
+async function removeAttendance(eventId, attendeeId, username) {
+    leaveEventClick(eventId, attendeeId, username + "-btn");
 
-    let div = document.getElementById(username);
+    let div = document.getElementById(username + "-entry");
     let parent = div.parentElement;
     parent.removeChild(div);
 
