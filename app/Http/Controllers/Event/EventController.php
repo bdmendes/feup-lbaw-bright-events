@@ -69,6 +69,7 @@ class EventController extends Controller
 
     public function create(Request $request)
     {
+        dd($request);
         $this->validate($request, [
             'title' => 'required',
             'description' => 'required',
@@ -104,8 +105,9 @@ class EventController extends Controller
         return redirect()->route('event', ['id' => $event->id]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
+        dd($request);
         if ($request->id == null) {
             return;
         }
