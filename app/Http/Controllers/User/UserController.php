@@ -148,9 +148,9 @@ class UserController extends Controller
         return redirect()->route('home');
     }
 
-    public function block(Request $request)
+    public function block(Request $request, $username)
     {
-        $user = User::where('username', $request)->get()->first();
+        $user = User::where('username', $username)->get()->first();
         
         $this->authorize('block', $user);
         
@@ -164,9 +164,9 @@ class UserController extends Controller
         return redirect()->route('profile', ['username' => $user->username]);
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request, $username)
     {
-        $user = User::where('username', $request)->get()->first();
+        $user = User::where('username', $username)->get()->first();
         $this->authorize('delete', $user);
 
         if (is_null($user)) {

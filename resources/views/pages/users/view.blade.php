@@ -22,7 +22,24 @@
                         </div>
                         <div class="d-flex flex-row">
                             @if (Auth::check())
-                                @if (Auth::user()->is_admin && !$user->is_admin)
+                                @if ((Auth::user()->is_admin || Auth::user()->id === $user->id) && !$user->is_admin)
+                                    @if (Auth::user()->is_admin)
+                                        <form method="POST"
+                                            action="{{ route('profile', ['username' => $user->username]) }}"
+                                            style="cursor: pointer">
+                                            @csrf
+                                            <a onclick="this.parentNode.submit();"
+                                                class="text-white m-3 text-decoration-none d-flex flex-column align-items-center">
+                                                @if ($user->is_blocked)
+                                                    <i class="bi bi-check-circle"></i>
+                                                    <p>Unblock</p>
+                                                @else
+                                                    <i class="bi bi-dash-circle"></i>
+                                                    <p>Block</p>
+                                                @endif
+                                            </a>
+                                        </form>
+                                    @endif
                                     <form method="POST" action="{{ route('profile', ['username' => $user->username]) }}">
                                         @csrf
                                         @method('DELETE')
@@ -33,27 +50,13 @@
                                             <p>Remove</p>
                                         </a>
                                     </form>
-                                    <form method="POST" action="{{ route('profile', ['username' => $user->username]) }}"
-                                        style="cursor: pointer">
-                                        @csrf
-                                        <a onclick="this.parentNode.submit();"
+                                    @if (Auth::user()->id === $user->id)
+                                        <a href="{{ route('editProfile', ['username' => Auth::user()->username]) }}"
                                             class="text-white m-3 text-decoration-none d-flex flex-column align-items-center">
-                                            @if ($user->is_blocked)
-                                                <i class="bi bi-check-circle"></i>
-                                                <p>Unblock</p>
-                                            @else
-                                                <i class="bi bi-dash-circle"></i>
-                                                <p>Block</p>
-                                            @endif
+                                            <i class="bi bi-pencil-square"></i>
+                                            <p>Edit</p>
                                         </a>
-                                    </form>
-                                @endif
-                                @if (Auth::user()->id == $user->id)
-                                    <a href="{{ route('editProfile', ['username' => Auth::user()->username]) }}"
-                                        class="text-white m-3 text-decoration-none d-flex flex-column align-items-center">
-                                        <i class="bi bi-pencil-square"></i>
-                                        <p>Edit</p>
-                                    </a>
+                                    @endif
                                 @endif
                             @endif
                         </div>

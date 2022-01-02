@@ -17,7 +17,7 @@ Route::get('events/{id}/edit', 'Event\EventController@indexEdit')->name('editEve
 Route::post('events/{id}/edit', 'Event\EventController@update')->name('editEvent');
 
 // Reports
-Route::get('reports', 'Report\ReportController@index')->name('reports');
+Route::get('reports', 'Report\ReportController@index')->name('reportsDash');
 // Route::get('reports/{report_id}', 'Report\ReportController@show');
 // Route::post('reports/{report_id}', 'Report\ReportController@execute');
 

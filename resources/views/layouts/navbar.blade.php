@@ -15,12 +15,19 @@
                 <h2>Users</h2>
             </a>
             @if (Auth::check())
-                <a class="nav-item nav-link" href="{{ route('profile', ['username' => Auth::user()->username]) }}">
-                    <h2>{{ Auth::user()->name }}</h2>
-                </a>
+                @if (Auth::user()->is_admin)
+                    <a class="nav-item nav-link" href="{{ route('reportsDash') }}">
+                        <h2>Dashboard</h2>
+                    </a>
+                @else
+                    <a class="nav-item nav-link" href="{{ route('profile', ['username' => Auth::user()->username]) }}">
+                        <h2>{{ Auth::user()->name }}</h2>
+                    </a>
+                @endif
                 <a class="nav-item nav-link" href="{{ route('logout') }}">
                     <h2>Logout</h2>
                 </a>
+
             @else
                 <a class="nav-item nav-link" href="{{ route('login') }}">
                     <h2>Login</h2>
