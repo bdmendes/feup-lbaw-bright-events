@@ -11,7 +11,7 @@ class EventPolicy
 {
     use HandlesAuthorization;
 
-    public function view(User $user, Event $event)
+    public function view(?User $user, Event $event)
     {
         if (!$event->is_private || $event->organizer_id == $user->id) {
             return true;

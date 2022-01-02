@@ -756,7 +756,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+         multipart/form-data:
             schema:
               type: object
               properties:
@@ -768,8 +768,13 @@ paths:
                   type: boolean
                 date:
                   type: string
-                organizer:
-                  type: integer
+                cover_image:
+                  type: string
+                  format: binary
+                tags:
+                  type: array
+                  items:
+                    type: integer
       responses:
         "401":
           description: "Event creation requires authentication"
@@ -805,8 +810,9 @@ paths:
       tags:
         - "M03: Events and Event Content"
       parameters:
-        - in: query
-          name: id
+        - name: id
+          required: true
+          in: path
           schema:
             type: integer
           description: "Event id"
@@ -862,10 +868,16 @@ paths:
                 private:
                   type: boolean
                   default: false
+                date:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: integer
                 cover_image:
                   type: string
                   format: binary
-              required: [title, description]
+              required: [title, description, date]
       responses:
         "200":
           description: "Ok. Event updated."
