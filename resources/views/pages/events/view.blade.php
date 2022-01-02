@@ -3,7 +3,7 @@
 @section('title', 'home')
 
 @section('content')
-    <div class="d-flex align-items-lg-center flex-column mx-auto col-lg-6 col-md-8 col-sm-10 col-xs-12 p-1">
+    <div class="container w-md-75">
         <div class="w-100">
             @if ($event->image ?? ('' && $event->image->path ?? ''))
                 <img src="/{{ $event->image->path }}" class="eventBackground mx-auto" />
@@ -38,6 +38,6 @@
                 @include("partials.events.tags", ['event' => $event])
             </div>
         </div>
-        @include('partials.events.tabview', ['event' => $event])
+        @include('partials.events.tabView', ['event' => $event])
     </div>
 @endsection

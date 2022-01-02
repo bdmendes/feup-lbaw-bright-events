@@ -55,4 +55,4 @@
 
 </style>
 
-@yield('tabview')
+@yield('tabView')

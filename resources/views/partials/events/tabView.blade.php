@@ -60,13 +60,21 @@
         <p>Polls not implemented yet</p>
     </div>
     <div class="tab-pane fade" id="attendees" role="tabpanel" aria-labelledby="contact-tab">
-        <div class="gap-4 m-4 d-flex flex-wrap justify-content-center align-items-center">
+        <div class="p-4 d-flex gap-4 flex-wrap justify-content">
             @forelse ($event->attendees() as $user)
-                @if (Auth::check() && Auth::user()->id == $event->organizer_id)
-                    @include('partials.users.removablecard', compact('user'), compact('event'))
-                @else
-                    @include ('partials.users.card', compact('user'))
-                @endif
+                <div class="d-flex" style="width: 250px;">
+                    @if (Auth::check() && Auth::user()->id == $event->organizer_id)
+                        @include('partials.users.smallCard', compact('user'), compact('event'))
+                        <div class="align-self-center" style="margin-left:auto;">
+                            <button id="{{ $user->username . '-btn' }}" class="btn btn-light"
+                                onclick="removeAndUpdate({{ $event->id }}, {{ $user->id }}, '{{ $user->username }}')">
+                                <i class="bi bi-x-circle"></i>
+                            </button>
+                        </div>
+                    @else
+                        @include ('partials.users.smallCard', compact('user'))
+                    @endif
+                </div>
             @empty
                 <p>No attendees around here...</p>
             @endforelse

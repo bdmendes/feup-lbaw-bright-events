@@ -64,7 +64,7 @@
                 </div>
             </div>
             <div class="col-auto w-100">
-                @include('partials.users.tabview')
+                @include('partials.users.tabView')
             </div>
         </div>
     </div>
