@@ -32,7 +32,7 @@
                          placeholder="Insert event title" @if (!empty($event)) value="{{ $event->title }}" @endif />
 
                     @if ($errors->has('title'))
-                        <span id="title" class="error">
+                        <span id="titleError" class="error">
                             {{ $errors->first('title') }}
                         </span>
                     @endif
@@ -54,7 +54,17 @@
                 <!-- Event date -->
                 <div class="col-lg-6 col-sm-12 col-12 mb-2">
                     <label class="w-100"> Event date: </label>
-                    <input type="date" name="date" id="date" @if (!empty($event)) value="{{ $event->date->format('Y-m-d') }}" @endif />
+                    <input type="date" name="date"
+                         id="date"
+                         onchange="removeErrors('date');"
+                         @if (!empty($event)) value="{{ $event->date->format('Y-m-d') }}" @endif
+                         class="@if ($errors->has('date')) errorBorder @endif" />
+
+                    @if ($errors->has('date'))
+                        <span id="dateError" class="error">
+                            {{ $errors->first('date') }}
+                        </span>
+                    @endif
                 </div>
 
                 <!-- Visibility -->
