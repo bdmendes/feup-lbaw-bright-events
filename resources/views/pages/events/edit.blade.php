@@ -55,8 +55,8 @@
             <div class="p-3 w-100 content-float">
                 <fieldset id="optionsSet" class="d-none">
                     @foreach ($tags as $tag)
-                        <input id="t{{ $tag->id }}" type="checkbox" name="t{{ $tag->id }}"
-                            value="{{ $tag->name }}" @if (!empty($event) && $event->tags->contains($tag)) checked @endif>
+                        <input id="t{{ $tag->id }}" type="checkbox" name="tags[]" value="{{ $tag->name }}"
+                            @if (!empty($event) && $event->tags->contains($tag)) checked @endif>
                     @endforeach
                 </fieldset>
 
