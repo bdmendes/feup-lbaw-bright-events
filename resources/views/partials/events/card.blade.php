@@ -1,6 +1,6 @@
 <a style="text-decoration: none;" class="text-dark card mb-3" href="{{ route('event', ['id' => $event->id]) }}">
     <div class="row gap-0">
-        <div class="col" style="max-width: 300px;">
+        <div class="col" style="max-width: 250px;">
             <img src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F203018239%2F227342121523%2F1%2Foriginal.20211220-101832?w=800&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C24%2C1002%2C501&s=ac1247a6305dd65956da5d4e85685c75"
                 class="img-fluid rounded-start" alt="Event cover image" style="height: 100%; object-fit: cover;">
         </div>

@@ -26,9 +26,10 @@
             <div class="collapse {{ $request->filled('begin_date') || $request->filled('end_date') ? 'show' : '' }}"
                 id="filter-date">
                 <form method="GET">
-                    <div>Begin <input id="date" value="{{ $request->begin_date }}" type="date" name="begin_date"></div>
-                    <div>End <input id="date" value="{{ $request->end_date }}" type="date" name="end_date"></div>
-                    <input type="submit">
+                    <div>Begin <input id="date" value="{{ $request->begin_date }}" type="date" name="begin_date"
+                            onchange="this.form.submit()"></div>
+                    <div>End <input id="date" value="{{ $request->end_date }}" type="date" name="end_date"
+                            onchange="this.form.submit()"></div>
                 </form>
             </div>
 
@@ -36,23 +37,30 @@
             </div>
             <div class="collapse {{ $request->filled('organizer') ? 'show' : '' }}" id="filter-organizer">
                 <form method="GET">
-                    <select name="cars" id="cars" onchange="this.form.submit()">
-                        <optgroup label="Swedish Cars">
-                            <option value="volvo">Volvo</option>
-                            <option selected value="saab">Saab</option>
-                        </optgroup>
-                        <optgroup label="German Cars">
-                            <option value="mercedes">Mercedes</option>
-                            <option value="audi">Audi</option>
-                        </optgroup>
+                    <select name="organizer" onchange="this.form.submit()">
+                        <option value="" {{ !$request->filled('organizer') ? 'selected' : '' }}></option>
+                        @foreach ($users as $user)
+                            <option value="{{ $user->id }}"
+                                {{ $request->query('organizer') == $user->id ? 'selected' : '' }}>{{ $user->username }}
+                            </option>
+                        @endforeach
                     </select>
                 </form>
             </div>
 
             <div data-bs-toggle="collapse" href="#filter-tag">Tag <i class="bi bi-chevron-down"></i></a>
             </div>
-            <div class="mb-4 collapse" id="filter-tag">
-                a tag
+            <div class="mb-4 collapse {{ $request->filled('tag') ? 'show' : '' }}" id="filter-tag">
+                <form method="GET">
+                    <select name="tag" onchange="this.form.submit()">
+                        <option value="" {{ !$request->filled('tag') ? 'selected' : '' }}></option>
+                        @foreach ($tags as $tag)
+                            <option value="{{ $tag->name }}"
+                                {{ $request->query('tag') == $tag->name ? 'selected' : '' }}>{{ $tag->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
             </div>
         </div>
 

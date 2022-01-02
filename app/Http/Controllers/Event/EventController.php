@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Event;
+use App\Models\User;
 use App\Models\File;
 use App\Models\Tag;
 
@@ -16,6 +17,8 @@ class EventController extends Controller
 {
     public function index(Request $request)
     {
+        $users = User::where('is_admin', 'false')->get();
+        $tags = Tag::all();
         $events = Event::search($request->query('global'));
         if ($request->filled('sort_by')) {
             if ($request->query('order') == 'descending') {
@@ -43,7 +46,7 @@ class EventController extends Controller
             $date = date('Y-m-d', strtotime($request->query('end_date')));
             $events = $events->where('date', '<=', $date);
         }
-        return view('pages.events.browse', ['events' => $events->paginate($request->size ?? 5)->withQueryString(), 'request' => $request]);
+        return view('pages.events.browse', ['tags' => $tags, 'users' => $users, 'events' => $events->paginate($request->size ?? 5)->withQueryString(), 'request' => $request]);
     }
 
     public function getCardList($events)

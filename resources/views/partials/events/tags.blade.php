@@ -3,5 +3,5 @@
         <span class="tag"> {{ $tag->name }}</span>
     @endforeach
 @else
-    Event doesn't have tags
+    <span>No tags</span>
 @endif

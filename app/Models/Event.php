@@ -98,8 +98,8 @@ class Event extends Model
 
     public function scopeTag($query, $tagName)
     {
-        return $query->whereHas('tags', function ($query) use ($tag) {
-            $query->where('name', $tag);
+        return $query->whereHas('tags', function ($query) use ($tagName) {
+            $query->where('name', $tagName);
         });
     }
 }
