@@ -40,11 +40,10 @@
                             event</button>
                     @endif
                 @else
-                    <form action="{{ route('event', ['id' => $event->id]) }}"
-                          method="POST" >
-                          @csrf
-                          <input type="hidden" name="_method" value="DELETE">
-                          <input type="hidden" name="id" id="id" value="{{ $event->id }}" />
+                    <form action="{{ route('event', ['id' => $event->id]) }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="id" id="id" value="{{ $event->id }}" />
                         <button class="btn btn-primary mx-2" type="submit">Delete event</button>
                     </form>
                     <form action="{{ route('editEvent', ['id' => $event->id]) }}">
@@ -69,14 +68,14 @@
             <!-- Invite user -->
             <div class="col-lg-6 col-sm-12 col-12">
                 <h3>Invite user</h3>
-                <input list="userOptions" id="selec" placeholder="Search user...">
+                <input list="userOptions" id="selectUser" placeholder="Search user...">
                 <datalist id="userOptions">
                     @foreach ($users as $user)
-                        <option id="{{ $user->name }}" data-id="t{{ $user->id }}" value="{{ $user->name }}">
+                        <option id="{{ $user->name }}-option" value="{{ $user->username }}">
                         </option>
                     @endforeach
                 </datalist>
-                <button type="button" onclick="inviteUser({{ $event->id }},{{ $user->id }});">
+                <button type="button" onclick="inviteUser({{ $event->id }});">
                     Invite
                 </button>
             </div>
@@ -120,11 +119,12 @@
     </div>
 
     <script>
-        function inviteUser(eventId, userId) {
-            let xmlHTTP = new XMLHttpRequest();
+        function inviteUser(eventId) {
+            const username = document.getElementById("selectUser").value;
 
+            let xmlHTTP = new XMLHttpRequest();
             xmlHTTP.open("POST", "/api/events/" + eventId + "/invites", false);
-            alert(eventId + ' ' + userId);
+            alert(eventId + ' ' + username);
             xmlHTTP.setRequestHeader(
                 "Content-type",
                 "application/x-www-form-urlencoded"
@@ -139,7 +139,8 @@
                     }
                 }
             };
-            xmlHTTP.send("userId=" + userId);
+
+            xmlHTTP.send("username=" + username);
         }
     </script>
 </div>

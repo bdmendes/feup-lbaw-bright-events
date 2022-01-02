@@ -11,7 +11,7 @@
             <a class="nav-item nav-link" href="{{ route('browseEvents') }}">
                 <h2>Events</h2>
             </a>
-            <a class="nav-item nav-link" href="{{ route('browseUsers') }}">
+            <a class="me-auto nav-item nav-link" href="{{ route('browseUsers') }}">
                 <h2>Users</h2>
             </a>
             @if (Auth::check())
@@ -27,7 +27,6 @@
                 <a class="nav-item nav-link" href="{{ route('logout') }}">
                     <h2>Logout</h2>
                 </a>
-
             @else
                 <a class="nav-item nav-link" href="{{ route('login') }}">
                     <h2>Login</h2>
