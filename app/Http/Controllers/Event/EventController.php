@@ -72,7 +72,7 @@ class EventController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'description' => 'required',
-            'cover_image' => 'mimes:png,jpg,jpe',
+            'cover_image' => 'nullable|mimes:png,jpg,jpe',
             'date' => 'required'
         ]);
 
@@ -104,7 +104,7 @@ class EventController extends Controller
         return redirect()->route('event', ['id' => $event->id]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         if ($request->id == null) {
             return;

@@ -130,7 +130,7 @@ CREATE TABLE lbaw2134.notifications (
 
 CREATE TABLE lbaw2134.reports (
     id SERIAL PRIMARY KEY,
-    date TIMESTAMP DEFAULT NOW(),
+    date TIMESTAMP DEFAULT NOW() NOT NULL,
     description VARCHAR(1000),
     report_motive lbaw2134.report_motive NOT NULL,
     handled_by_id INTEGER REFERENCES lbaw2134.users ON DELETE SET NULL ON UPDATE CASCADE,
@@ -821,4 +821,4 @@ INSERT INTO lbaw2134.COMMENTS  VALUES
 	( 120, 111, 105, null, 'can my girlfriend cum?', TO_TIMESTAMP('2021/12/07 00:00', 'YYYY/MM/DD/ HH24:MI') ) ;
 
 INSERT INTO lbaw2134.REPORTS VALUES
-	(100, null, 'Is this a typo?', 'Nudity or explicit content', null, null, null, 120);
+	(100, TO_TIMESTAMP('2021/11/29 00:00', 'YYYY/MM/DD/ HH24:MI'), 'Is this a typo?', 'Nudity or explicit content', null, null, null, 120);
