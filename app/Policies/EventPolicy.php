@@ -28,4 +28,9 @@ class EventPolicy
     {
         return Auth::check();
     }
+
+    public function delete(User $user, Event $event)
+    {
+        return $user != null && $user->id == $event->organizer_id;
+    }
 }

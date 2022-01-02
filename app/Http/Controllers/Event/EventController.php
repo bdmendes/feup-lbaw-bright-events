@@ -151,14 +151,31 @@ class EventController extends Controller
         return view("pages.events.view", compact('users', 'event', 'invites'));
     }
 
-    public function delete($id)
+    public function inviteUser($username)
     {
-        $event = Event::find($id);
-        if ($event == null) {
+        $user = User::where('username', $username);
+        if ($user == null) {
             return;
         }
-        if (Auth::user()->id == $event->organizer_id) {
+        foreach ($user_ as $this->attendances) {
+            if ($user_id == $user->id) {
+                return;
+            }
+        }
+        AttendanceRequest::create([
+            'event_id' => $this->id,
+            'attendee_id' => $user->id,
+            'is_invite' => true
+        ]);
+    }
+
+    public function delete(Request $request)
+    {
+        $event = Event::find($request->id);
+        if ($event != null) {
+            $this->authorize('delete', $event);
             $event->delete();
         }
+        return redirect()->route('profile', ['username' => Auth::user()->username]);
     }
 }
