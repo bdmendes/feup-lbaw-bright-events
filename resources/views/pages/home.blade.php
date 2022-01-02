@@ -30,7 +30,7 @@
                         style="font-size: 1em;">Create Event</button></a>
             </div>
             <br><br>
-            <h2>Trending Users</h2>
+            <h2>Trending Organizers</h2>
             <div class="row gap-4 my-4">
                 @foreach ($users as $user)
                     @include('partials.users.card', compact('user'))
