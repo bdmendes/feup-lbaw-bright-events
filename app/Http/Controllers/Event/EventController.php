@@ -87,6 +87,7 @@ class EventController extends Controller
             'is_private' => $request->restriction === 'private' ? 'true' : 'false'
         ]);
         $event->tags()->attach($request->tags);
+
         if ($request->cover_image) {
             $filename = 'event' . $event->id . '.' . $request->cover_image->extension();
             $request->cover_image->move(public_path('storage'), $filename);
@@ -103,12 +104,15 @@ class EventController extends Controller
         return redirect()->route('event', ['id' => $event->id]);
     }
 
-    public function update($request)
+    public function update(Request $request)
     {
         if ($request->id == null) {
+            return;
         }
-        $event = Event::find($request->id);
+
+        $event = Event::findOrFail($request->id);
         if ($event->organizer_id != Auth::user()->id) {
+            return;
         }
         $event->description = $request->description;
         $event->title = $request->title;
@@ -130,11 +134,13 @@ class EventController extends Controller
             $event->cover_image_id = $file->id;
         }
 
-        $event->tags = $request->tags;
-
+        $event->tags()->detach();
+        $event->tags()->attach($request->tags);
 
         $event->save();
+        return redirect()->route('event', ['id' => $event->id]);
     }
+
     public function get($id)
     {
         $event = Event::find($id);
@@ -148,6 +154,7 @@ class EventController extends Controller
     {
         $event = Event::find($id);
         if ($event == null) {
+            return;
         }
         if (Auth::user()->id == $event->organizer_id) {
             $event->delete();

@@ -31,11 +31,12 @@
                 @if (Auth::user()->id !== $event->organizer->id)
                     @if (Auth::user()->attends($event->id))
                         <button class="btn-light"
-                            onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }})" id="button"
-                            type="submit">Leave event</button>
+                            onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, 'attend_button')"
+                            id="attend_button" type="submit">Leave event</button>
                     @else
                         <button class="btn-light"
-                            onclick="addAttendee({{ $event->id }}, {{ Auth::user()->id }})" id="button">Attend
+                            onclick="addAttendee({{ $event->id }}, {{ Auth::user()->id }}, 'attend_button')"
+                            id="attend_button">Attend
                             event</button>
                     @endif
                 @else

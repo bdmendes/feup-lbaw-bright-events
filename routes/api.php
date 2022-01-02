@@ -17,8 +17,6 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', 'Auth\LoginController@getUser');
 
 // Events
-/* Route::get('events', "Event\EventApiController@index");
-Route::patch('events/{id}', "Event\EventApiController@update"); */
 Route::get('events/{id}/attendees', "Event\EventApiController@getAttendees");
 Route::get('events/{id}/comments', "Event\EventApiController@getComments");
 Route::post('events/{eventId}/attendees', "Event\EventApiController@addAttendee")->name('addAttendee');
