@@ -10,52 +10,52 @@
                 <form method="POST" enctype="multipart/form-data" action="{{ route('editUser', ['username' => $user->username]) }}">
                     @csrf
 
-                    <label for="name">Name</label>
-                    <input class="text-white mb-3" type="text" name="name" id="name" value="{{ $user->name }}"
+                    <label class="d-block" for="name">Name</label>
+                    <input onchange="removeErrors('name');" class="text-white mb-3" type="text" name="name" id="name" value="{{ $user->name }}"
                         placeholder="Name">
                     @if ($errors->has('name'))
-                        <span class="error">
+                        <span class="error" id="nameError">
                             {{ $errors->first('name') }}
                         </span>
                     @endif
 
-                    <label for="username">Username</label>
-                    <input class="text-white mb-3" type="text" name="username" id="username"
+                    <label class="d-block" for="username">Username</label>
+                    <input onchange="removeErrors('username');" class="text-white mb-3" type="text" name="username" id="username"
                         value="{{ $user->username }}" placeholder="Username">
                     @if ($errors->has('username'))
-                        <span class="error">
+                        <span class="error" id="usernameError">
                             {{ $errors->first('username') }}
                         </span>
                     @endif
 
-                    <label for="bio">Bio</label>
-                    <textarea class="text-white" type="text" name="bio" id="bio" value="{{ $user->bio }}"
+                    <label class="d-block" for="bio">Bio</label>
+                    <textarea onchange="removeErrors('bio');" class="text-white" type="text" name="bio" id="bio" value="{{ $user->bio }}"
                         placeholder="Bio">{{ $user->bio }}</textarea>
                     @if ($errors->has('bio'))
-                        <span class="error">
+                        <span class="error" id="bioError">
                             {{ $errors->first('bio') }}
                         </span>
                     @endif
 
-                    <label for="email">Email</label>
-                    <input class="text-white mb-3" type="text" name="email" id="email" value="{{ $user->email }}"
+                    <label class="d-block" for="email">Email</label>
+                    <input onchange="removeErrors('email');" class="text-white mb-3" type="text" name="email" id="email" value="{{ $user->email }}"
                         placeholder="Email">
                     @if ($errors->has('email'))
-                        <span class="error">
+                        <span class="error" id="emailError">
                             {{ $errors->first('email') }}
                         </span>
                     @endif
 
-                    <label for="birth_date">Birth Date</label>
-                    <input class="text-dark mb-3 d-block" type="date" name="birth_date" id="birth_date"
+                    <label class="d-block" for="birth_date">Birth Date</label>
+                    <input onchange="removeErrors('birth_date');" class="text-dark mb-3 d-block" type="date" name="birth_date" id="birth_date"
                         value="{{ $user->birth_date }}" placeholder="birth_date">
                     @if ($errors->has('birth_date'))
-                        <span class="error">
+                        <span class="error" id="birth_dateError">
                             {{ $errors->first('birth_date') }}
                         </span>
                     @endif
 
-                    <label for="gender">Gender</label>
+                    <label class="d-block" for="gender">Gender</label>
                     <select name="gender" name="gender" id="gender" class="text-white mb-3">
                         <option value="Female" @if (!is_null($user->gender) && $user->gender == 'Female')
                             selected
@@ -68,19 +68,19 @@
                             @endif>Other</option>
                     </select>
 
-                    <label for="password">Password</label>
-                    <input class="text-white mb-3" type="password" name="password" id="password" placeholder="Password">
+                    <label class="d-block" for="password">Password</label>
+                    <input onchange="removeErrors('password');" class="text-white mb-3" type="password" name="password" id="password" placeholder="Password">
                     @if ($errors->has('password'))
-                        <span class="error">
+                        <span class="error" id="passwordError">
                             {{ $errors->first('password') }}
                         </span>
                     @endif
 
-                    <label for="confirm_password">Confirm password</label>
-                    <input class="text-white mb-3" type="password" name="confirm_password" id="confirm_password"
+                    <label class="d-block" for="confirm_password">Confirm password</label>
+                    <input onchange="removeErrors('confirm_password');" class="text-white mb-3" type="password" name="confirm_password" id="confirm_password"
                         placeholder="Confirm password">
                     
-                    <label for=""></label>
+                    <label class="d-block" for="profile_picture"></label>
                     <input class="text-white mb-3" type="file" name="profile_picture" id="profile_picture">
 
                     <input type="hidden" name="id" id="id" value="{{$user->id}}">
