@@ -6,7 +6,7 @@
 
     <div>
         <img class="d-block"
-            src="https://pixabay.com/get/gc5f555671439461f5374a79b68f0111c570ca8587d26ab868900b6be1cc5842c778cb6d2dc57dcb9da99bc3ff9ddbaa792150aea646b3a15b1ea6821872a446b299a58e3251c1daabbb855c06873aa56_1920.jpg"
+            src="/images/party.jpg"
             style="margin: 0 auto; width: 100%; max-height: 400px; object-fit: cover;">
         <div style=" position: relative; bottom: 100px; text-align: center;">
             <h1 class="text-white">A bright community for bright experiences</h1>

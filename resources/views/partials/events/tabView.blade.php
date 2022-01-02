@@ -26,16 +26,16 @@
         <div class="w-100 p-4">
             {{ $event->description ?? 'Event has no description' }}
         </div>
-        <div class="float-right d-flex justify-content-end">
+        <div class="d-flex justify-content-end">
             @if (Auth::check())
                 @if (Auth::user()->id !== $event->organizer->id)
                     @if (Auth::user()->attends($event->id))
                         <button class="btn-light"
-                            onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', '{{ !empty(Auth::user()->profile_picture) ? '/' . Auth::user()->profile_picture->path : 'https://marriedbiography.com/wp-content/uploads/2021/01/Linus-Torvalds.jpg' }}', '{{ Auth::user()->name }}', true)"
+                            onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', '{{ !empty(Auth::user()->profile_picture) ? '/' . Auth::user()->profile_picture->path : '/images/user.png' }}', '{{ Auth::user()->name }}', true)"
                             id="attend_button" type="submit">Leave event</button>
                     @else
                         <button class="btn-light"
-                            onclick="addAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', '{{ !empty(Auth::user()->profile_picture) ? '/' . Auth::user()->profile_picture->path : 'https://marriedbiography.com/wp-content/uploads/2021/01/Linus-Torvalds.jpg' }}', '{{ Auth::user()->name }}', true)"
+                            onclick="addAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', '{{ !empty(Auth::user()->profile_picture) ? '/' . Auth::user()->profile_picture->path : '/images/user.png' }}', '{{ Auth::user()->name }}', true)"
                             id="attend_button">Attend
                             event</button>
                     @endif
@@ -52,9 +52,7 @@
                 @endif
 
             @else
-                <button disabled>Attend event</button>
-                <br>
-                <small class="text-muted">Login to attend event</small>
+                <button disabled>Login to attend event</button>
             @endif
         </div>
     </div>

@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-auto d-flex flex-row p-3 w-100">
                 @if (is_null($user->profile_picture_id))
-                    <img src="https://cdn.pixabay.com/photo/2017/08/10/02/05/tiles-shapes-2617112_960_720.jpg"
+                    <img src="/images/user.png"
                         alt="Generic Profile Picture" class="mb-3 rounded-circle align-self-left"
                         style="object-fit: cover; width: 300px; height: 300px;">
                 @else

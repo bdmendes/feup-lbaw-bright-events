@@ -79,7 +79,7 @@
                     <label class="d-block" for="confirm_password">Confirm password</label>
                     <input onchange="removeErrors('confirm_password');" class="text-white mb-3" type="password" name="confirm_password" id="confirm_password"
                         placeholder="Confirm password">
-                    
+
                     <label class="d-block" for="profile_picture"></label>
                     <input class="text-white mb-3" type="file" name="profile_picture" id="profile_picture">
 
@@ -91,7 +91,7 @@
             </div>
             <div class="col-auto col-6 p-3 d-flex align-items-center justify-content-center">
                 @if (is_null($user->profile_picture_id))
-                    <img src="https://cdn.pixabay.com/photo/2017/08/10/02/05/tiles-shapes-2617112_960_720.jpg"
+                    <img src="/images/user.png"
                         alt="Generic Profile Picture" class="mb-3 rounded-circle align-self-left"
                         style="object-fit: cover; width: 300px; height: 300px;">
                 @else
