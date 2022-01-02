@@ -5,27 +5,25 @@
  * @param {*} arrayId  -> Array id, to add to the hidden input's name field
  */
 function addTag(selection, tagsDiv) {
-  let selec = document.getElementById(selection)
-  let checkbox = document.getElementById(document.getElementById(selec.value).dataset.id)
+    let selec = document.getElementById(selection)
+    let checkbox = document.getElementById(document.getElementById(selec.value).dataset.id)
+    let div = document.getElementById(tagsDiv)
 
-  if (checkbox.checked !== true) {
-    let node = document.createElement("span");
-    node.classList = 'tag m-1 removable'
-    node.title = "Click to remove"
-    node.textContent = selec.value
-    node.onclick = function () { removeTag(node) }
-    document.getElementById(tagsDiv).append(node)
-    checkbox.checked = true
+    if (checkbox.checked !== true) {
+        let node = document.getElementById('tagEx').cloneNode()
+        node.classList.remove('d-none')
+        node.textContent = selec.value
+        div.append(node)
+        checkbox.checked = true
+    }
 
-  }
-  document.getElementById(selection).value = ''
-
+    document.getElementById(selection).value = ''
 }
 
 function removeTag(tag) {
-  let checkbox = document.getElementById(document.getElementById(tag.textContent.replace(/\s+/g, '')).dataset.id)
-  checkbox.checked = false
-  tag.remove()
+    let checkbox = document.getElementById(document.getElementById(tag.textContent.replace(/\s+/g, '')).dataset.id)
+    checkbox.checked = false
+    tag.remove()
 }
 
 async function attendEventClick(eventId, attendeeId, btnId) {
