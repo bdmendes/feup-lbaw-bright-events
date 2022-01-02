@@ -70,7 +70,6 @@ class EventController extends Controller
 
     public function create(Request $request)
     {
-
         $this->validate($request, [
             'title' => 'required',
             'description' => 'required',
@@ -161,23 +160,5 @@ class EventController extends Controller
         if (Auth::user()->id == $event->organizer_id) {
             $event->delete();
         }
-    }
-
-    public function inviteUser($username)
-    {
-        $user = User::where('username', $username);
-        if ($user == null) {
-            return;
-        }
-        foreach ($user_ as $this->attendances) {
-            if ($user_id == $user->id) {
-                return;
-            }
-        }
-        AttendanceRequest::create([
-            'event_id' => $this->id,
-            'attendee_id' => $user->id,
-            'is_invite' => true
-        ]);
     }
 }

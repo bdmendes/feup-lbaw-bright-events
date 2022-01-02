@@ -56,4 +56,21 @@ class EventApiController extends Controller
 
         return response("Successfully joined attendance list.", 200);
     }
+
+    public function invite(Request $request)
+    {
+        $user = User::findOrFail($request->userId);
+        $event = Event::findOrFail($request->eventId);
+        foreach ($user_ as $this->attendances) {
+            if ($user_id == $user->id) {
+                return response(203, "Is attended");
+            }
+        }
+        AttendanceRequest::create([
+            'event_id' => $this->id,
+            'attendee_id' => $user->id,
+            'is_invite' => true
+        ]);
+        return response(200, "Invite added");
+    }
 }
