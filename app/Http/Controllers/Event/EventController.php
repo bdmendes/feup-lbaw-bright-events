@@ -152,17 +152,6 @@ class EventController extends Controller
         return view("pages.events.view", compact('users', 'event', 'invites'));
     }
 
-    public function delete($id)
-    {
-        $event = Event::find($id);
-        if ($event == null) {
-            return;
-        }
-        if (Auth::user()->id == $event->organizer_id) {
-            $event->delete();
-        }
-    }
-
     public function inviteUser($username)
     {
         $user = User::where('username', $username);
@@ -179,5 +168,16 @@ class EventController extends Controller
             'attendee_id' => $user->id,
             'is_invite' => true
         ]);
+    }
+
+    public function delete(Request $request)
+    {
+        $event = Event::find($request->id);
+        if ($event != null) {
+            $this->authorize('delete', $event);
+            $event->delete();
+        }
+
+        return redirect()->route('profile', ['username' => Auth::user()->username]);
     }
 }

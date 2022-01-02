@@ -24,9 +24,9 @@
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="home-tab">
         <div class="w-100 p-4">
-            {{ $event->description }}
+            {{ $event->description ?? 'Event has no description' }}
         </div>
-        <div class="float-right">
+        <div class="float-right d-flex justify-content-end">
             @if (Auth::check())
                 @if (Auth::user()->id !== $event->organizer->id)
                     @if (Auth::user()->attends($event->id))
@@ -40,7 +40,13 @@
                             event</button>
                     @endif
                 @else
-                    <button class="btn btn-primary mx-2">Delete event</button>
+                    <form action="{{ route('event', ['id' => $event->id]) }}"
+                          method="POST" >
+                          @csrf
+                          <input type="hidden" name="_method" value="DELETE">
+                          <input type="hidden" name="id" id="id" value="{{ $event->id }}" />
+                        <button class="btn btn-primary mx-2" type="submit">Delete event</button>
+                    </form>
                     <form action="{{ route('editEvent', ['id' => $event->id]) }}">
                         <button class="btn btn-primary " type="submit">Edit event</button>
                     </form>
