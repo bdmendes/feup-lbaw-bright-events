@@ -69,6 +69,7 @@ class EventController extends Controller
 
     public function create(Request $request)
     {
+
         $this->validate($request, [
             'title' => 'required',
             'description' => 'required',
