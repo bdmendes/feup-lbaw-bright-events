@@ -9,8 +9,8 @@
         <h2>Edit event</h2>
     @endif
 
-    <form id="eventCE" action="{{ empty($event) ? route('createEvent') : route('editEvent', ['id' => $event->id]) }}"
-        method="post" enctype="multipart/form-data">
+    <form id="eventCE" action="{{ empty($event) ? route('createEvent') : route('editEvent', [$event->id]) }}"
+        method="post">
         @csrf
         @if (!empty($event))
             <input type="hidden" name="id" id="id" value="{{ $event->id }}" />

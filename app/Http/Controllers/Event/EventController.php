@@ -100,7 +100,7 @@ class EventController extends Controller
         return redirect()->route('event', ['id' => $event->id]);
     }
 
-    public function update($request)
+    public function update(Request $request, $id)
     {
         dd($request);
         if ($request->id == null) {
