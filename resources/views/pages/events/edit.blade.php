@@ -84,6 +84,8 @@
                 <div class="col-lg-6 col-12 mb-2 ">
                     <label class="p-2 w-100"> Tags </label>
                     <div id="tagsDiv" class="w-100 d-flex justify-content-start flex-wrap">
+                        <span id="tagEx" class="tag m-1 removable d-none" title="Click to remove"
+                            onclick="removeTag(this);"> </span>
                         @if (!empty($event))
                             @foreach ($event->tags as $tag)
                                 <span class="tag m-1 removable" title="Click to remove" onclick="removeTag(this);">
