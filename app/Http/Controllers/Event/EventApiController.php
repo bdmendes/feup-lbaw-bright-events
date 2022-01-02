@@ -60,7 +60,7 @@ class EventApiController extends Controller
 
     public function invite(Request $request)
     {
-        $user = User::find($request->userId);
+        $user = User::where('username', $request->username)->get()->first();
         $event = Event::find($request->route('eventId'));
         if (empty($user) || empty($event)) {
             return response("Invalid data", 400);
