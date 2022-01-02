@@ -1141,9 +1141,9 @@ paths:
             schema:
               type: object
               properties:
-                attendee_id:
-                  type: integer
-              required: [attendee_id]
+                username:
+                  type: string
+              required: [username]
       responses:
         "200":
           description: "Ok. Invite created."
