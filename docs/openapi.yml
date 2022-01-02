@@ -798,10 +798,29 @@ paths:
           description: "Event requires authentication to be viewed"
         "200":
           description: "OK. Show event details page (UI18)"
+    delete:
+      operationId: "R305"
+      summary: "R310: Remove Attendance action"
+      description: "Remove event attendance. Access: AUO, attendant"
+      tags:
+        - "M03: Events and Event Content"
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+          description: "Event id"
+      responses:
+        "200":
+          description: "Ok. Event deleted."
+        "404":
+          description: "Event not found"
+        "403":
+          description: "User doesn't have permission to remove event"
 
   /events/{id}/edit:
     get:
-      operationId: R305
+      operationId: "R306"
       summary: "R305: Edit Event page"
       description: "Show Edit Event page. Access: AUO"
       parameters:
@@ -818,7 +837,7 @@ paths:
         "200":
           description: "Ok. Show event edition page (UI18)"
     post:
-      operationId: R306
+      operationId: "R307"
       summary: "R306: Edit Event action"
       description: "Update event details. Access: AUO"
       parameters:
@@ -857,7 +876,7 @@ paths:
 
   /api/events/{id}/attendees:
     get:
-      operationId: "R309"
+      operationId: "R308"
       summary: "R309: Event Attendees list"
       tags:
         - "M03: Events and Event Content"
@@ -897,7 +916,7 @@ paths:
                       type: integer
 
     delete:
-      operationId: "R310"
+      operationId: "R309"
       summary: "R310: Remove Attendance action"
       description: "Remove event attendance. Access: AUO, attendant"
       tags:
@@ -923,7 +942,7 @@ paths:
 
   /api/events/{id}/comments:
     get:
-      operationId: "R311"
+      operationId: "R310"
       summary: "R311: Event Comments list"
       description: "Retrieve event comments. Access: NAU"
       parameters:
@@ -944,7 +963,7 @@ paths:
         "200":
           description: "Ok. Show event comments"
     post:
-      operationId: R312
+      operationId: "R311"
       summary: "R312: Comment Event action"
       description: "Create comment. Access: AU"
       parameters:
@@ -981,7 +1000,7 @@ paths:
 
   /api/events/{eventId}/comments/{commentId}:
     get:
-      operationId: "R313"
+      operationId: "R312"
       summary: "R313: Event Comment details"
       tags:
         - "M03: Events and Event Content"
@@ -1027,7 +1046,7 @@ paths:
                     body:
                       type: string
     delete:
-      operationId: R313
+      operationId: "R313"
       summary: "R313: Delete Comment action"
       description: "Delete Comment from database. Access: AUO, author"
       parameters:
@@ -1197,7 +1216,7 @@ paths:
                     event_id:
                       type: integer
     post:
-      operationId: R318
+      operationId: "R318"
       summary: "R318: Request Event Join action"
       description: "Request to join an event. Access: AU"
       parameters:
@@ -1227,7 +1246,7 @@ paths:
 
   /api/events/{eventId}/join-requests/{requestId}:
     delete:
-      operationId: R319
+      operationId: "R319"
       summary: "R319: Delete Join Request action"
       description: "Delete Join request from database. Access: AUO"
       parameters:
