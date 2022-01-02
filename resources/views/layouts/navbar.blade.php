@@ -24,9 +24,12 @@
                         <h2>{{ Auth::user()->name }}</h2>
                     </a>
                 @endif
-                <a class="nav-item nav-link" href="{{ route('logout') }}">
-                    <h2>Logout</h2>
-                </a>
+                <form action="{{ route('logout') }}" method="post" style="margin: 0; padding: 0;">
+                    @csrf
+                    <a class="nav-item nav-link" href="javascript:;" onclick="this.parentNode.submit();">
+                        <h2>Logout</h2>
+                    </a>
+                </form>
             @else
                 <a class="nav-item nav-link" href="{{ route('login') }}">
                     <h2>Login</h2>
