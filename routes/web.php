@@ -26,7 +26,7 @@ Route::get('reports', 'Report\ReportController@index')->name('reportsDash');
 // Authentication
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login')->name('login');
-Route::get('logout', 'Auth\LoginController@logout')->name('logout');
+Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register', 'Auth\RegisterController@register')->name('register');
 
