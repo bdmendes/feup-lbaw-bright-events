@@ -70,7 +70,6 @@ class EventController extends Controller
 
     public function create(Request $request)
     {
-
         $this->validate($request, [
             'title' => 'required',
             'description' => 'required',
@@ -177,7 +176,6 @@ class EventController extends Controller
             $this->authorize('delete', $event);
             $event->delete();
         }
-
         return redirect()->route('profile', ['username' => Auth::user()->username]);
     }
 }
