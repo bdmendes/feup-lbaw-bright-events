@@ -800,8 +800,8 @@ paths:
           description: "OK. Show event details page (UI18)"
     delete:
       operationId: "R305"
-      summary: "R310: Remove Attendance action"
-      description: "Remove event attendance. Access: AUO, attendant"
+      summary: "R305: Remove Event action"
+      description: "Remove event. Access: AUO"
       tags:
         - "M03: Events and Event Content"
       parameters:
@@ -821,7 +821,7 @@ paths:
   /events/{id}/edit:
     get:
       operationId: "R306"
-      summary: "R305: Edit Event page"
+      summary: "R306: Edit Event page"
       description: "Show Edit Event page. Access: AUO"
       parameters:
         - name: id
@@ -838,7 +838,7 @@ paths:
           description: "Ok. Show event edition page (UI18)"
     post:
       operationId: "R307"
-      summary: "R306: Edit Event action"
+      summary: "R307: Edit Event action"
       description: "Update event details. Access: AUO"
       parameters:
         - name: id
@@ -877,7 +877,7 @@ paths:
   /api/events/{id}/attendees:
     get:
       operationId: "R308"
-      summary: "R309: Event Attendees list"
+      summary: "R308: Event Attendees list"
       tags:
         - "M03: Events and Event Content"
       parameters:
@@ -917,7 +917,7 @@ paths:
 
     delete:
       operationId: "R309"
-      summary: "R310: Remove Attendance action"
+      summary: "R309: Remove Attendance action"
       description: "Remove event attendance. Access: AUO, attendant"
       tags:
         - "M03: Events and Event Content"
@@ -943,7 +943,7 @@ paths:
   /api/events/{id}/comments:
     get:
       operationId: "R310"
-      summary: "R311: Event Comments list"
+      summary: "R310: Event Comments list"
       description: "Retrieve event comments. Access: NAU"
       parameters:
         - in: query
@@ -964,7 +964,7 @@ paths:
           description: "Ok. Show event comments"
     post:
       operationId: "R311"
-      summary: "R312: Comment Event action"
+      summary: "R311: Comment Event action"
       description: "Create comment. Access: AU"
       parameters:
         - name: id
@@ -1001,7 +1001,7 @@ paths:
   /api/events/{eventId}/comments/{commentId}:
     get:
       operationId: "R312"
-      summary: "R313: Event Comment details"
+      summary: "R312: Event Comment details"
       tags:
         - "M03: Events and Event Content"
       parameters:
