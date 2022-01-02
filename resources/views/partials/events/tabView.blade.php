@@ -72,8 +72,8 @@
                         </option>
                     @endforeach
                 </datalist>
-                <button type="button" onclick="">
-                    Add
+                <button type="button" onclick="inviteUser({{ $event->id }},{{ $user->id }});">
+                    Invite
                 </button>
             </div>
             <br>
@@ -114,4 +114,28 @@
     <div class="tab-pane fade" id="statistics" role="tabpanel" aria-labelledby="contact-tab">
         <p>Statistics not implemented yet</p>
     </div>
+
+    <script>
+        function inviteUser(eventId, userId) {
+            let xmlHTTP = new XMLHttpRequest();
+
+            xmlHTTP.open("POST", "/api/events/" + eventId + "/invites", false);
+            alert(eventId + ' ' + userId);
+            xmlHTTP.setRequestHeader(
+                "Content-type",
+                "application/x-www-form-urlencoded"
+            );
+
+            xmlHTTP.onreadystatechange = function() {
+                if (xmlHTTP.readyState == 4) {
+                    if (xmlHTTP.status == 200) {
+                        alert("User invited!");
+                    } else {
+                        alert(xmlHTTP.status + ': Something went wrong');
+                    }
+                }
+            };
+            xmlHTTP.send("userId=" + userId);
+        }
+    </script>
 </div>

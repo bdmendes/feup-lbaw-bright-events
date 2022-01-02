@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Attendance;
+use App\Models\AttendanceRequest;
 use Auth;
 
 class EventApiController extends Controller
@@ -59,18 +60,26 @@ class EventApiController extends Controller
 
     public function invite(Request $request)
     {
-        $user = User::findOrFail($request->userId);
-        $event = Event::findOrFail($request->eventId);
-        foreach ($user_ as $this->attendances) {
-            if ($user_id == $user->id) {
-                return response(203, "Is attended");
+        $user = User::find($request->userId);
+        $event = Event::find($request->route('eventId'));
+        if (empty($user) || empty($event)) {
+            return response("Invalid data", 400);
+        }
+        foreach ($event->attendances as $attendance) {
+            if ($attendance->attendee_id == $user->id) {
+                return response("Is already attendee already", 203);
             }
         }
         AttendanceRequest::create([
-            'event_id' => $this->id,
+            'event_id' => $event->id,
             'attendee_id' => $user->id,
             'is_invite' => true
         ]);
-        return response(200, "Invite added");
+        return response("Invite added", 200);
+    }
+
+    public function getInvites(Request $request)
+    {
+        return response("Not implemented yet", 501);
     }
 }
