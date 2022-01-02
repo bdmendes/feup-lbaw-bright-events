@@ -10,10 +10,7 @@ class AttendanceRequest extends Model
     public $timestamps  = false;
     protected $table = 'attendance_requests';
 
-    /**
-     * The Comment author is
-     */
-    public function commenter()
+    public function attendee()
     {
         return $this->belongsTo('App\Models\User');
     }

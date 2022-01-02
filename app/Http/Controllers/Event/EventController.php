@@ -10,6 +10,7 @@ use App\Models\Event;
 use App\Models\User;
 use App\Models\File;
 use App\Models\Tag;
+use App\Models\AttendanceRequest;
 
 use Illuminate\Support\Facades\DB;
 
@@ -145,10 +146,10 @@ class EventController extends Controller
     public function get($id)
     {
         $event = Event::find($id);
-        if ($event->is_private) {
-            $this->authorize('view', Auth::user(), $event);
-        }
-        return view("pages.events.view", ['event' => $event]);
+        $this->authorize('view', $event);
+        $users = User::where('is_admin', 'false')->get();
+        $invites = $event->invites();
+        return view("pages.events.view", compact('users', 'event', 'invites'));
     }
 
     public function delete($id)
@@ -160,5 +161,23 @@ class EventController extends Controller
         if (Auth::user()->id == $event->organizer_id) {
             $event->delete();
         }
+    }
+
+    public function inviteUser($username)
+    {
+        $user = User::where('username', $username);
+        if ($user == null) {
+            return;
+        }
+        foreach ($user_ as $this->attendances) {
+            if ($user_id == $user->id) {
+                return;
+            }
+        }
+        AttendanceRequest::create([
+            'event_id' => $this->id,
+            'attendee_id' => $user->id,
+            'is_invite' => true
+        ]);
     }
 }

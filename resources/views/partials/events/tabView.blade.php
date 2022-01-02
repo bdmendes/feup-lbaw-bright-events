@@ -31,11 +31,11 @@
                 @if (Auth::user()->id !== $event->organizer->id)
                     @if (Auth::user()->attends($event->id))
                         <button class="btn-light"
-                            onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username}}', '{{ !empty(Auth::user()->profile_picture) ? '/' . Auth::user()->profile_picture->path : 'https://marriedbiography.com/wp-content/uploads/2021/01/Linus-Torvalds.jpg' }}', '{{Auth::user()->name}}', true)"
+                            onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', '{{ !empty(Auth::user()->profile_picture) ? '/' . Auth::user()->profile_picture->path : 'https://marriedbiography.com/wp-content/uploads/2021/01/Linus-Torvalds.jpg' }}', '{{ Auth::user()->name }}', true)"
                             id="attend_button" type="submit">Leave event</button>
                     @else
                         <button class="btn-light"
-                            onclick="addAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username}}', '{{ !empty(Auth::user()->profile_picture) ? '/' . Auth::user()->profile_picture->path : 'https://marriedbiography.com/wp-content/uploads/2021/01/Linus-Torvalds.jpg' }}', '{{Auth::user()->name}}', true)"
+                            onclick="addAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', '{{ !empty(Auth::user()->profile_picture) ? '/' . Auth::user()->profile_picture->path : 'https://marriedbiography.com/wp-content/uploads/2021/01/Linus-Torvalds.jpg' }}', '{{ Auth::user()->name }}', true)"
                             id="attend_button">Attend
                             event</button>
                     @endif
@@ -61,6 +61,30 @@
     </div>
     <div class="tab-pane fade" id="attendees" role="tabpanel" aria-labelledby="contact-tab">
         <div class="p-4 d-flex gap-4 flex-wrap justify-content" id="attendees-list">
+            @if (Auth::check() && Auth::user()->id == $event->organizer_id)
+                <!-- Invite user -->
+                <div class="col-lg-6 col-sm-12 col-12">
+                    <label class="p-2 w-100"> Invite user </label>
+                    <input list="userOptions" id="selec" placeholder="Search user...">
+                    <datalist id="userOptions">
+                        @foreach ($users as $user)
+                            <option id="{{ $user->name }}" data-id="t{{ $user->id }}"
+                                value="{{ $user->name }}">
+                            </option>
+                        @endforeach
+                    </datalist>
+                    <button type="button" onclick="">
+                        Add
+                    </button>
+                </div>
+
+
+                <!-- Current invites -->
+                @foreach ($invites as $invite)
+                    <h2>{{ $users->find($invite->attendee_id)->username }}</h2>
+                @endforeach
+
+            @endif
             @forelse ($event->attendees() as $user)
                 <div id="{{ $user->username . '-entry' }}" class="border rounded d-flex p-1" style="width: 250px;">
                     @if (Auth::check() && Auth::user()->id == $event->organizer_id)
