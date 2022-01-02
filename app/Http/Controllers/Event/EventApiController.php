@@ -75,7 +75,8 @@ class EventApiController extends Controller
             'attendee_id' => $user->id,
             'is_invite' => true
         ]);
-        return response("Invite added", 200);
+        $returnHTML = view('partials.users.smallCard')->with('user', $user)->render();
+        return response()->json(array('success' => true, 'html'=>$returnHTML), 200);
     }
 
     public function getInvites(Request $request)

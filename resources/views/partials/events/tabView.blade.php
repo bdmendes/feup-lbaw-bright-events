@@ -84,11 +84,13 @@
             <h3>Currently invited users</h3>
 
             <!-- Current invites -->
-            @foreach ($invites as $invite)
-                <div class="border rounded d-flex p-1" style="width: 250px;">
-                    @include('partials.users.smallCard', ['user' => $users->find($invite->attendee_id)])
-                </div>
-            @endforeach
+            <div id="invitees">
+                @foreach ($invites as $invite)
+                    <div class="border rounded d-flex p-1" style="width: 250px;">
+                        @include('partials.users.smallCard', ['user' => $users->find($invite->attendee_id)])
+                    </div>
+                @endforeach
+            </div>
 
             <br>
             <h3>Attendees</h3>
@@ -124,7 +126,6 @@
 
             let xmlHTTP = new XMLHttpRequest();
             xmlHTTP.open("POST", "/api/events/" + eventId + "/invites", false);
-            alert(eventId + ' ' + username);
             xmlHTTP.setRequestHeader(
                 "Content-type",
                 "application/x-www-form-urlencoded"
@@ -133,7 +134,14 @@
             xmlHTTP.onreadystatechange = function() {
                 if (xmlHTTP.readyState == 4) {
                     if (xmlHTTP.status == 200) {
-                        alert("User invited!");
+                        let html = JSON.parse(xmlHTTP.response).html;
+                        let invitees = document.getElementById('invitees');
+                        let div = document.createElement('id');
+                        div.classList.add("border", "rounded", "d-flex", "p-1");
+                        div.style.width = "250px";
+                        div.innerHTML += html;
+
+                        invitees.appendChild(div);
                     } else {
                         alert(xmlHTTP.status + ': Something went wrong');
                     }
