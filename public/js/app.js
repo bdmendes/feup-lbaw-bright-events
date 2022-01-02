@@ -60,12 +60,16 @@ async function attendEventClick(eventId, attendeeId, btnId) {
     );
 
     xmlHTTP.onreadystatechange = function () {
-        if (xmlHTTP.readyState == 4 && xmlHTTP.status == 200) {
-            if (btn != null) {
-                btn.innerHTML = "Leave Event";
-                btn.onclick = function () {
-                    leaveEventClick(eventId, attendeeId);
-                };
+        if (xmlHTTP.readyState == 4) {
+            if (xmlHTTP.status == 200) {
+                if (btn != null) {
+                    btn.innerHTML = "Leave Event";
+                    btn.onclick = function () {
+                        leaveEventClick(eventId, attendeeId);
+                    };
+                }
+            } else {
+                alert('Something went wrong');
             }
         }
     };
@@ -90,12 +94,16 @@ async function leaveEventClick(eventId, attendeeId, btn_id) {
     );
 
     xmlHTTP.onreadystatechange = function () {
-        if (xmlHTTP.readyState == 4 && xmlHTTP.status == 200) {
-            if (btn != null) {
-                btn.innerHTML = "Attend Event";
-                btn.onclick = function () {
-                    attendEventClick(eventId, attendeeId, btn_id);
-                };
+        if (xmlHTTP.readyState == 4) {
+            if (xmlHTTP.status == 200) {
+                if (btn != null) {
+                    btn.innerHTML = "Leave Event";
+                    btn.onclick = function () {
+                        leaveEventClick(eventId, attendeeId);
+                    };
+                }
+            } else {
+                alert('Something went wrong');
             }
         }
     };
