@@ -89,7 +89,7 @@
     </div>
 
     <div class="col">
-        <a href="{{ route('createEvent') }}"> <button type="button" class="btn btn-primary btn"
+        <a href="{{ route('createEvent') }}"> <button type="button" class="btn btn-primary"
                 style="float: right; font-size: 1em;">Create Event</button></a>
         <h2 class="mb-4">Browse Events</h2>
         @if ($events->isEmpty())

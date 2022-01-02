@@ -69,3 +69,11 @@ li {
 .hidden {
     display: none;
 }
+
+.error {
+    color: red;
+}
+
+.errorBorder {
+    border: 1px solid red;
+}

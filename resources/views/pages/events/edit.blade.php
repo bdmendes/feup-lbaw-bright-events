@@ -24,11 +24,28 @@
             <div class="p-3 w-100 content-float">
                 <div class="col-lg-6 col-12 mb-2">
                     <label class="w-100"> Event title:</label>
-                    <input id="title" name="title" placeholder="Insert event title" @if ($event ?? '') value="{{ $event->title ?: '' }}" @endif />
+                    <input id="title" name="title"
+                         placeholder="Insert event title" @if ($event ?? '') value="{{ $event->title ?: '' }}" @endif
+                         onchange="removeErrors('title');"
+                         class=" @if($errors->has('title')) errorBorder @endif" />
+                    @if ($errors->has('title'))
+                        <span id="titleError" class="error">
+                            {{ $errors->first('title') }}
+                        </span>
+                    @endif
                 </div>
                 <div class="col-lg-6 col-12 mb-2">
                     <label class="w-100">Background image:</label>
-                    <input id="cover_image" name="cover_image" type="file" />
+                    <input id="cover_image"
+                        name="cover_image"
+                        type="file"
+                        class="w-100"
+                        onchange="remove('cover_imageError');" />
+                    @if ($errors->has('cover_image'))
+                        <span id="cover_imageError" class="error">
+                            {{ $errors->first('cover_image') }}
+                        </span>
+                    @endif
                 </div>
 
             </div>
@@ -37,12 +54,23 @@
                 <!-- Event date -->
                 <div class="col-lg-6 col-sm-12 col-12 mb-2">
                     <label class="w-100"> Event date: </label>
-                    <input type="date" name="date" id="date" @if ($event ?? '') value="{{ $event->date->format('Y-m-d') }}" @endif />
+                    <input type="date"
+                        name="date"
+                        id="date"
+                        onchange="removeErrors('date')"
+                        @if ($event ?? '') value="{{ $event->date->format('Y-m-d') }}" @endif
+                        class=" @if($errors->has('date')) errorBorder @endif" />
+
+                        @if ($errors->has('date'))
+                            <span id="dateError" class="error">
+                                {{ $errors->first('date') }}
+                            </span>
+                        @endif
                 </div>
                 <!-- Is private -->
                 <div class="col-lg-6 col-sm-12 col-12 mb-2">
                     <label class="p-2 w-100"> Event restriction </label>
-                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                    <div class="btn-group" role="group">
                         <input type="radio" class="btn-check" name="restriction" id="restriction1" autocomplete="off"
                             value="public" checked>
                         <label class="btn btn-outline-primary" for="restriction1">Public</label>
@@ -61,7 +89,7 @@
                 <div class="col-lg-6 col-sm-12 col-12 mb-2 ">
                     <label class="p-2 w-100"> Tags </label>
                     <div id="tagsDiv" class="w-100 d-flex justify-content-start flex-wrap">
-                        <span class="tag m-1 removable" title="Click to remove" onclick="removeTag(this);"> </span>
+                        <span class="tag m-1 removable hidden" title="Click to remove" onclick="removeTag(this);"> </span>
                         @if ($event ?? ('' ?? ''))
                             @foreach ($event->tags as $tag)
                                 <input type="hidden" name="tags[]" value="{{ $tag->id }}"
@@ -84,8 +112,9 @@
                             <option data-value="{{ $tag->id }}" value="{{ $tag->name }}"> </option>
                         @endforeach
                     </datalist>
-                    <button type="button" onclick="addItem('tagsDiv', 'tag', 'tags'); clearValue
-                                            ('tag');"> Add </button>
+                    <button type="button"
+                            onclick="addItem('tagsDiv', 'tag', 'tags'); clearValue('tag');"
+                            class="btn btn-primary"> Add </button>
                 </div>
             </div>
 
@@ -94,11 +123,21 @@
             <!-- Description -->
             <div class="p-3 w-100">
                 <label class="p-2 w-100"> Description </label>
-                <textarea id="description" name="description"
-                    placeholder="Insert description">@if ($event ?? ''){{ $event->description ?: '' }}@endif</textarea>
+                <textarea id="description"
+                        name="description"
+                        placeholder="Insert description"
+                        class=" @if($errors->has('description')) errorBorder @endif"
+                        onchange="removeErrors('description');"
+                        >@if ($event ?? ''){{ $event->description ?: '' }}@endif</textarea>
+                    @if ($errors->has('description'))
+                        <span id="descriptionError" class="error">
+                            {{ $errors->first('description') }}
+                        </span>
+                    @endif
             </div>
 
-            <button type="submit"> @if ($event ?? '') Edit @else Create @endif </button>
+            <button type="submit"
+                    class="btn btn-primary"> @if ($event ?? '') Edit @else Create @endif </button>
 
         </div>
         <form>

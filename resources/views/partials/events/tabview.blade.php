@@ -30,9 +30,9 @@
                         <button class="btn-light" onclick="addAttendee({{$event->id}}, {{Auth::user()->id}})" id="button">Attend event</button>
                     @endif
                 @else
-                    <button>Delete event</button>
+                    <button class="btn btn-primary mx-2">Delete event</button>
                     <form action="{{ route('editEvent', ['id' => $event->id]) }}">
-                        <button type="submit">Edit event</button>
+                        <button class="btn btn-primary " type="submit">Edit event</button>
                     </form>
                 @endif
 

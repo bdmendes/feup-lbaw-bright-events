@@ -69,7 +69,8 @@ class EventController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'description' => 'required',
-            'cover_image' => 'mimes:png,jpg,jpe'
+            'cover_image' => 'mimes:png,jpg,jpe',
+            'date' => 'required'
         ]);
 
         $file = null;
