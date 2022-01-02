@@ -69,11 +69,10 @@ class EventController extends Controller
 
     public function create(Request $request)
     {
-        dd($request);
         $this->validate($request, [
             'title' => 'required',
             'description' => 'required',
-            'cover_image' => 'mimes:png,jpg,jpe',
+            'cover_image' => 'nullable|mimes:png,jpg,jpe',
             'date' => 'required'
         ]);
 
@@ -107,7 +106,6 @@ class EventController extends Controller
 
     public function update(Request $request, $id)
     {
-        dd($request);
         if ($request->id == null) {
             return;
         }
