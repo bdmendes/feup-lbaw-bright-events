@@ -107,7 +107,6 @@ class EventController extends Controller
 
     public function update(Request $request, $id)
     {
-        dd($request);
         if ($request->id == null) {
             return;
         }
