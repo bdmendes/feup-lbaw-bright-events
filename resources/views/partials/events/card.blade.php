@@ -14,7 +14,7 @@
                         {{ $event->location->country }}
                     @endif
                 </h4>
-                <div class="d-flex pt-4 gap-4 align-items-center">
+                <div class="d-flex flex-wrap pt-4 gap-2 align-items-center">
                     @include('partials.users.smallCard', ['user' => $event->organizer])
                     @include("partials.events.tags", ['event' => $event])
                 </div>

@@ -3,25 +3,39 @@
 @section('title', 'home')
 
 @section('content')
-    @if (empty($event))
-        <h2>Event creation</h2>
-    @else
-        <h2>Edit event</h2>
-    @endif
+
 
     <form id="eventCE" action="{{ empty($event) ? route('createEvent') : route('editEvent', [$event->id]) }}"
         method="post">
         @csrf
         @if (!empty($event))
             <input type="hidden" name="id" id="id" value="{{ $event->id }}" />
-            hellllo
         @endif
-        <div class="d-flex align-items-lg-center flex-column p-1 pb-3">
+        <div class="d-flex align-items-lg-center flex-column border rounded p-1 pb-3">
+            <div class="w-100 p-1">
+                @if (empty($event))
+                    <h2>Event creation</h2>
+                @else
+                    <h2>Edit event</h2>
+                @endif
+            </div>
             <!-- Event title -->
             <div class="p-3 w-100 content-float">
-                <div class="col-lg-6 col-12 mb-2">
+                <div class="col-lg-6 col-12 mb-2 pe-5">
                     <label class="w-100"> Event title:</label>
-                    <input id="title" name="title" placeholder="Insert event title" @if (!empty($event)) value="{{ $event->title }}" @endif />
+                    <input id="title"
+                         type="text"
+                         name="title"
+                         class="col-lg-8 col-12
+                            @if ($errors->has('title')) errorBorder @endif"
+                         onchange="removeErrors('title');"
+                         placeholder="Insert event title" @if (!empty($event)) value="{{ $event->title }}" @endif />
+
+                    @if ($errors->has('title'))
+                        <span id="titleError" class="error">
+                            {{ $errors->first('title') }}
+                        </span>
+                    @endif
                 </div>
                 <div class="col-lg-6 col-12 mb-2">
                     <label class="w-100">Background image:</label>
@@ -40,7 +54,17 @@
                 <!-- Event date -->
                 <div class="col-lg-6 col-sm-12 col-12 mb-2">
                     <label class="w-100"> Event date: </label>
-                    <input type="date" name="date" id="date" @if (!empty($event)) value="{{ $event->date->format('Y-m-d') }}" @endif />
+                    <input type="date" name="date"
+                         id="date"
+                         onchange="removeErrors('date');"
+                         @if (!empty($event)) value="{{ $event->date->format('Y-m-d') }}" @endif
+                         class="@if ($errors->has('date')) errorBorder @endif" />
+
+                    @if ($errors->has('date'))
+                        <span id="dateError" class="error">
+                            {{ $errors->first('date') }}
+                        </span>
+                    @endif
                 </div>
 
                 <!-- Visibility -->
@@ -67,7 +91,7 @@
                     @endforeach
                 </fieldset>
 
-                <div class="col-lg-6 col-sm-12 col-12 mb-2 ">
+                <div class="col-lg-6 col-12 mb-2 ">
                     <label class="p-2 w-100"> Tags </label>
                     <div id="tagsDiv" class="w-100 d-flex justify-content-start flex-wrap">
                         <span id="tagEx" class="tag m-1 removable d-none" title="Click to remove"
@@ -81,8 +105,8 @@
                         @endif
                     </div>
                 </div>
-                <div class="col-lg-6 col-sm-12 col-12">
-                    <label class="p-2 w-100"> Add tags </label>
+                <div class="col-lg-6 col-12">
+                    <label class="p-2 w-100"> <!-- Add tags --> </label>
                     <input list="tagOptions" id="selec" placeholder="Search tag...">
                     <datalist id="tagOptions">
                         @foreach ($tags as $tag)
@@ -90,7 +114,9 @@
                             </option>
                         @endforeach
                     </datalist>
-                    <button type="button" onclick="addTag('selec', 'tagsDiv');">
+                    <button type="button"
+                            class="btn-primary"
+                            onclick="addTag('selec', 'tagsDiv');">
                         Add
                     </button>
                 </div>
@@ -109,7 +135,8 @@
                 @endif
             </div>
 
-            <button type="submit" class="btn btn-primary"> @if ($event ?? '') Edit @else Create @endif </button>
+            <button type="submit"
+                    class="btn-primary "> @if ($event ?? '') Edit @else Create @endif </button>
 
         </div>
         <form>
