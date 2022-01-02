@@ -82,7 +82,8 @@ CREATE TABLE lbaw2134.attendance_requests (
     event_id INTEGER REFERENCES lbaw2134.events ON DELETE CASCADE ON UPDATE CASCADE,
     attendee_id INTEGER REFERENCES lbaw2134.users ON DELETE SET NULL ON UPDATE CASCADE,
     is_accepted BOOLEAN DEFAULT FALSE NOT NULL,
-    is_invite BOOLEAN NOT NULL
+    is_invite BOOLEAN NOT NULL,
+    UNIQUE(event_id, attendee_id)
 );
 
 CREATE TABLE lbaw2134.polls (

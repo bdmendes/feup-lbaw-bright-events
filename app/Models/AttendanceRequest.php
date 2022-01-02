@@ -10,6 +10,10 @@ class AttendanceRequest extends Model
     public $timestamps  = false;
     protected $table = 'attendance_requests';
 
+    protected $fillable = [
+        'event_id', 'attendee_id', 'is_invite'
+    ];
+
     public function attendee()
     {
         return $this->belongsTo('App\Models\User');

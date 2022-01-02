@@ -27,7 +27,7 @@
             </div>
             <div class="p-3  w-100">
                 <label> Organizer: </label>
-                {{ $event->organizer->name ?? 'Deleted User' }}
+                @include('partials.users.smallCard', ['user' => $event->organizer])
             </div>
             <div class="p-3 w-100">
                 <label> Tags: </label>
