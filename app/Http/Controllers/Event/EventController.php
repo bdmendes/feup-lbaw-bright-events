@@ -174,7 +174,9 @@ class EventController extends Controller
         $event = Event::find($request->id);
         if ($event != null) {
             $this->authorize('delete', $event);
-            $event->delete();
+            $event->is_disabled = true;
+            $event->save();
+            //$event->delete();
         }
         return redirect()->route('profile', ['username' => Auth::user()->username]);
     }

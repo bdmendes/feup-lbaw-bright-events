@@ -16,7 +16,7 @@
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="events" role="tabpanel" aria-labelledby="contact-tab">
         <div class="w-100 p-4">
-            @forelse ($user->events as $event)
+            @forelse ($user->events()->where('is_disabled', 'false')->get() as $event)
                 @include('partials.events.card', compact('event'))
             @empty
                 <p class="text-grey disabled">Nothing to see here</p>

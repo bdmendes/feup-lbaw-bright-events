@@ -299,8 +299,8 @@ BEGIN
             (VALUES (CAST('Disabled event' AS lbaw2134.notification_type), NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer))) AS foo
             CROSS JOIN
             (
-                SELECT id as attendance_request_id, attendee
-                FROM lbaw2134.attendances
+                SELECT att.id as attendance_request_id, att.attendee_id
+                FROM lbaw2134.attendances att
                 WHERE event_id = NEW.id
             ) AS bar
         );
