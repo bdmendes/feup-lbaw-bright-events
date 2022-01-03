@@ -60,6 +60,9 @@ class EventController extends Controller
 
     public function indexCreate()
     {
+        if (!Auth::check()) {
+            return redirect()->route("login");
+        }
         $tags = Tag::all();
         return view("pages.events.edit", ['tags' => $tags]);
     }
