@@ -11,11 +11,11 @@ Route::get('/contacts', 'Static\StaticPagesController@contact')->name('contacts'
 // Events
 Route::get('events', "Event\EventController@index")->name('browseEvents');
 Route::get('events/create', "Event\EventController@indexCreate")->name('createEvent');
-Route::post('events/create', "Event\EventController@create")->name('createEvent');
+Route::post('events/create', "Event\EventController@create");
 Route::get('events/{id}', "Event\EventController@get")->name('event');
 Route::delete('events/{id}', 'Event\EventController@delete');
 Route::get('events/{id}/edit', 'Event\EventController@indexEdit')->name('editEvent');
-Route::post('events/{id}/edit', 'Event\EventController@update')->name('editEvent');
+Route::post('events/{id}/edit', 'Event\EventController@update');
 
 
 // Reports
@@ -25,10 +25,10 @@ Route::get('reports', 'Report\ReportController@index')->name('reportsDash');
 
 // Authentication
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::post('login', 'Auth\LoginController@login')->name('login');
+Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-Route::post('register', 'Auth\RegisterController@register')->name('register');
+Route::post('register', 'Auth\RegisterController@register');
 
 
 //Users
