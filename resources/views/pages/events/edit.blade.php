@@ -5,8 +5,10 @@
 @section('content')
 
 
-    <form id="eventCE" action="{{ empty($event) ? route('createEvent') : route('editEvent', [$event->id]) }}"
-        method="post">
+    <form id="eventCE"
+     action="{{ empty($event) ? route('createEvent') : route('editEvent', [$event->id]) }}"
+     enctype="multipart/form-data"
+     method="post">
         @csrf
         @if (!empty($event))
             <input type="hidden" name="id" id="id" value="{{ $event->id }}" />

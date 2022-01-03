@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Attendance;
+use App\Models\AttendanceRequest;
 use Illuminate\Support\Arr;
 
 class Event extends Model
@@ -69,6 +70,11 @@ class Event extends Model
             $attendees = Arr::add($attendees, $attendance->attendee_id, User::findOrFail($attendance->attendee_id));
         }
         return $attendees;
+    }
+
+    public function invites()
+    {
+        return AttendanceRequest::where('event_id', $this->id)->get();
     }
 
     public function scopeSearch($query, $search)

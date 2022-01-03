@@ -3,13 +3,9 @@
 @section('title', 'home')
 
 @section('content')
-    <div class="container w-md-75">
+    <div class="container w-md-75 border rounded p-4">
         <div class="w-100">
-            @if ($event->image ?? ('' && $event->image->path ?? ''))
-                <img src="/{{ $event->image->path }}" class="eventBackground mx-auto" />
-            @else
-                <div class="eventBackground mx-auto bg-dark" style="height: 300px"> </div>
-            @endif
+                <img src="/{{ $event->image->path ?? 'images/group.jpg' }}" class="eventBackground mx-auto" />
         </div>
         <div class="p-1  w-100">
             <div class="p-3  w-100">
@@ -31,7 +27,7 @@
             </div>
             <div class="p-3  w-100">
                 <label> Organizer: </label>
-                {{ $event->organizer->name ?? 'Deleted User' }}
+                @include('partials.users.smallCard', ['user' => $event->organizer])
             </div>
             <div class="p-3 w-100">
                 <label> Tags: </label>

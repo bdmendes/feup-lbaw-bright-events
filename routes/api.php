@@ -20,7 +20,8 @@ Route::middleware('auth:api')->get('/user', 'Auth\LoginController@getUser');
 Route::get('events/{id}/attendees', "Event\EventApiController@getAttendees");
 Route::post('events/{eventId}/attendees', "Event\EventApiController@attendEventClick")->name('attendEventClick');
 Route::delete('events/{eventId}/attendees', "Event\EventApiController@leaveEventClick")->name('leaveEventClick');
-// Route::get('events/{id}/comments', "Event\EventApiController@getComments");
+Route::post('events/{eventId}/invites', 'Event\EventApiController@invite');
+Route::get('events/{eventId}/invites', 'Event\EventApiController@getInvites');
 
 // Reports
 // Route::post('reports/event', 'Report\ReportAPIController@reportEvent')->name('report');

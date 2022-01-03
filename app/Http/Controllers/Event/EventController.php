@@ -10,6 +10,7 @@ use App\Models\Event;
 use App\Models\User;
 use App\Models\File;
 use App\Models\Tag;
+use App\Models\AttendanceRequest;
 
 use Illuminate\Support\Facades\DB;
 
@@ -69,7 +70,6 @@ class EventController extends Controller
 
     public function create(Request $request)
     {
-
         $this->validate($request, [
             'title' => 'required',
             'description' => 'required',
@@ -145,20 +145,37 @@ class EventController extends Controller
     public function get($id)
     {
         $event = Event::find($id);
-        if ($event->is_private) {
-            $this->authorize('view', Auth::user(), $event);
-        }
-        return view("pages.events.view", ['event' => $event]);
+        $this->authorize('view', $event);
+        $users = User::where('is_admin', 'false')->get();
+        $invites = $event->invites();
+        return view("pages.events.view", compact('users', 'event', 'invites'));
     }
 
-    public function delete($id)
+    public function inviteUser($username)
     {
-        $event = Event::find($id);
-        if ($event == null) {
+        $user = User::where('username', $username);
+        if ($user == null) {
             return;
         }
-        if (Auth::user()->id == $event->organizer_id) {
+        foreach ($user_ as $this->attendances) {
+            if ($user_id == $user->id) {
+                return;
+            }
+        }
+        AttendanceRequest::create([
+            'event_id' => $this->id,
+            'attendee_id' => $user->id,
+            'is_invite' => true
+        ]);
+    }
+
+    public function delete(Request $request)
+    {
+        $event = Event::find($request->id);
+        if ($event != null) {
+            $this->authorize('delete', $event);
             $event->delete();
         }
+        return redirect()->route('profile', ['username' => Auth::user()->username]);
     }
 }

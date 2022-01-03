@@ -82,7 +82,8 @@ CREATE TABLE lbaw2134.attendance_requests (
     event_id INTEGER REFERENCES lbaw2134.events ON DELETE CASCADE ON UPDATE CASCADE,
     attendee_id INTEGER REFERENCES lbaw2134.users ON DELETE SET NULL ON UPDATE CASCADE,
     is_accepted BOOLEAN DEFAULT FALSE NOT NULL,
-    is_invite BOOLEAN NOT NULL
+    is_invite BOOLEAN NOT NULL,
+    UNIQUE(event_id, attendee_id)
 );
 
 CREATE TABLE lbaw2134.polls (
@@ -249,6 +250,19 @@ BEGIN
     IF NEW.attendee_id IS NOT NULL THEN
         IF EXISTS (SELECT * FROM lbaw2134.events WHERE organizer_id = NEW.attendee_id AND id = NEW.event_id) THEN
             RAISE EXCEPTION 'Requests for a certain event can not be sent to the organizer of that same events';
+        END IF;
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION lbaw2134.request_attended_users() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.attendee_id IS NOT NULL THEN
+        IF EXISTS (SELECT * FROM lbaw2134.attendances WHERE attendee_id = NEW.attendee_id AND event_id = NEW.event_id AND NEW.is_accepted = False) THEN
+            RAISE EXCEPTION 'Cannot request if already attending event';
         END IF;
     END IF;
     RETURN NEW;
@@ -469,6 +483,11 @@ CREATE TRIGGER request_diff_users
     BEFORE INSERT OR UPDATE ON lbaw2134.attendance_requests
     FOR EACH ROW
     EXECUTE PROCEDURE lbaw2134.request_diff_users();
+
+CREATE TRIGGER request_attended_users
+    BEFORE INSERT OR UPDATE ON lbaw2134.attendance_requests
+    FOR EACH ROW
+    EXECUTE PROCEDURE lbaw2134.request_attended_users();
 
 CREATE TRIGGER voter_is_attendee
     BEFORE INSERT OR UPDATE ON lbaw2134.user_poll_options
@@ -745,34 +764,7 @@ INSERT INTO lbaw2134.ATTENDANCES (event_id, attendee_id) VALUES
 	( 111, 106 ) ,
 	( 111, 108 ) ;
 INSERT INTO lbaw2134.ATTENDANCE_REQUESTS VALUES
-	( 100, 108, 101, True, False ) ,
-	( 101, 108, 103, True, False ) ,
-	( 102, 108, 105, True, False ) ,
-	( 103, 108, 106, True, False ) ,
-	( 104, 108, 107, True, False ) ,
-	( 105, 108, 108, True, False ) ,
-	( 106, 109, 100, True, False ) ,
-	( 107, 109, 101, True, False ) ,
-	( 108, 109, 102, True, False ) ,
-	( 109, 109, 104, True, False ) ,
-	( 110, 109, 105, True, False ) ,
-	( 111, 109, 106, True, False ) ,
-	( 112, 109, 109, True, False ) ,
-	( 113, 110, 100, True, False ) ,
-	( 114, 110, 101, True, False ) ,
-	( 115, 110, 102, True, False ) ,
-	( 116, 110, 105, True, False ) ,
-	( 117, 110, 107, True, False ) ,
-	( 118, 110, 108, True, False ) ,
-	( 119, 110, 109, True, False ) ,
-	( 120, 111, 100, True, False ) ,
-	( 121, 111, 101, True, False ) ,
-	( 122, 111, 102, True, False ) ,
-	( 123, 111, 103, True, False ) ,
-	( 124, 111, 104, True, False ) ,
-	( 125, 111, 105, True, False ) ,
-	( 126, 111, 106, True, False ) ,
-	( 127, 111, 108, True, False ) ;
+	( 100, 108, 100, False, False ) ;
 INSERT INTO lbaw2134.POLLS VALUES
 	( 100, 103, 109, 'Do you want to change the schedule?',  '' , TO_TIMESTAMP('2021/12/18 00:00', 'YYYY/MM/DD/ HH24:MI'), True ) ,
 	( 101, 111, 107, 'What should we eat',  '' , TO_TIMESTAMP('2021/11/29 00:00', 'YYYY/MM/DD/ HH24:MI'), False ) ;

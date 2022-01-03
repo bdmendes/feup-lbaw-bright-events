@@ -697,7 +697,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          multipart/form-data:
             schema:
               type: object
               properties:
@@ -709,8 +709,13 @@ paths:
                   type: boolean
                 date:
                   type: string
-                organizer:
-                  type: integer
+                cover_image:
+                  type: string
+                  format: binary
+                tags:
+                  type: array
+                  items:
+                    type: integer
       responses:
         "401":
           description: "Event creation requires authentication"
@@ -739,11 +744,31 @@ paths:
           description: "Event requires authentication to be viewed"
         "200":
           description: "OK. Show event details page (UI18)"
+    delete:
+      operationId: "R305"
+      summary: "R305: Remove Event action"
+      description: "Remove event. Access: AUO"
+      tags:
+        - "M03: Events and Event Content"
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: integer
+          description: "Event id"
+      responses:
+        "200":
+          description: "Ok. Event deleted."
+        "404":
+          description: "Event not found"
+        "403":
+          description: "User doesn't have permission to remove event"
 
   /events/{id}/edit:
     get:
-      operationId: R305
-      summary: "R305: Edit Event page"
+      operationId: "R306"
+      summary: "R306: Edit Event page"
       description: "Show Edit Event page. Access: AUO"
       parameters:
         - name: id
@@ -759,8 +784,8 @@ paths:
         "200":
           description: "Ok. Show event edition page (UI18)"
     post:
-      operationId: R306
-      summary: "R306: Edit Event action"
+      operationId: "R307"
+      summary: "R307: Edit Event action"
       description: "Update event details. Access: AUO"
       parameters:
         - name: id
@@ -784,10 +809,16 @@ paths:
                 private:
                   type: boolean
                   default: false
+                date:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: integer
                 cover_image:
                   type: string
                   format: binary
-              required: [title, description]
+              required: [title, description, date]
       responses:
         "200":
           description: "Ok. Event updated."
@@ -798,8 +829,8 @@ paths:
 
   /api/events/{id}/attendees:
     get:
-      operationId: "R307"
-      summary: "R307: Event Attendees list"
+      operationId: "R308"
+      summary: "R308: Event Attendees list"
       tags:
         - "M03: Events and Event Content"
       parameters:
@@ -838,8 +869,8 @@ paths:
                       type: integer
 
     post:
-      operationId: "R308"
-      summary: "R308: Register Attendance action"
+      operationId: "R309"
+      summary: "R309: Register Attendance action"
       description: "Add event attendance. Access: AUO, AU (not AUO), Invited user(private events)"
       tags:
         - "M03: Events and Event Content"
@@ -863,8 +894,8 @@ paths:
           description: "Internal server error. Invalid data"
 
     delete:
-      operationId: "R309"
-      summary: "R309: Remove Attendance action"
+      operationId: "R310"
+      summary: "R310: Remove Attendance action"
       description: "Remove event attendance. Access: AUO, attendant"
       tags:
         - "M03: Events and Event Content"
@@ -889,8 +920,8 @@ paths:
 
   /api/events/{id}/comments:
     get:
-      operationId: "R310"
-      summary: "R310: Event Comments list"
+      operationId: "R311"
+      summary: "R311: Event Comments list"
       description: "Retrieve event comments. Access: NAU"
       parameters:
         - in: query
@@ -910,8 +941,8 @@ paths:
         "200":
           description: "Ok. Show event comments"
     post:
-      operationId: R311
-      summary: "R311: Comment Event action"
+      operationId: "R312"
+      summary: "R312: Comment Event action"
       description: "Create comment. Access: AU"
       parameters:
         - name: id
@@ -947,8 +978,8 @@ paths:
 
   /api/events/{eventId}/comments/{commentId}:
     get:
-      operationId: "R312"
-      summary: "R312: Event Comment details"
+      operationId: "R313"
+      summary: "R313: Event Comment details"
       tags:
         - "M03: Events and Event Content"
       parameters:
@@ -993,8 +1024,8 @@ paths:
                     body:
                       type: string
     delete:
-      operationId: "R313"
-      summary: "R313: Delete Comment action"
+      operationId: "R314"
+      summary: "R314: Delete Comment action"
       description: "Delete Comment from database. Access: AUO, author"
       parameters:
         - name: eventId
@@ -1019,8 +1050,8 @@ paths:
 
   /api/events/{id}/invites:
     get:
-      operationId: "R314"
-      summary: "R314: Event Invites list"
+      operationId: "R315"
+      summary: "R315: Event Invites list"
       description: "Show event invites. Access: AUO"
       tags:
         - "M03: Events and Event Content"
@@ -1063,8 +1094,8 @@ paths:
                     event_id:
                       type: integer
     post:
-      operationId: "R315"
-      summary: "R315: Invite User action"
+      operationId: "R316"
+      summary: "R316: Invite User action"
       description: "Invite user to event. Access: AUO"
       tags:
         - "M03: Events and Event Content"
@@ -1076,9 +1107,9 @@ paths:
             schema:
               type: object
               properties:
-                attendee_id:
-                  type: integer
-              required: [attendee_id]
+                username:
+                  type: string
+              required: [username]
       responses:
         "200":
           description: "Ok. Invite created."
@@ -1089,8 +1120,8 @@ paths:
 
   /api/events/{eventId}/invites/{requestId}:
     delete:
-      operationId: "R316"
-      summary: "R316: Delete Invite action"
+      operationId: "R317"
+      summary: "R317: Delete Invite action"
       description: "Delete Invite from database. Access: AUO"
       parameters:
         - name: eventId
@@ -1115,8 +1146,8 @@ paths:
 
   /api/events/{id}/join-requests:
     get:
-      operationId: "R317"
-      summary: "R317: Event Join Requests list"
+      operationId: "R318"
+      summary: "R318: Event Join Requests list"
       tags:
         - "M03: Events and Event Content"
       parameters:
@@ -1163,8 +1194,8 @@ paths:
                     event_id:
                       type: integer
     post:
-      operationId: R318
-      summary: "R318: Request Event Join action"
+      operationId: "R319"
+      summary: "R319: Request Event Join action"
       description: "Request to join an event. Access: AU"
       parameters:
         - name: id
@@ -1193,8 +1224,8 @@ paths:
 
   /api/events/{eventId}/join-requests/{requestId}:
     delete:
-      operationId: R319
-      summary: "R319: Delete Join Request action"
+      operationId: "R320"
+      summary: "R320: Delete Join Request action"
       description: "Delete Join request from database. Access: AUO"
       parameters:
         - name: eventId
@@ -1219,8 +1250,8 @@ paths:
 
   /api/events/{id}/polls:
     get:
-      operationId: "R320"
-      summary: "R320: Event Polls list"
+      operationId: "R321"
+      summary: "R321: Event Polls list"
       tags:
         - "M03: Events and Event Content"
       description: "Retrieve event polls list. Access: NAU"
@@ -1270,8 +1301,8 @@ paths:
         "404":
           description: "Event not found"
     post:
-      operationId: "R321"
-      summary: "R321: Create Event Poll action"
+      operationId: "R322"
+      summary: "R322: Create Event Poll action"
       description: "Create event poll. Access: AU"
       tags:
         - "M03: Events and Event Content"
@@ -1308,8 +1339,8 @@ paths:
 
   /api/events/{eventId}/polls/{pollId}:
     patch:
-      operationId: "R322"
-      summary: "R322: Edit Event Poll action"
+      operationId: "R323"
+      summary: "R323: Edit Event Poll action"
       description: "Edit event poll. Access: poll author"
       tags:
         - "M03: Events and Event Content"
