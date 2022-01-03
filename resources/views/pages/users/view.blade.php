@@ -28,6 +28,9 @@
                                             action="{{ route('profile', ['username' => $user->username]) }}"
                                             style="cursor: pointer">
                                             @csrf
+
+                                            <input type="hidden" value={{ $user->is_blocked ? 1 : 0 }}
+                                                name="is_blocked" />
                                             <a onclick="this.parentNode.submit();"
                                                 class="text-white m-3 text-decoration-none d-flex flex-column align-items-center">
                                                 @if ($user->is_blocked)

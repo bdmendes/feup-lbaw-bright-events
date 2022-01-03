@@ -18,7 +18,6 @@ Route::middleware('auth:api')->get('/user', 'Auth\LoginController@getUser');
 
 // Events
 Route::get('events/{id}/attendees', "Event\EventApiController@getAttendees");
-Route::get('events/{id}/comments', "Event\EventApiController@getComments");
 Route::post('events/{eventId}/attendees', "Event\EventApiController@attendEventClick")->name('attendEventClick');
 Route::delete('events/{eventId}/attendees', "Event\EventApiController@leaveEventClick")->name('leaveEventClick');
 Route::post('events/{eventId}/invites', 'Event\EventApiController@invite');

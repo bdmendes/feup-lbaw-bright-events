@@ -30,57 +30,7 @@ function removeTag(tag) {
     tag.remove();
 }
 
-function createSmallCard(username, profile_picture, name) {
-    let entry = document.createElement("div");
-    let div = document.createElement("div");
-
-    entry.appendChild(div);
-    let first_child = document.createElement("div");
-    let first_child_div = document.createElement("div");
-    let img = document.createElement("img");
-
-    first_child_div.appendChild(img);
-    first_child.appendChild(first_child_div);
-    div.appendChild(first_child);
-
-    let second_child = document.createElement("div");
-    let second_child_div = document.createElement("div");
-    let small = document.createElement("small");
-
-    second_child.appendChild(second_child_div);
-    second_child.appendChild(small);
-    div.appendChild(second_child);
-
-    entry.id = username + "-entry";
-    entry.classList.add("border", "rounded", "d-flex", "p-1");
-    entry.style.width = "250px";
-    div.classList.add(
-        "d-flex",
-        "justify-content-start",
-        "align-items-center",
-        "gap-4"
-    );
-    img.classList.add("rounded-circle");
-    img.style.width = "5ch";
-    img.style.height = "5ch";
-    img.style.objectFit = "cover";
-    img.src = profile_picture;
-    img.alt = "Card image cap";
-
-    second_child_div.innerHTML = name;
-    small.classList.add("text-muted");
-    small.innerHTML = username;
-
-    return entry;
-}
-
-async function attendEventClick(
-    eventId,
-    attendeeId,
-    username,
-    profile_picture,
-    name
-) {
+async function attendEventClick(eventId, attendeeId, username) {
     let xmlHTTP = new XMLHttpRequest();
     xmlHTTP.open("POST", "/api/events/" + eventId + "/attendees", false);
     xmlHTTP.setRequestHeader(
@@ -91,13 +41,22 @@ async function attendEventClick(
     xmlHTTP.onreadystatechange = function () {
         if (xmlHTTP.readyState == 4) {
             if (xmlHTTP.status == 200) {
-                let attendee = createSmallCard(username, profile_picture, name);
+                let html = JSON.parse(xmlHTTP.response).html;
+                
+                let parser = new DOMParser();
+                let attendee = parser.parseFromString(html, "text/html").body.firstChild;
+                
+                let div = document.createElement('div');
+                div.classList.add("border", "rounded", "d-flex", "p-1");
+                div.style.width = "250px";
+                div.id = username + "-entry";
+                div.appendChild(attendee);
 
                 let attendees = document.getElementById("attendees-list");
                 if (attendees.childElementCount == 1) {
                     attendees.removeChild(attendees.firstElementChild);
                 }
-                attendees.appendChild(attendee);
+                attendees.appendChild(div);
             } else {
                 alert("Something went wrong");
             }
@@ -135,14 +94,7 @@ async function leaveEventClick(eventId, attendeeId, username) {
     xmlHTTP.send("event_id=" + eventId + "&attendee_id=" + attendeeId);
 }
 
-async function addAttendee(
-    eventId,
-    attendeeId,
-    username,
-    profile_picture,
-    name,
-    is_main_btn
-) {
+async function addAttendee(eventId, attendeeId, username, is_main_btn) {
     let btn;
 
     if (is_main_btn) {
@@ -157,37 +109,18 @@ async function addAttendee(
         btn.onclick = "";
     }
 
-    await attendEventClick(
-        eventId,
-        attendeeId,
-        username,
-        profile_picture,
-        name
-    );
+    await attendEventClick(eventId, attendeeId, username);
+    console.log("done");
 
     if (btn != null && is_main_btn) {
         btn.innerHTML = "Leave event";
         btn.onclick = function () {
-            removeAttendee(
-                eventId,
-                attendeeId,
-                username,
-                profile_picture,
-                name,
-                is_main_btn
-            );
+            removeAttendee(eventId, attendeeId, username, is_main_btn);
         };
     }
 }
 
-async function removeAttendee(
-    eventId,
-    attendeeId,
-    username,
-    profile_picture,
-    name,
-    is_main_btn
-) {
+async function removeAttendee(eventId, attendeeId, username, is_main_btn) {
     let btn;
 
     if (is_main_btn) {
@@ -207,14 +140,7 @@ async function removeAttendee(
     if (btn != null && is_main_btn) {
         btn.innerHTML = "Attend event";
         btn.onclick = function () {
-            addAttendee(
-                eventId,
-                attendeeId,
-                username,
-                profile_picture,
-                name,
-                is_main_btn
-            );
+            addAttendee(eventId, attendeeId, username, is_main_btn);
         };
     }
 }

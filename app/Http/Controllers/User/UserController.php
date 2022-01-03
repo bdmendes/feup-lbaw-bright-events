@@ -150,7 +150,12 @@ class UserController extends Controller
 
     public function block(Request $request, $username)
     {
+        $this->validate($request, [
+            'is_blocked' => 'required|boolean'
+        ]);
+
         $user = User::where('username', $username)->get()->first();
+
 
         $this->authorize('block', $user);
 
@@ -158,8 +163,11 @@ class UserController extends Controller
             abort('404', 'User not found');
         }
 
-        $user->is_blocked = !$user->is_blocked;
-        $user->save();
+        if ($request->is_blocked == $user->is_blocked) {
+            $user->is_blocked = !$user->is_blocked;
+            $user->save();
+        }
+
 
         return redirect()->route('profile', ['username' => $user->username]);
     }
