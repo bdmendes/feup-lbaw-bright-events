@@ -66,9 +66,11 @@ class Event extends Model
     public function attendees()
     {
         $attendees = [];
+        
         foreach ($this->attendances as $attendance) {
-            $attendees = Arr::add($attendees, $attendance->attendee_id, User::findOrFail($attendance->attendee_id));
+            $attendees[] = User::find($attendance->attendee_id);
         }
+        
         return $attendees;
     }
 
