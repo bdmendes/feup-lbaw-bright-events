@@ -1,8 +1,8 @@
 <a style="text-decoration: none;" class="text-dark card mb-3" href="{{ route('event', ['id' => $event->id]) }}">
     <div class="row gap-0">
         <div class="col" style="max-width: 250px;">
-            <img src="{{$event->image->path ?? '/images/group.jpg' }}"
-                class="img-fluid rounded-start" alt="Event cover image" style="height: 100%; object-fit: cover;">
+            <img src="/{{ $event->image->path ?? 'images/group.jpg' }}" class="img-fluid rounded-start"
+                alt="Event cover image" style="height: 150px; width: 100%; object-fit: cover;">
         </div>
         <div class="col-8">
             <div class="card-body">
