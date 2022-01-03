@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Crypt;
 use Auth;
 use Validator;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -92,6 +93,12 @@ class UserController extends Controller
         }
 
         if (!is_null($request->birth_date) && $request->birth_date != $user->birth_date) {
+            $date = Carbon::parse($request->birth_date);
+            if ($date->isFuture()) {
+                $validator->getMessageBag()->add('birth_date', 'Impossible to be born in the future.');
+                return redirect()->route('editProfile', ['username' => Auth::user()->username])->withErrors($validator)->withInput();
+            }
+
             $user->birth_date = $request->birth_date;
         }
 

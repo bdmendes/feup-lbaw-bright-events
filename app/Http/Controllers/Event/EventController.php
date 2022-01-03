@@ -12,6 +12,9 @@ use App\Models\File;
 use App\Models\Tag;
 use App\Models\AttendanceRequest;
 
+use Carbon\Carbon;
+use Validator;
+
 use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
@@ -70,14 +73,22 @@ class EventController extends Controller
 
     public function create(Request $request)
     {
-        $this->validate($request, [
+        $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'description' => 'required',
+            'description' => 'nullable|string',
             'cover_image' => 'nullable|mimes:png,jpg,jpe',
             'date' => 'required'
         ]);
 
         $file = null;
+
+        if (!is_null($request->date)) {
+            $date = Carbon::parse($request->date);
+            if ($date->isPast()) {
+                $validator->getMessageBag()->add('date', 'Events cannot be set in the past');
+                return redirect()->route("createEvent")->withErrors($validator)->withInput();
+            }
+        }
 
         $event = Event::create([
             'organizer_id' => Auth::user()->id,
@@ -111,14 +122,40 @@ class EventController extends Controller
             return;
         }
 
+        $validator = Validator::make($request->all(), [
+            'description' => 'nullable|string',
+            'title' => 'required|string',
+            'date' => 'required|date'
+        ]);
+
         $event = Event::findOrFail($request->id);
         if ($event->organizer_id != Auth::user()->id) {
             return;
         }
-        $event->description = $request->description;
-        $event->title = $request->title;
-        $event->date = $request->date;
-        $event->is_private = $request->restriction === 'private' ? 'true' : 'false';
+        
+        if (!is_null($request->title) && $event->description != $request->description) {
+            $event->description = $request->description;
+        }
+
+        if (!is_null($request->title) && $event->title != $request->title) {
+            $event->title = $request->title;
+        }
+
+        if (!is_null($request->date)) {
+            $old_date = Carbon::parse($event->date);
+            $new_date = Carbon::parse($request->date);
+            if ($old_date->ne($new_date)) {
+                if ($new_date->isPast()) {
+                    $validator->getMessageBag()->add('date', 'Events cannot be set in the past');
+                    return redirect()->route("editEvent", ['id' => $event->id])->withErrors($validator)->withInput();
+                }
+                $event->date = $request->date;
+            }
+        }
+
+        if (!is_null($request->restriction)) {
+            $event->is_private = $request->restriction === 'private' ? 'true' : 'false';
+        }
 
         if ($request->cover_image) {
             $filename = 'event' . $event->id . '.' . $request->cover_image->extension();
@@ -135,8 +172,10 @@ class EventController extends Controller
             $event->cover_image_id = $file->id;
         }
 
-        $event->tags()->detach();
-        $event->tags()->attach($request->tags);
+        if ($request->tags) {
+            $event->tags()->detach();
+            $event->tags()->attach($request->tags);
+        }
 
         $event->save();
         return redirect()->route('event', ['id' => $event->id]);
