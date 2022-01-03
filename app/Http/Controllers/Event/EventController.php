@@ -105,6 +105,11 @@ class EventController extends Controller
             $request->cover_image->move(public_path('storage'), $filename);
             $relativePath = 'storage/' . $filename;
 
+            $curr_img = File::where('path', $relativePath)->get()->first();
+            if ($curr_img != null) {
+                $curr_img->delete();
+            }
+
             $file = File::create([
                 'path' => $relativePath,
                 'name' => $request->file('cover_image')->getClientOriginalName()
@@ -161,6 +166,11 @@ class EventController extends Controller
             $filename = 'event' . $event->id . '.' . $request->cover_image->extension();
             $request->cover_image->move(public_path('storage'), $filename);
             $relativePath = 'storage/' . $filename;
+
+            $curr_img = File::where('path', $relativePath)->get()->first();
+            if ($curr_img != null) {
+                $curr_img->delete();
+            }
 
             $file = File::create([
                 'path' => $relativePath,

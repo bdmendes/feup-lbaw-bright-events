@@ -97,9 +97,15 @@
     </div>
 
     <div class="col">
-        <a href="{{ route('createEvent') }}"> <button type="button" class="btn btn-primary"
-                style="float: right; font-size: 1em;">Create Event</button></a>
-        <h2 class="mb-4">Browse Events</h2>
+        <div class="d-flex flex-row mb-4 align-items-center">
+            <div>
+                <h2>Browse Events</h2>
+            </div>
+            <div class="ms-auto">
+                <a href="{{ route('createEvent') }}"> <button type="button" class="btn btn-primary"
+                        style="font-size: 1em;">Create Event</button></a>
+            </div>
+        </div>
         @if ($events->isEmpty())
             No events were found
         @else
