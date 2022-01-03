@@ -153,12 +153,12 @@ function remove(id) {
 }
 
 function removeErrors(id) {
-    let span = $("#" + id + "Error");
-    let input = $("#" + id + ".errorBorder");
+    let span = document.getElementById(id + "Error");
+    let input = document.getElementById(id);
     if (span != undefined) {
         span.remove();
     }
     if (input != undefined) {
-        input.removeClass("errorBorder");
+        input.classList.remove("errorBorder");
     }
 }
