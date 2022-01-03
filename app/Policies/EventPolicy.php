@@ -13,6 +13,9 @@ class EventPolicy
 
     public function view(?User $user, Event $event)
     {
+        if ($event->is_disabled) {
+            return false;
+        }
         if (!$event->is_private || $event->organizer_id == $user->id) {
             return true;
         }

@@ -24,7 +24,7 @@ class UserController extends Controller
         if (is_null($user) || $user->is_admin) {
             abort('404', 'User not found');
         }
-        
+
         return view('pages.users.view', [
             'user' => $user,
             'attended_events' => $user->attended_events(),
@@ -56,7 +56,7 @@ class UserController extends Controller
             'password' => 'nullable|string|min:6|confirmed',
             'profile_picture' => 'nullable|mimes:png,jpg,jpe',
         ]);
-        
+
         $user = User::findOrFail($request->id);
 
         $this->authorize('edit', $user);
@@ -64,7 +64,7 @@ class UserController extends Controller
         if ($request->name != $user->name) {
             $user->name = $request->name;
         }
-        
+
         if ($request->username != $user->username) {
             $find = User::where('username', $request->username)->get()->first();
             if (!is_null($find)) {
@@ -153,22 +153,22 @@ class UserController extends Controller
         $this->validate($request, [
             'is_blocked' => 'required|boolean'
         ]);
-        
+
         $user = User::where('username', $username)->get()->first();
-        
+
 
         $this->authorize('block', $user);
-        
+
         if (is_null($user)) {
             abort('404', 'User not found');
         }
-    
+
         if ($request->is_blocked == $user->is_blocked) {
             $user->is_blocked = !$user->is_blocked;
             $user->save();
         }
 
-        
+
         return redirect()->route('profile', ['username' => $user->username]);
     }
 

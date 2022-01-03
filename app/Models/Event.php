@@ -21,6 +21,7 @@ class Event extends Model
         'event_state',
         'is_private',
         'organizer_id',
+        'is_disabled',
         'tags',
         'cover_image_id'
     ];
@@ -85,15 +86,15 @@ class Event extends Model
             $search_ = str_replace(" ", "|", implode(explode(" ", $search)));
             $query = $query->where(function ($query) use ($search_, $search) {
                 $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', $search_)
-                ->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', $search_)
-                ->orWhereRelation('organizer', 'username', 'ilike', '%'.$search.'%')
-                ->orWhereRelation('organizer', 'name', 'ilike', '%'.$search.'%')
-                ->orWhereHas('tags', function ($query) use ($search) {
-                    $query->where('name', 'like', '%'.$search.'%');
-                })
-                ->orWhereRelation('location', 'name', 'ilike', '%'.$search.'%')
-                ->orWhereRelation('location', 'city', 'ilike', '%'.$search.'%')
-                ->orWhereRelation('location', 'country', 'ilike', '%'.$search.'%');
+                    ->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', $search_)
+                    ->orWhereRelation('organizer', 'username', 'ilike', '%' . $search . '%')
+                    ->orWhereRelation('organizer', 'name', 'ilike', '%' . $search . '%')
+                    ->orWhereHas('tags', function ($query) use ($search) {
+                        $query->where('name', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereRelation('location', 'name', 'ilike', '%' . $search . '%')
+                    ->orWhereRelation('location', 'city', 'ilike', '%' . $search . '%')
+                    ->orWhereRelation('location', 'country', 'ilike', '%' . $search . '%');
             });
         }
         return $query->where('is_private', 'false');

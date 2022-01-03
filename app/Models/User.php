@@ -60,7 +60,9 @@ class User extends Authenticatable
     {
         $attended_events = [];
         foreach ($this->attendances as $attendance) {
-            $attended_events = Arr::add($attended_events, $attendance->event_id, Event::findOrFail($attendance->event_id));
+            $event = Event::findOrFail($attendance->event_id);
+            if (!$event->is_disabled)
+                $attended_events = Arr::add($attended_events, $attendance->event_id, $event);
         }
         return $attended_events;
     }
@@ -86,10 +88,10 @@ class User extends Authenticatable
         if ($search) {
             $search_ = str_replace(" ", "|", implode(explode(" ", $search)));
             $query = $query->where(function ($query) use ($search, $search_) {
-                $query= $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', $search_)
-                ->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', $search_)
-                ->orWhere('username', 'like', '%' . $search . '%')
-                ->orWhere('name', 'ilike', '%' . $search . '%');
+                $query = $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', $search_)
+                    ->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', $search_)
+                    ->orWhere('username', 'like', '%' . $search . '%')
+                    ->orWhere('name', 'ilike', '%' . $search . '%');
             });
         }
         return $query->where('is_admin', 'false');
