@@ -31,11 +31,11 @@
                 @if (Auth::user()->id !== $event->organizer->id)
                     @if (Auth::user()->attends($event->id))
                         <button class="btn-light"
-                            onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', '{{ !empty(Auth::user()->profile_picture) ? '/' . Auth::user()->profile_picture->path : '/images/user.png' }}', '{{ Auth::user()->name }}', true)"
+                            onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
                             id="attend_button" type="submit">Leave event</button>
                     @else
                         <button class="btn-light"
-                            onclick="addAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', '{{ !empty(Auth::user()->profile_picture) ? '/' . Auth::user()->profile_picture->path : '/images/user.png' }}', '{{ Auth::user()->name }}', true)"
+                            onclick="addAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
                             id="attend_button">Attend
                             event</button>
                     @endif
@@ -103,7 +103,7 @@
                         @include('partials.users.smallCard', compact('user'), compact('event'))
                         <div class="align-self-center" style="margin-left:auto;">
                             <button id="{{ $user->username . '-btn' }}" class="btn btn-light"
-                                onclick="removeAttendee({{ $event->id }}, {{ $user->id }}, '{{ $user->username }}', null, null, false)">
+                                onclick="removeAttendee({{ $event->id }}, {{ $user->id }}, '{{ $user->username }}', false)">
                                 <i class="bi bi-x-circle"></i>
                             </button>
                         </div>

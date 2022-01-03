@@ -37,7 +37,10 @@ class EventApiController extends Controller
             'attendee_id' => $request->attendee_id
         ]);
 
-        return response("Successfully joined attendance list.", 200);
+        $user = User::find($request->attendee_id);
+
+        $returnHTML = view('partials.users.smallCard')->with('user', $user)->render();
+        return response()->json(array('success' => true, 'html'=>$returnHTML), 200);
     }
 
     public function leaveEventClick(Request $request)
@@ -55,7 +58,7 @@ class EventApiController extends Controller
 
         $attendance->delete();
 
-        return response("Successfully joined attendance list.", 200);
+        return response("Successfully left attendance list.", 200);
     }
 
     public function invite(Request $request)
