@@ -24,7 +24,7 @@
         {
             "label": "Webapp",
             "type": "shell",
-            "command": "php artisan serve",
+            "command": "php artisan serve --env local",
             "problemMatcher": []
         }
     ]
