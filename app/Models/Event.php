@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Attendance;
 use App\Models\AttendanceRequest;
 use Illuminate\Support\Arr;
+use Carbon\Carbon;
 
 class Event extends Model
 {
@@ -73,6 +74,44 @@ class Event extends Model
         }
         
         return $attendees;
+    }
+
+    public function stats()
+    {
+        $n_attendes = 0;
+        $ages = [0, 0, 0, 0]; // 18-30, 30-45, 45-65, >65
+        $genders = [0, 0, 0]; // Male, Female, Other
+        foreach ($this->attendees() as $attendee) {
+            $n_attendes++;
+            $age = Carbon::parse($attendee->birth_date)->diffInYears(Carbon::now());
+            if ($age >= 18 && $age < 30) {
+                $ages[0]++;
+            } elseif ($age >= 30 && $age < 45) {
+                $ages[1]++;
+            } elseif ($age >= 45 && $age < 65) {
+                $ages[2]++;
+            } elseif ($age >= 65) {
+                $ages[3]++;
+            }
+
+            if ($attendee->gender == "Male") {
+                $genders[0]++;
+            } elseif ($attendee->gender == "Female") {
+                $genders[1]++;
+            } else {
+                $genders[2]++;
+            }
+        }
+
+        for ($i = 0; $i < count($ages); $i++) {
+            $ages[$i] /= $n_attendes;
+        }
+
+        for ($i = 0; $i < count($genders); $i++) {
+            $genders[$i] /= $n_attendes;
+        }
+
+        return [$ages, $genders];
     }
 
     public function invites()
