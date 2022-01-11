@@ -6,14 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-    // Don't add create and update timestamps in database.
     public $timestamps  = false;
     protected $table = 'comments';
 
-    /**
-     * The Comment author is
-     */
-    public function commenter()
+    public function author()
     {
         return $this->belongsTo('App\Models\User');
     }
@@ -21,5 +17,15 @@ class Comment extends Model
     public function event()
     {
         return $this->belongsTo('App\Models\Event');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Comment::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Comment::class, 'parent_id');
     }
 }

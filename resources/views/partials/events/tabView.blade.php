@@ -59,7 +59,9 @@
         </div>
     </div>
     <div class="tab-pane fade" id="forum" role="tabpanel" aria-labelledby="contact-tab">
-        <p>Forum not implemented yet</p>
+        @foreach ($comments as $comment)
+            @include('partials.events.comment', compact('comment'))
+        @endforeach
     </div>
     <div class="tab-pane fade" id="polls" role="tabpanel" aria-labelledby="contact-tab">
         <p>Polls not implemented yet</p>

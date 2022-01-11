@@ -34,6 +34,7 @@
                 @include("partials.events.tags", ['event' => $event])
             </div>
         </div>
-        @include('partials.events.tabView', ['event' => $event])
+
+        @include('partials.events.tabView', compact('event', 'comments'))
     </div>
 @endsection
