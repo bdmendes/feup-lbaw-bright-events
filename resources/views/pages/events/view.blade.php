@@ -35,6 +35,6 @@
             </div>
         </div>
 
-        @include('partials.events.tabView', compact('event', 'comments'))
+        @include('partials.events.tabView', compact('event'))
     </div>
 @endsection

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Attendance;
+use App\Models\Comment;
 use App\Models\AttendanceRequest;
 use Auth;
 
@@ -21,8 +22,26 @@ class EventApiController extends Controller
 
     public function getComments(Request $request)
     {
-        $event = Event::findOrFail($request->id);
-        dd(json_encode($event->comments, JSON_PRETTY_PRINT));
+        $event = Event::find($request->eventId);
+        if ($event == null) return '';
+        $start = $request->start ?? 0;
+        $size = $request->size ?? 5;
+        $comments = $event->comments()->getQuery()->orderBy('date', 'asc')->skip($start)->take($size)->get();
+        return view('partials.events.commentList', compact('comments'));
+    }
+
+    public function submitComment(Request $request){
+        $event = Event::find($request->eventId);
+        if ($event == null) return 'Could not find event';
+        $data = json_decode($request->getContent(), true);
+        if ($data["body"] == null || $data["author"] == null) return 'Invalid data!';
+        $comment = Comment::create([
+            'event_id' => $request->eventId,
+            'commenter_id' => $data["author"], // change auth...
+            'body' => $data["body"]
+        ]);
+        if ($comment == null) return 'Could not create comment';
+        return view('partials.events.comment', compact('comment'));
     }
 
     public function attendEventClick(Request $request)

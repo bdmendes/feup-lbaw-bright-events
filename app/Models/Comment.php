@@ -9,14 +9,20 @@ class Comment extends Model
     public $timestamps  = false;
     protected $table = 'comments';
 
+    protected $fillable = [
+        'commenter_id',
+        'event_id',
+        'body'
+    ];
+
     public function author()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\User', 'commenter_id');
     }
 
     public function event()
     {
-        return $this->belongsTo('App\Models\Event');
+        return $this->belongsTo('App\Models\Event', 'event_id');
     }
 
     public function parent()
