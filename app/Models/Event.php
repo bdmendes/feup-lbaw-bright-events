@@ -9,7 +9,6 @@ use Illuminate\Support\Arr;
 
 class Event extends Model
 {
-    // Don't add create and update timestamps in database.
     public $timestamps  = false;
     protected $table = 'events';
     protected $dates = ['date'];
@@ -25,17 +24,12 @@ class Event extends Model
         'tags',
         'cover_image_id'
     ];
-    /**
-     * The event organizer is
-     */
+
     public function organizer()
     {
         return $this->belongsTo(User::class, 'organizer_id');
     }
 
-    /**
-     * The cover image file is
-     */
     public function image()
     {
         return $this->belongsTo(File::class, 'cover_image_id');
@@ -46,12 +40,9 @@ class Event extends Model
         return $this->belongsTo(Location::class, 'location_id');
     }
 
-    /**
-     * Comments of event
-     */
     public function comments()
     {
-        return $this->hasMany(Comment::class, 'event');
+        return $this->hasMany(Comment::class, 'event_id');
     }
 
     public function tags()
@@ -75,7 +66,7 @@ class Event extends Model
         return $attendees;
     }
 
-    public function invites()
+    public function getInvites()
     {
         return AttendanceRequest::where('event_id', $this->id)->get();
     }

@@ -5,8 +5,7 @@
 @section('content')
 
     <div>
-        <img class="d-block"
-            src="/images/party.jpg"
+        <img class="d-block" src="/images/party.jpg"
             style="margin: 0 auto; width: 100%; max-height: 400px; object-fit: cover;">
         <div style=" position: relative; bottom: 100px; text-align: center;">
             <h1 class="text-white">A bright community for bright experiences</h1>

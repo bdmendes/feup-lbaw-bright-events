@@ -6,20 +6,33 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-    // Don't add create and update timestamps in database.
     public $timestamps  = false;
     protected $table = 'comments';
 
-    /**
-     * The Comment author is
-     */
-    public function commenter()
+    protected $fillable = [
+        'commenter_id',
+        'event_id',
+        'body',
+        'parent_id'
+    ];
+
+    public function author()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\User', 'commenter_id');
     }
 
     public function event()
     {
-        return $this->belongsTo('App\Models\Event');
+        return $this->belongsTo('App\Models\Event', 'event_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Comment::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Comment::class, 'parent_id');
     }
 }
