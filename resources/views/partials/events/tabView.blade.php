@@ -1,11 +1,13 @@
 <ul class="nav nav-tabs w-100 nav-fill" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button"
-            role="tab" aria-controls="description" aria-selected="true" onclick="appendToUrl('')">Description</button>
+        <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description"
+            type="button" role="tab" aria-controls="description" aria-selected="true"
+            onclick="appendToUrl('')">Description</button>
     </li>
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="forum-tab" data-bs-toggle="tab" data-bs-target="#forum" type="button"
-            role="tab" aria-controls="forum" aria-selected="false" onclick="appendToUrl('#forum'); getComments();">Forum</button>
+            role="tab" aria-controls="forum" aria-selected="false"
+            onclick="appendToUrl('#forum'); getComments();">Forum</button>
     </li>
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="polls-tab" data-bs-toggle="tab" data-bs-target="#polls" type="button"
@@ -13,11 +15,13 @@
     </li>
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="attendees-tab" data-bs-toggle="tab" data-bs-target="#attendees" type="button"
-            role="tab" aria-controls="attendees" aria-selected="false" onclick="appendToUrl('#attendees')">Attendees</button>
+            role="tab" aria-controls="attendees" aria-selected="false"
+            onclick="appendToUrl('#attendees')">Attendees</button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="statistics-tab" data-bs-toggle="tab" data-bs-target="#statistics" type="button"
-            role="tab" aria-controls="statistics" aria-selected="false" onclick="appendToUrl('#statistics')">Statistics</button>
+        <button class="nav-link" id="statistics-tab" data-bs-toggle="tab" data-bs-target="#statistics"
+            type="button" role="tab" aria-controls="statistics" aria-selected="false"
+            onclick="appendToUrl('#statistics')">Statistics</button>
     </li>
 </ul>
 
@@ -61,14 +65,14 @@
 
     <div class="tab-pane fade" id="forum" role="tabpanel" aria-labelledby="contact-tab">
         @if (Auth::check())
-        <form class="mt-4">
-            <input type="text" id="new_comment_body" name="body" placeholder="What do you think of this event?" onsubmit=";">
-            <input type="hidden" name="author" id="new_comment_author" value="{{Auth::id()}}">
-            <button id="submit_comment_button" class="mt-2" type="button">Submit</button>
-          </form>
+            <form class="mt-4">
+                <input type="text" id="new_comment_body" name="body" placeholder="What do you think of this event?">
+                <button id="submit_comment_button" class="mt-2" type="button"
+                    onclick="submitComment();">Submit</button>
+            </form>
         @endif
         <div id="comment_area"></div>
-        <button id="view_more_comments">View more</button>
+        <button id="view_more_comments" onclick="viewMoreComments();">View more</button>
     </div>
 
     <div class="tab-pane fade" id="polls" role="tabpanel" aria-labelledby="contact-tab">
@@ -166,60 +170,27 @@
     </script>
 
     <script>
-        function getComments() {
-            const eventId = window.location.pathname.split('/').slice(-1)[0];
-            fetch('/api/events/' + eventId + "/comments?size=5")
-            .then((response) => response.text())
-            .then((html) => {
-                document.getElementById("comment_area").innerHTML = html;
-            });
-        }
-
-        function redirectTab(){
+        function redirectTab() {
             const hash = window.location.hash;
-            switch (hash){
-                case "#forum": document.getElementById('forum-tab').click(); break;
-                case "#polls": document.getElementById('polls-tab').click(); break;
-                case "#attendees": document.getElementById('attendees-tab').click(); break;
-                case "#statistics": document.getElementById('statistics-tab').click(); break;
-                default: break;
+            switch (hash) {
+                case "#forum":
+                    document.getElementById('forum-tab').click();
+                    break;
+                case "#polls":
+                    document.getElementById('polls-tab').click();
+                    break;
+                case "#attendees":
+                    document.getElementById('attendees-tab').click();
+                    break;
+                case "#statistics":
+                    document.getElementById('statistics-tab').click();
+                    break;
+                default:
+                    break;
             }
         }
         window.onload = () => {
             redirectTab();
-            document.getElementById("submit_comment_button").addEventListener('click', ()=>{
-                const element_body = document.getElementById("new_comment_body");
-                const value = element_body.value;
-                if (value === '') return;
-                const eventId = window.location.pathname.split('/').slice(-1)[0];
-                const userId = document.getElementById("new_comment_author").value;
-                const data = {
-                    body: value,
-                    author: userId,
-                };
-                fetch('/api/events/' + eventId + "/comments", {
-                    "method": "POST",
-                    "body": JSON.stringify(data)
-                })
-                .then((response) => response.text())
-                .then(html => {
-                    const div = document.createElement("div");
-                    div.innerHTML = html;
-                    document.getElementById("comment_area").prepend(div);
-                    element_body.value = "";
-                })
-            });
-            document.getElementById("view_more_comments").addEventListener('click', () => {
-                const eventId = window.location.pathname.split('/').slice(-1)[0];
-                const comment_count = document.getElementsByClassName("event_comment_entry").length;
-                fetch('/api/events/' + eventId + "/comments?start=" + comment_count)
-                .then((response) => response.text())
-                .then((html) => {
-                    const div = document.createElement("div");
-                    div.innerHTML = html;
-                    document.getElementById("comment_area").append(div);
-                });
-            });
         }
     </script>
 </div>

@@ -23,6 +23,7 @@
     </script>
     <script type="text/javascript" src={{ asset('js/app.js') }} defer>
     </script>
+    <script type="text/javascript" src={{ asset('js/comments.js') }} defer></script>
 </head>
 
 <body>
