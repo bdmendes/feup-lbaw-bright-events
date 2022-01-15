@@ -24,12 +24,22 @@ class EventApiController extends Controller
     {
         $event = Event::find($request->eventId);
         if ($event == null) {
-            return '';
+            return 'Event not found';
         }
         $start = $request->start ?? 0;
         $size = $request->size ?? 5;
         $comments = $event->comments()->getQuery()->orderBy('date', 'desc')->skip($start)->take($size)->get();
         return view('partials.events.commentList', compact('comments'));
+    }
+
+    public function getCommentsCount(Request $request)
+    {
+        $event = Event::find($request->eventId);
+        if ($event == null) {
+            return 'Event not found';
+        }
+        $count = count($event->comments->all());
+        return strval($count);
     }
 
     public function submitComment(Request $request)

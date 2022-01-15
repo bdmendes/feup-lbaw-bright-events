@@ -17,6 +17,7 @@ function getComments() {
         .then((response) => response.text())
         .then((html) => {
             document.getElementById("comment_area").innerHTML = html;
+            updateViewMoreCommentsButton();
         });
 }
 
@@ -43,14 +44,28 @@ function submitComment() {
 
 function viewMoreComments() {
     const eventId = window.location.pathname.split("/").slice(-1)[0];
-    const comment_count = document.getElementsByClassName(
-        "event_comment_entry"
-    ).length;
+    const comment_count =
+        document.getElementsByClassName("event_comment").length;
     fetch("/api/events/" + eventId + "/comments?start=" + comment_count)
         .then((response) => response.text())
         .then((html) => {
             const div = document.createElement("div");
             div.innerHTML = html;
             document.getElementById("comment_area").append(div);
+            updateViewMoreCommentsButton();
+        });
+}
+
+function updateViewMoreCommentsButton() {
+    const eventId = window.location.pathname.split("/").slice(-1)[0];
+    const button = document.getElementById("view_more_comments");
+    const shown_comments_count =
+        document.getElementsByClassName("event_comment").length;
+    fetch("/api/events/" + eventId + "/comments/count")
+        .then((response) => response.text())
+        .then((text) => {
+            const all_comments_count = parseInt(text);
+            button.style.display =
+                all_comments_count > shown_comments_count ? "block" : "none";
         });
 }

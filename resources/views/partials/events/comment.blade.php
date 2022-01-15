@@ -1,5 +1,5 @@
-<div class="border-start p-2 my-4" id="event_comment_{{ $comment->id }}" class="event_comment">
-    <div class="d-flex gap-4 event_comment_entry">
+<div class="border-start p-2 my-4 event_comment" id="event_comment_{{ $comment->id }}">
+    <div class="d-flex gap-4">
         <div class="col-3">
             @include('partials.users.smallCard', ['user' => $comment->author])
         </div>

@@ -72,7 +72,7 @@
             </form>
         @endif
         <div id="comment_area"></div>
-        <button id="view_more_comments" onclick="viewMoreComments();">View more</button>
+        <button id="view_more_comments" style="display: none;" onclick="viewMoreComments();">View more</button>
     </div>
 
     <div class="tab-pane fade" id="polls" role="tabpanel" aria-labelledby="contact-tab">
