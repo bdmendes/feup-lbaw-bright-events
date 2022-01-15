@@ -229,8 +229,8 @@
                     break;
             }
         }
-        window.onload = () => {
+        window.addEventListener('load', () => {
             redirectTab();
-        }
+        });
     </script>
 @endsection
