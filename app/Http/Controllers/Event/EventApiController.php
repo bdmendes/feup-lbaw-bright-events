@@ -28,7 +28,13 @@ class EventApiController extends Controller
         }
         $start = $request->start ?? 0;
         $size = $request->size ?? 5;
-        $comments = $event->comments()->getQuery()->orderBy('date', 'desc')->skip($start)->take($size)->get();
+        $comments_ = $event->comments()->getQuery();
+        if ($request->filled('parent')) {
+            $comments_ = $comments_->where('parent_id', $request->parent);
+        } else {
+            $comments_ = $comments_->where('parent_id', null);
+        }
+        $comments = $comments_->skip($start)->take($size)->orderBy('date', 'desc')->get();
         return view('partials.events.commentList', compact('comments'));
     }
 
@@ -38,7 +44,7 @@ class EventApiController extends Controller
         if ($event == null) {
             return 'Event not found';
         }
-        $count = count($event->comments->all());
+        $count = count($event->comments()->getQuery()->where('parent_id', null)->get());
         return strval($count);
     }
 
@@ -55,6 +61,7 @@ class EventApiController extends Controller
         $comment = Comment::create([
             'event_id' => $request->eventId,
             'commenter_id' => Auth::id(),
+            'parent_id' => $request->parent ?? null,
             'body' => $data["body"]
         ]);
         if ($comment == null) {

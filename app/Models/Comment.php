@@ -12,7 +12,8 @@ class Comment extends Model
     protected $fillable = [
         'commenter_id',
         'event_id',
-        'body'
+        'body',
+        'parent_id'
     ];
 
     public function author()

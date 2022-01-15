@@ -113,7 +113,8 @@ CREATE TABLE lbaw2134.comments (
     commenter_id INTEGER REFERENCES lbaw2134.users ON DELETE SET NULL ON UPDATE CASCADE,
     parent_id INTEGER REFERENCES lbaw2134.comments ON DELETE CASCADE ON UPDATE CASCADE DEFAULT NULL,
     body TEXT,
-    date TIMESTAMP DEFAULT NOW() NOT NULL
+    date TIMESTAMP DEFAULT NOW() NOT NULL,
+    CONSTRAINT past_date CHECK (date <= NOW())
 );
 
 CREATE TABLE lbaw2134.notifications (
@@ -790,27 +791,28 @@ INSERT INTO lbaw2134.USER_POLL_OPTIONS  VALUES
 	(106, 103 ) ,
 	(108, 105 ) ;
 INSERT INTO lbaw2134.COMMENTS  VALUES
-	( 100, 100, 103, null, 'Very nice event', TO_TIMESTAMP('2022/02/19 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
+	( 100, 100, 103, null, 'Very nice event', TO_TIMESTAMP('2021/02/19 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
 	( 101, 101, 105, null, 'NiCe event', TO_TIMESTAMP('2021/12/14 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
 	( 102, 101, 106, null, 'Very nice event', TO_TIMESTAMP('2021/12/15 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
-	( 103, 103, 102, null, 'Looking forward to it!', TO_TIMESTAMP('2021/12/25 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
-	( 104, 104, 105, null, 'This event is bloat', TO_TIMESTAMP('2022/01/03 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
-	( 105, 105, 104, null, 'NiCe event', TO_TIMESTAMP('2022/01/05 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
-	( 106, 105, 106, null, 'Very nice event', TO_TIMESTAMP('2022/02/06 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
-	( 107, 106, 103, null, 'Looking forward to it!', TO_TIMESTAMP('2022/01/28 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
-	( 108, 106, 109, null, 'Very nice event', TO_TIMESTAMP('2022/02/08 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
+	( 103, 100, 102, null, 'Looking forward to it!', TO_TIMESTAMP('2021/12/25 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
+	( 104, 104, 105, null, 'This event is bloat', TO_TIMESTAMP('2021/01/03 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
+	( 105, 105, 104, null, 'NiCe event', TO_TIMESTAMP('2021/01/05 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
+	( 106, 105, 106, null, 'Very nice event', TO_TIMESTAMP('2021/02/06 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
+	( 107, 106, 103, null, 'Looking forward to it!', TO_TIMESTAMP('2021/01/28 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
+	( 108, 106, 109, null, 'Very nice event', TO_TIMESTAMP('2021/02/08 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
 	( 109, 107, 101, null, 'Very nice event', TO_TIMESTAMP('2021/12/21 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
-	( 110, 107, 105, null, 'can my girlfriend cum?', TO_TIMESTAMP('2022/02/06 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
+	( 110, 107, 105, null, 'can my girlfriend cum?', TO_TIMESTAMP('2021/02/06 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
 	( 111, 108, 103, null, 'NiCe event', TO_TIMESTAMP('2021/12/18 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
 	( 112, 108, 106, null, 'This event is bloat', TO_TIMESTAMP('2021/12/08 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
-	( 113, 109, 100, null, 'Very nice event', TO_TIMESTAMP('2022/01/06 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
+	( 113, 109, 100, null, 'Very nice event', TO_TIMESTAMP('2021/01/06 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
 	( 114, 109, 102, null, 'NiCe event', TO_TIMESTAMP('2021/12/25 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
-	( 115, 109, 109, null, 'This event is bloat', TO_TIMESTAMP('2022/02/13 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
-	( 116, 110, 101, null, 'Bonjour', TO_TIMESTAMP('2022/02/09 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
-	( 117, 110, 109, null, 'Nice event', TO_TIMESTAMP('2022/01/08 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
+	( 115, 109, 109, null, 'This event is bloat', TO_TIMESTAMP('2021/02/13 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
+	( 116, 110, 101, null, 'Bonjour', TO_TIMESTAMP('2021/02/09 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
+	( 117, 110, 109, null, 'Nice event', TO_TIMESTAMP('2021/01/08 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
 	( 118, 111, 102, null, 'Bonjour', TO_TIMESTAMP('2021/12/06 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
 	( 119, 111, 103, null, 'can my girlfriend cum?', TO_TIMESTAMP('2021/12/26 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
-	( 120, 111, 105, null, 'can my girlfriend cum?', TO_TIMESTAMP('2021/12/07 00:00', 'YYYY/MM/DD/ HH24:MI') ) ;
+	( 120, 111, 105, null, 'can my girlfriend cum?', TO_TIMESTAMP('2021/12/07 00:00', 'YYYY/MM/DD/ HH24:MI') ) ,
+    ( 121, 100, 103, 100, 'Agreed!', TO_TIMESTAMP('2021/02/19 00:00', 'YYYY/MM/DD/ HH24:MI') ) ;
 
 INSERT INTO lbaw2134.REPORTS VALUES
 	(100, TO_TIMESTAMP('2021/11/29 00:00', 'YYYY/MM/DD/ HH24:MI'), 'Is this a typo?', 'Nudity or explicit content', null, null, null, 120);

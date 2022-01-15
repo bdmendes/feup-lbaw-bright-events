@@ -165,6 +165,17 @@ function removeErrors(id) {
     }
 }
 
+function trimEnd(s, mask) {
+    while (~mask.indexOf(s[s.length - 1])) {
+        s = s.slice(0, -1);
+    }
+    return s;
+}
+
 function appendToUrl(str) {
-    window.history.replaceState(null, "", window.location.pathname + str);
+    window.history.replaceState(
+        null,
+        "",
+        trimEnd(window.location.pathname, "/") + str
+    );
 }
