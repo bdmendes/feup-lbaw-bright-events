@@ -15,6 +15,7 @@
                 <h2>Users</h2>
             </a>
             @if (Auth::check())
+                @include('layouts.notifications')
                 @if (Auth::user()->is_admin)
                     <a class="nav-item nav-link" href="{{ route('reportsDash') }}">
                         <h2>Dashboard</h2>

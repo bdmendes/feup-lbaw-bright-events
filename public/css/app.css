@@ -1,3 +1,11 @@
+:root {
+    --primary-color: #2b4162;
+    --secondary-color: #fd7233;
+    --third-color: #f9deca;
+    --dark-color: #91a0ad;
+    --light-color: #f7fff7;
+}
+
 html {
     height: 100%;
 }
@@ -49,7 +57,7 @@ li {
 
 .tag {
     color: #f7fff7;
-    background-color: #2b4162;
+    background-color: var(--primary-color);
     border-radius: 15px;
     padding: 5px 10px;
 }
@@ -76,4 +84,44 @@ li {
 
 .errorBorder {
     border: 1px solid red !important;
+}
+
+.notification-bell {
+    cursor: pointer;
+    transition: 0.5s;
+    color: var(--primary-color);
+    font-size: 1.2em;
+    position: relative;
+}
+
+.notification-bell:hover {
+    color: var(--secondary-color);
+}
+
+.notification-panel {
+    width: 500px;
+}
+
+.notification {
+    border-radius: 0px;
+    border-top: 1px solid var(--dark-color);
+    border-bottom: 1px solid var(--dark-color);
+    background-color: var(--light-color);
+}
+.notification-remove > span {
+    color: var(--secondary-color);
+}
+
+.notification-count {
+    position: absolute;
+    top: -2px;
+    right: -7px;
+    font-size: 10px;
+    width: 15px;
+    height: 15px;
+    text-align: center;
+    border-radius: 100%;
+    background-color: var(--secondary-color);
+    color: var(--light-color);
+    border: 1px var(--light-color) solid;
 }

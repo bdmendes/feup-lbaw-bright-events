@@ -23,6 +23,24 @@
     </script>
     <script type="text/javascript" src={{ asset('js/app.js') }} defer>
     </script>
+    <script type="text/javascript" src={{ asset('js/notification.js') }}>
+    </script>
+
+    <script src="//js.pusher.com/3.1/pusher.min.js"></script>
+    <script>
+        var pusher = new Pusher('5aaef3148145a5edc935', {
+            encrypted: true,
+            cluster: 'eu'
+        });
+
+        // Subscribe to the channel we specified in our Laravel Event
+        var channel = pusher.subscribe('notification-received-channel');
+        // Bind a function to a Event (the full Laravel class)
+        channel.bind('notification-received', function(data) {
+            //console.log("teste" + data.message);
+
+        });
+      </script>
 </head>
 
 <body>
