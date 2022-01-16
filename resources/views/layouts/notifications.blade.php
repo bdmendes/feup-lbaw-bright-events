@@ -1,10 +1,11 @@
 <div class="btn-group">
-    <a class="bi bi-bell-fill notification-bell"
+    <a class="bi bi-bell-fill clickableIcon"
         id="notificationBell"
     data-bs-toggle="dropdown"
     data-bs-auto-close="outside"
+    onclick="readNotifications()"
     aria-expanded="false">
-    <div class="notification-count align-items-center  justify-content-center d-flex">0</div>
+    <div id="notificationCounter" class="notification-count align-items-center  justify-content-center d-flex">0</div>
     </a>
     <ul
     class="dropdown-menu dropdown-menu-end notification-panel p-0"
@@ -12,11 +13,12 @@
 
         <div  id="notifications" class="w-100">
             <script>
-                getNotifications();
+                window.addEventListener('load', getNotifications);
             </script>
         </div>
-        <div class="w-100 justify-content-center mt-4">
-            <button class="btn-primary"> Load more </button>
+        <div class="w-100 d-flex justify-content-center my-2">
+            <button id="getPastNotifications" class="btn-primary"
+            onclick="getPastNotifications();"> Load more </button>
         </div>
     </ul>
 </div>

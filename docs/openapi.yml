@@ -1524,10 +1524,45 @@ paths:
                     asset_id:
                       type: string
 
-  /api/notifications/{id}:
+  /api/notifications/read:
     patch:
       operationId: R602
-      summary: "R602: Edit notification"
+      summary: "R602: Read notifications"
+      description: "Marks all notifications given as read. Access: AU"
+      tags:
+        - "M06: Notifications"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+              required: [ids]
+      responses:
+        "401":
+          description: "Unauthorized. User must be logged in"
+        "404":
+          description: "Notification not found"
+        "500":
+          description: "Internal server error"
+        "200":
+          description: "Ok. Update notifications"
+
+  /api/notifications/{id}:
+    patch:
+      operationId: R603
+      summary: "R603: Edit notification"
       description: "Process the new notification information. Access: AU"
       tags:
         - "M06: Notifications"

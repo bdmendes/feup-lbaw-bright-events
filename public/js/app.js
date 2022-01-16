@@ -42,10 +42,10 @@ async function attendEventClick(eventId, attendeeId, username) {
         if (xmlHTTP.readyState == 4) {
             if (xmlHTTP.status == 200) {
                 let html = JSON.parse(xmlHTTP.response).html;
-                
+
                 let parser = new DOMParser();
                 let attendee = parser.parseFromString(html, "text/html").body.firstChild;
-                
+
                 let div = document.createElement('div');
                 div.classList.add("border", "rounded", "d-flex", "p-1");
                 div.style.width = "250px";
@@ -146,7 +146,7 @@ async function removeAttendee(eventId, attendeeId, username, is_main_btn) {
 }
 
 function remove(id) {
-    let a = $("#" + id)[0];
+    let a = document.getElementById(id);
     if (a != undefined) {
         a.remove();
     }

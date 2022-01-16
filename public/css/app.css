@@ -86,7 +86,7 @@ li {
     border: 1px solid red !important;
 }
 
-.notification-bell {
+.clickableIcon {
     cursor: pointer;
     transition: 0.5s;
     color: var(--primary-color);
@@ -94,7 +94,12 @@ li {
     position: relative;
 }
 
-.notification-bell:hover {
+.clickable {
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.clickableIcon:hover {
     color: var(--secondary-color);
 }
 
@@ -106,6 +111,12 @@ li {
     border-radius: 0px;
     border-top: 1px solid var(--dark-color);
     border-bottom: 1px solid var(--dark-color);
+    background-color: var(--light-color);
+}
+.notification[seen="1"] {
+    background-color: transparent;
+}
+.notification[seen="0"] {
     background-color: var(--light-color);
 }
 .notification-remove > span {
@@ -124,4 +135,31 @@ li {
     background-color: var(--secondary-color);
     color: var(--light-color);
     border: 1px var(--light-color) solid;
+}
+
+@keyframes rotating {
+    from {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.rotating {
+    transform: rotate(0deg);
+    animation: rotating 1s linear infinite;
+}
+
+div.bi {
+    width: fit-content;
+    height: fit-content;
 }
