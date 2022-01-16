@@ -43,9 +43,9 @@ function submitComment(parentId) {
     })
         .then((response) => response.text())
         .then((html) => {
-            const div = document.createElement("div");
-            div.innerHTML = html;
-            document.getElementById("comment_area").prepend(div);
+            document
+                .getElementById("comment_area")
+                .insertAdjacentHTML("afterbegin", html);
             element_body.value = "";
         });
 }
@@ -89,9 +89,9 @@ function viewMoreComments() {
     fetch("/api/events/" + eventId + "/comments?start=" + comment_count)
         .then((response) => response.text())
         .then((html) => {
-            const div = document.createElement("div");
-            div.innerHTML = html;
-            document.getElementById("comment_area").append(div);
+            document
+                .getElementById("comment_area")
+                .insertAdjacentElement("afterbegin", html);
             updateViewMoreCommentsButton();
         });
 }

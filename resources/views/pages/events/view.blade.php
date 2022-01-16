@@ -113,7 +113,9 @@
             </div>
 
             <div class="tab-pane fade" id="polls" role="tabpanel" aria-labelledby="contact-tab">
-                <p>Polls not implemented yet</p>
+                @foreach ($event->polls as $poll)
+                    @include('partials.events.poll', compact('poll'))
+                @endforeach
             </div>
 
             <div class="tab-pane fade" id="attendees" role="tabpanel" aria-labelledby="contact-tab">

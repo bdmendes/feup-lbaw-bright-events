@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Attendance;
+use App\Models\Poll;
 use App\Models\AttendanceRequest;
 use Illuminate\Support\Arr;
 
@@ -53,6 +54,11 @@ class Event extends Model
     public function attendances()
     {
         return $this->hasMany(Attendance::class, 'event_id');
+    }
+
+    public function polls()
+    {
+        return $this->hasMany(Poll::class, 'event_id');
     }
 
     public function attendees()
