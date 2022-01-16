@@ -9,6 +9,8 @@ use App\Models\Event;
 use App\Models\User;
 use App\Models\Attendance;
 use App\Models\Comment;
+use App\Models\Poll;
+use App\Models\PollOption;
 use App\Models\AttendanceRequest;
 use Auth;
 
@@ -81,6 +83,37 @@ class EventApiController extends Controller
         }
         $comment->delete();
         return response("Comment successfully deleted", 200);
+    }
+
+    public function voteOnPoll(Request $request, $is_delete)
+    {
+        if (!Auth::check()) {
+            return response("User is not logged in", 403);
+        }
+        $poll = Poll::find($request->pollId);
+        if ($poll == null) {
+            return response("Poll not found", 404);
+        }
+        $poll_option = PollOption::find($request->pollOption);
+        if ($poll_option == null) {
+            return response("Poll option not found", 404);
+        }
+        if ($is_delete) {
+            $poll_option->voters()->detach(Auth::id());
+        } else {
+            $poll_option->voters()->attach(Auth::id());
+        }
+        return response("Vote change saved successfully", 200);
+    }
+
+    public function addVote(Request $request)
+    {
+        return $this->voteOnPoll($request, false);
+    }
+
+    public function removeVote(Request $request)
+    {
+        return $this->voteOnPoll($request, true);
     }
 
     public function attendEventClick(Request $request)

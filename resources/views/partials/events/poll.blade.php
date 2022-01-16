@@ -6,7 +6,8 @@
         @foreach ($poll->options as $option)
             <input type="checkbox" name="poll_{{ $poll->id }}_option"
                 id="poll_{{ $poll->id }}_option_{{ $option->id }}" {{ !Auth::check() ? 'disabled' : '' }}
-                {{ Auth::check() && $option->hasBeenSelectedBy(Auth::id()) ? 'checked' : '' }}>
+                {{ Auth::check() && $option->hasBeenSelectedBy(Auth::id()) ? 'checked' : '' }}
+                onchange="changePollVote({{ $poll->id }}, {{ $option->id }});">
             <label class="ms-2" for="poll_{{ $poll->id }}_option_{{ $option->id }}"
                 style="font-weight: normal;">
                 {{ $option->name }}

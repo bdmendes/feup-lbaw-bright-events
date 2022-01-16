@@ -1,6 +1,6 @@
 function deleteComment(eventId, commentId, parentId) {
     fetch("/api/events/" + eventId + "/comments/" + commentId, {
-        method: "POST",
+        method: "DELETE",
     }).then((response) => {
         if (response.ok) {
             const comment = document.getElementById(
