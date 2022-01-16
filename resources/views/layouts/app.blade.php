@@ -23,10 +23,11 @@
     </script>
     <script type="text/javascript" src={{ asset('js/app.js') }} defer>
     </script>
-    <script type="text/javascript" src={{ asset('js/notification.js') }}>
-    </script>
+    <script type="text/javascript" src={{ asset('js/notification.js')}} defer></script>
+    <script type="text/javascript" src={{ asset('js/comments.js') }} defer></script>
 
     <script src="//js.pusher.com/3.1/pusher.min.js"></script>
+
     <script>
         var pusher = new Pusher('5aaef3148145a5edc935', {
             encrypted: true,
@@ -41,6 +42,7 @@
 
         });
       </script>
+
 </head>
 
 <body>

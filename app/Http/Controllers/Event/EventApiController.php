@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Attendance;
+use App\Models\Comment;
 use App\Models\AttendanceRequest;
 use Auth;
 
@@ -21,8 +22,65 @@ class EventApiController extends Controller
 
     public function getComments(Request $request)
     {
-        $event = Event::findOrFail($request->id);
-        dd(json_encode($event->comments, JSON_PRETTY_PRINT));
+        $event = Event::find($request->eventId);
+        if ($event == null) {
+            return 'Event not found';
+        }
+        $start = $request->start ?? 0;
+        $size = $request->size ?? 5;
+        $comments_ = $event->comments()->getQuery();
+        if ($request->filled('parent')) {
+            $comments_ = $comments_->where('parent_id', $request->parent);
+        } else {
+            $comments_ = $comments_->where('parent_id', null);
+        }
+        $comments = $comments_->skip($start)->take($size)->orderBy('date', 'desc')->get();
+        return view('partials.events.commentList', compact('comments'));
+    }
+
+    public function getCommentsCount(Request $request)
+    {
+        $event = Event::find($request->eventId);
+        if ($event == null) {
+            return 'Event not found';
+        }
+        $count = count($event->comments()->getQuery()->where('parent_id', null)->get());
+        return strval($count);
+    }
+
+    public function submitComment(Request $request)
+    {
+        $event = Event::find($request->eventId);
+        if ($event == null) {
+            return 'Could not find event';
+        }
+        $data = json_decode($request->getContent(), true);
+        if ($data["body"] == null || Auth::id() == null) {
+            return 'Invalid data!';
+        }
+        $comment = Comment::create([
+            'event_id' => $request->eventId,
+            'commenter_id' => Auth::id(),
+            'parent_id' => $request->parent ?? null,
+            'body' => $data["body"]
+        ]);
+        if ($comment == null) {
+            return 'Could not create comment';
+        }
+        return view('partials.events.comment', compact('comment'));
+    }
+
+    public function deleteComment(Request $request)
+    {
+        if (!Auth::check()) {
+            return response("User is not logged in", 403);
+        }
+        $comment = Comment::find($request->commentId);
+        if ($comment == null) {
+            return response("Comment not found", 404);
+        }
+        $comment->delete();
+        return response("Comment successfully deleted", 200);
     }
 
     public function attendEventClick(Request $request)

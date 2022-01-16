@@ -1,5 +1,6 @@
 /**
- * Reads from an input that has a datalist, and adds one span and hidden input to div
+ * Reads from an input that has a datalist, and adds one span and hidden input
+ * to div
  * @param {*} div -> Div to add the new span elem
  * @param {*} inputId -> Div to read the input from
  * @param {*} arrayId  -> Array id, to add to the hidden input's name field
@@ -44,9 +45,10 @@ async function attendEventClick(eventId, attendeeId, username) {
                 let html = JSON.parse(xmlHTTP.response).html;
 
                 let parser = new DOMParser();
-                let attendee = parser.parseFromString(html, "text/html").body.firstChild;
+                let attendee = parser.parseFromString(html, "text/html").body
+                    .firstChild;
 
-                let div = document.createElement('div');
+                let div = document.createElement("div");
                 div.classList.add("border", "rounded", "d-flex", "p-1");
                 div.style.width = "250px";
                 div.id = username + "-entry";
@@ -161,4 +163,19 @@ function removeErrors(id) {
     if (input != undefined) {
         input.classList.remove("errorBorder");
     }
+}
+
+function trimEnd(s, mask) {
+    while (~mask.indexOf(s[s.length - 1])) {
+        s = s.slice(0, -1);
+    }
+    return s;
+}
+
+function appendToUrl(str) {
+    window.history.replaceState(
+        null,
+        "",
+        trimEnd(window.location.pathname, "/") + str
+    );
 }

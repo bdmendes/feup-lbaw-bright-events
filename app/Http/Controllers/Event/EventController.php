@@ -199,7 +199,7 @@ class EventController extends Controller
         $event = Event::find($id);
         $this->authorize('view', $event);
         $users = User::where('is_admin', 'false')->get();
-        $invites = $event->invites();
+        $invites = $event->getInvites();
         return view("pages.events.view", compact('users', 'event', 'invites'));
     }
 

@@ -22,6 +22,11 @@ Route::post('events/{eventId}/attendees', "Event\EventApiController@attendEventC
 Route::delete('events/{eventId}/attendees', "Event\EventApiController@leaveEventClick")->name('leaveEventClick');
 Route::post('events/{eventId}/invites', 'Event\EventApiController@invite');
 Route::get('events/{eventId}/invites', 'Event\EventApiController@getInvites');
+Route::get('events/{eventId}/invites', 'Event\EventApiController@getInvites');
+Route::get('events/{eventId}/comments', 'Event\EventApiController@getComments')->name('getComments');
+Route::get('events/{eventId}/comments/count', 'Event\EventApiController@getCommentsCount')->name('getCommentsCount');
+Route::post('events/{eventId}/comments', 'Event\EventApiController@submitComment')->name('submitComment');
+Route::post('events/{eventId}/comments/{commentId}', 'Event\EventApiController@deleteComment')->name('deleteComment');
 
 // Reports
 // Route::post('reports/event', 'Report\ReportAPIController@reportEvent')->name('report');
