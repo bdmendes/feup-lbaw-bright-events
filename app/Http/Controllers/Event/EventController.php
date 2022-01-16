@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Events\NotificationReceived;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\File;
 use App\Models\Tag;
 use App\Models\AttendanceRequest;
+
 
 use Carbon\Carbon;
 use Validator;
@@ -140,7 +142,7 @@ class EventController extends Controller
         if ($event->organizer_id != Auth::user()->id) {
             return;
         }
-        
+
         if (!is_null($request->title) && $event->description != $request->description) {
             $event->description = $request->description;
         }
@@ -229,6 +231,7 @@ class EventController extends Controller
             $event->is_disabled = true;
             $event->save();
             //$event->delete();
+            event(new NotificationReceived('event deleted', $event->attendees));
         }
         return redirect()->route('profile', ['username' => Auth::user()->username]);
     }

@@ -1,6 +1,6 @@
 <span id="notificationCount" class="d-none">{{count($notifications)}}</span>
 @forelse ($notifications as $notification)
-<div id="notification{{$notification->id}}" class="notification d-flex w-100 p-2" seen="{{$notification->is_seen ?? '0'}}">
+<div id="notification{{$notification->id}}" class="notification d-flex w-100 p-2" seen="{{$notification->is_seen ? '1' : '0'}}">
     <div class="col-sm-1">
         @switch($notification->notification_type)
             @case('Disabled event')
@@ -100,9 +100,9 @@
                 @break
 
             @case('New comment')
-                @include('partials.hyperlinks.user', ['poll' => $notification->comment->commenter])
-                commented on you event
-                @include('partials.hyperlinks.poll', ['poll' => $notification->comment->event])
+                @include('partials.hyperlinks.user', ['user' => $notification->comment->author])
+                commented on your event
+                @include('partials.hyperlinks.event', ['event' => $notification->comment->event])
                 @break
 
             @case('New poll')

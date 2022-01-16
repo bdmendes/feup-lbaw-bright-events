@@ -172,5 +172,3 @@ function refreshCounter(){
     let counter = document.getElementById("notificationCounter");
     counter.innerHTML = notSeen;
 }
-
-window.addEventListener('load', getNotifications);

@@ -108,7 +108,18 @@
                             onclick="submitComment();">Submit</button>
                     </form>
                 @endif
-                <div id="comment_area"></div>
+                <script>
+                    let commentsChannel = pusher.subscribe("comment-received-channel-{{$event->id}}");
+
+                    commentsChannel.bind('comment-received', function(data) {
+                        alert("aosdfjasdojfoasd")
+                        getComments();
+                    });
+
+                </script>
+                <div id="comment_area">
+
+                </div>
                 <button id="view_more_comments" style="display: none;" onclick="viewMoreComments();">View more</button>
             </div>
 

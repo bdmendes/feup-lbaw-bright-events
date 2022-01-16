@@ -24,7 +24,7 @@
     <script type="text/javascript" src={{ asset('js/app.js') }} defer>
     </script>
     <script type="text/javascript" src={{ asset('js/notification.js')}}></script>
-    <script type="text/javascript" src={{ asset('js/comments.js') }} defer></script>
+    <script type="text/javascript" src={{ asset('js/comments.js') }}></script>
 
     <script src="//js.pusher.com/3.1/pusher.min.js"></script>
 
@@ -34,13 +34,21 @@
             cluster: 'eu'
         });
 
-        // Subscribe to the channel we specified in our Laravel Event
-        var channel = pusher.subscribe('notification-received-channel');
-        // Bind a function to a Event (the full Laravel class)
-        channel.bind('notification-received', function(data) {
-            //console.log("teste" + data.message);
+        function subscribeNotifications(user){
 
-        });
+        }
+        // Subscribe to the channel we specified in our Laravel Event
+        @if(Auth::check())
+            var channel = pusher.subscribe("notification-received-channel-{{Auth::user()->username}}");
+
+            channel.bind('notification-received', function(data) {
+                getNotifications();
+
+            });
+
+        @endif
+        // Bind a function to a Event (the full Laravel class)
+
       </script>
 
 </head>
