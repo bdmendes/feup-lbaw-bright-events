@@ -20,12 +20,9 @@ function getNotifications(){
     .then(html => {
         remove(refreshId);
         let notifications = document.getElementById("notifications");
-
         notifications.insertAdjacentHTML('beforeend', html);
-        let counter = document.getElementById("notificationCounter");
-        let n = document.getElementById("notificationCount").innerText;
         remove("notificationCount");
-        counter.innerHTML = n;
+        refreshCounter();
     });
 }
 
@@ -175,3 +172,5 @@ function refreshCounter(){
     let counter = document.getElementById("notificationCounter");
     counter.innerHTML = notSeen;
 }
+
+window.addEventListener('load', getNotifications);
