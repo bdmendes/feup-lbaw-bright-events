@@ -444,7 +444,7 @@ BEGIN
         INSERT INTO lbaw2134.notifications
         (notification_type, event_id, attendance_request_id, poll_id, comment_id, addressee_id)
         SELECT * FROM (
-            (VALUES ('Closed poll', NEW.event_id, NULL, NEW.id, NULL)) AS foo
+            (VALUES (CAST('Closed Poll' AS lbaw2134.notification_type), NEW.event_id, CAST(NULL AS INTEGER), NEW.id, CAST(NULL AS INTEGER))) AS foo
             CROSS JOIN
             (
                 SELECT DISTINCT voter_id

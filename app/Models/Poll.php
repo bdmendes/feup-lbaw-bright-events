@@ -17,7 +17,8 @@ class Poll extends Model
         'event_id',
         'creator_id',
         'title',
-        'description'
+        'description',
+        'is_open'
     ];
 
     public function options()

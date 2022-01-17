@@ -103,3 +103,14 @@ function switchCommentReplyAreaDisplay(commentId) {
   const hidden = elem.style.display === 'none';
   elem.style.display = hidden ? 'block' : 'none';
 }
+
+function prependComment(commentId) {
+  const eventId = window.location.pathname.split('/').slice(-1)[0];
+  fetch('/api/events/' + eventId + 'comments/' + commentId)
+      .then((response) => response.text())
+      .then((html) => {
+        const comment_area = document.getElementById('comment_area');
+        comment_area.insertAdjacentElement('afterbegin', html);
+        alert('inserted comment');
+      });
+}

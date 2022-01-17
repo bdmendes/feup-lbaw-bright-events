@@ -92,10 +92,7 @@ function getPolls() {
       .then((response) => response.text())
       .then((html) => {
         document.getElementById('poll_area').innerHTML = html;
-        const collapsed =
-            document.querySelector('#poll_area .accordion-collapse');
-        if (collapsed === null) return;
-        collapsed.classList.add('show');
+        expandPollEntry();
       });
 }
 
@@ -107,5 +104,35 @@ function deletePoll(pollId) {
     if (!response.ok) return;
     const poll_entry = document.getElementById('poll_' + pollId + '_entry');
     poll_entry.remove();
+  })
+}
+
+function expandPollEntry(pollId) {
+  const collapsed = pollId == null ?
+      document.querySelector('#poll_area .accordion-collapse') :
+      document.getElementById('poll_' + pollId + '_item_body');
+  if (collapsed === null) return;
+  collapsed.classList.add('show');
+}
+
+function updatePoll(pollId) {
+  const eventId = window.location.pathname.split('/').slice(-1)[0];
+  const poll_entry = document.getElementById('poll_' + pollId + '_entry');
+  fetch('/api/events/' + eventId + '/polls/' + pollId, {method: 'GET'})
+      .then((response) => response.text())
+      .then((html) => {
+        poll_entry.insertAdjacentHTML('beforebegin', html);
+        poll_entry.remove();
+        expandPollEntry(pollId);
+      });
+}
+
+function switchPollState(pollId) {
+  const eventId = window.location.pathname.split('/').slice(-1)[0];
+  fetch('/api/events/' + eventId + '/polls/' + pollId, {
+    method: 'POST'
+  }).then((response) => {
+    if (!response.ok) return;
+    updatePoll(pollId);
   })
 }

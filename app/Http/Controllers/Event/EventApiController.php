@@ -76,6 +76,16 @@ class EventApiController extends Controller
         return view('partials.events.comment', compact('comment'));
     }
 
+    public function getComment(Request $request)
+    {
+        $event = Event::find($request->eventId);
+        $comment = Comment::find($request->commentId);
+        if ($event == null || $comment == null || $comment->event_id != $request->eventId) {
+            return response("Invalid request data", 404);
+        }
+        return view('partials.events.comment', compact('comment'));
+    }
+
     public function deleteComment(Request $request)
     {
         if (!Auth::check()) {
@@ -143,7 +153,8 @@ class EventApiController extends Controller
         $poll = Poll::create([
             'title' => $data["title"],
             'description' => $data["description"],
-            'event_id' => $event->id
+            'event_id' => $event->id,
+            'is_open' => true
         ]);
         $options = [];
         foreach ($data["options"] as $name) {
@@ -167,6 +178,29 @@ class EventApiController extends Controller
         $can_vote = $this->canVote($request->eventId, Auth::id());
         $polls = $event->polls()->getQuery()->orderBy('date', 'desc')->get();
         return view('partials.events.pollList', compact('polls', 'can_vote'));
+    }
+
+    public function getPoll(Request $request)
+    {
+        $event = Event::find($request->eventId);
+        $poll = Poll::find($request->pollId);
+        if ($event == null || $poll == null || $poll->event_id != $request->eventId) {
+            return response("Invalid request data", 404);
+        }
+        $can_vote = $this->canVote($request->eventId, Auth::id());
+        return view('partials.events.poll', compact('poll', 'can_vote'));
+    }
+
+    public function switchPollState(Request $request)
+    {
+        $event = Event::find($request->eventId);
+        $poll = Poll::find($request->pollId);
+        if ($event == null || $poll == null || $poll->event_id != $request->eventId) {
+            return response("Invalid request data", 404);
+        }
+        $poll->is_open = !$poll->is_open;
+        $poll->save();
+        return response('Poll state successfully switched', 200);
     }
 
     public function removePoll(Request $request)
