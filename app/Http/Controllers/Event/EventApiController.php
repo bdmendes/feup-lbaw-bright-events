@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Event;
 
+use App\Events\NotificationReceived;
+use App\Events\EventPusher;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
@@ -66,6 +68,8 @@ class EventApiController extends Controller
             'parent_id' => $request->parent ?? null,
             'body' => $data["body"]
         ]);
+        event(new NotificationReceived('new comment', [$event->organizer]));
+        event(new EventPusher('comment', $event));
         if ($comment == null) {
             return 'Could not create comment';
         }
@@ -119,6 +123,13 @@ class EventApiController extends Controller
         return $this->voteOnPoll($request, true);
     }
 
+    public function canVote($eventId, $userId)
+    {
+        $user = User::find($userId);
+        $event = Event::find($eventId);
+        return $user != null && $event != null && $event->attendances()->getQuery()->where('attendee_id', $userId)->exists();
+    }
+
     public function submitPoll(Request $request)
     {
         $event = Event::find($request->eventId);
@@ -143,7 +154,8 @@ class EventApiController extends Controller
             array_push($options, $option);
         }
         $poll->options()->saveMany($options);
-        return response(view('partials.events.poll', compact('poll')), 200);
+        $can_vote = $this->canVote($request->eventId, Auth::id());
+        return response(view('partials.events.poll', compact('poll', 'can_vote')), 200);
     }
 
     public function getPolls(Request $request)
@@ -152,8 +164,20 @@ class EventApiController extends Controller
         if ($event == null) {
             return 'Event not found';
         }
+        $can_vote = $this->canVote($request->eventId, Auth::id());
         $polls = $event->polls()->getQuery()->orderBy('date', 'desc')->get();
-        return view('partials.events.pollList', compact('polls'));
+        return view('partials.events.pollList', compact('polls', 'can_vote'));
+    }
+
+    public function removePoll(Request $request)
+    {
+        $event = Event::find($request->eventId);
+        $poll = Poll::find($request->pollId);
+        if ($event == null || $poll == null || $poll->event_id != $request->eventId) {
+            return response("Invalid request data", 404);
+        }
+        $poll->delete();
+        return response("Poll successfully deleted", 200);
     }
 
     public function attendEventClick(Request $request)
@@ -171,7 +195,7 @@ class EventApiController extends Controller
         $user = User::find($request->attendee_id);
 
         $returnHTML = view('partials.users.smallCard')->with('user', $user)->render();
-        return response()->json(array('success' => true, 'html'=>$returnHTML), 200);
+        return response()->json(array('success' => true, 'html' => $returnHTML), 200);
     }
 
     public function leaveEventClick(Request $request)
@@ -210,7 +234,9 @@ class EventApiController extends Controller
             'is_invite' => true
         ]);
         $returnHTML = view('partials.users.smallCard')->with('user', $user)->render();
-        return response()->json(array('success' => true, 'html'=>$returnHTML), 200);
+
+        event(new NotificationReceived('invite', [$user]));
+        return response()->json(array('success' => true, 'html' => $returnHTML), 200);
     }
 
     public function getInvites(Request $request)

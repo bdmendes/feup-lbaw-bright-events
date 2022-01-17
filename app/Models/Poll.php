@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\PollOption;
+use App\Models\Event;
 
 class Poll extends Model
 {
@@ -22,5 +23,10 @@ class Poll extends Model
     public function options()
     {
         return $this->hasMany(PollOption::class, 'poll_id');
+    }
+
+    public function event()
+    {
+        return $this->belongsTo(Event::class, 'event_id');
     }
 }

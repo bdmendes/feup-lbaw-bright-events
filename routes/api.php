@@ -31,6 +31,7 @@ Route::post('events/{eventId}/polls/{pollId}/{pollOption}', 'Event\EventApiContr
 Route::delete('events/{eventId}/polls/{pollId}/{pollOption}', 'Event\EventApiController@removeVote')->name('removeVote');
 Route::post('events/{eventId}/polls', 'Event\EventApiController@submitPoll')->name('createPoll');
 Route::get('events/{eventId}/polls', 'Event\EventApiController@getPolls')->name('getPolls');
+Route::delete('events/{eventId}/polls/{pollId}', 'Event\EventApiController@removePoll')->name('removePoll');
 
 // Reports
 // Route::post('reports/event', 'Report\ReportAPIController@reportEvent')->name('report');
@@ -38,3 +39,10 @@ Route::get('events/{eventId}/polls', 'Event\EventApiController@getPolls')->name(
 // Route::post('reports/comment', 'Report\ReportAPIController@reportComment');
 // Route::get('reports', 'Report\ReportAPIController@getReports');
 // Route::get('reports/{report_id}', 'Report\ReportAPIController@show');
+
+//Notifications
+Route::get('notifications', 'Notifications\NotificationController@get')->name('notifications');
+Route::get('notifications/past', 'Notifications\NotificationController@getPast')->name('pastNotifications');
+Route::post('notifications/read', 'Notifications\NotificationController@read')->name('readNotifications');
+Route::post('notifications/{id}', 'Notifications\NotificationController@edit')->name('editNotifcation');
+Route::delete('notifications/{id}', 'Notifications\NotificationController@delete');

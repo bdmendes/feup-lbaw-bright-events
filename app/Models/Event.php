@@ -61,17 +61,6 @@ class Event extends Model
         return $this->hasMany(Poll::class, 'event_id');
     }
 
-    public function attendees()
-    {
-        $attendees = [];
-        
-        foreach ($this->attendances as $attendance) {
-            $attendees[] = User::find($attendance->attendee_id);
-        }
-        
-        return $attendees;
-    }
-
     public function getInvites()
     {
         return AttendanceRequest::where('event_id', $this->id)->get();

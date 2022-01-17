@@ -109,7 +109,16 @@
                             onclick="submitComment();">Submit</button>
                     </form>
                 @endif
-                <div id="comment_area"></div>
+                <script>
+                    let commentsChannel = pusher.subscribe("comment-received-channel-{{ $event->id }}");
+
+                    commentsChannel.bind('comment-received', function(data) {
+                        getComments();
+                    });
+                </script>
+                <div id="comment_area">
+
+                </div>
                 <button id="view_more_comments" style="display: none;" onclick="viewMoreComments();">View more</button>
             </div>
 
@@ -164,19 +173,19 @@
                 @endif
 
                 <div class="p-4 d-flex gap-4 flex-wrap justify-content" id="attendees-list">
-                    @forelse ($event->attendees() as $user)
-                        <div id="{{ $user->username . '-entry' }}" class="border rounded d-flex p-1"
+                    @forelse ($event->attendances as $attendance)
+                        <div id="{{ $attendance->attendee->username . '-entry' }}" class="border rounded d-flex p-1"
                             style="width: 250px;">
                             @if (Auth::check() && Auth::user()->id == $event->organizer_id)
                                 @include('partials.users.smallCard', compact('user'), compact('event'))
                                 <div class="align-self-center" style="margin-left:auto;">
                                     <button id="{{ $user->username . '-btn' }}" class="btn btn-light"
-                                        onclick="removeAttendee({{ $event->id }}, {{ $user->id }}, '{{ $user->username }}', false)">
+                                        onclick="removeAttendee({{ $event->id }}, {{ $attendance->attendee->id }}, '{{ $attendance->attendee->username }}', false)">
                                         <i class="bi bi-x-circle"></i>
                                     </button>
                                 </div>
                             @else
-                                @include ('partials.users.smallCard', compact('user'))
+                                @include ('partials.users.smallCard', ['user' => $attendance->attendee])
                             @endif
                         </div>
                     @empty

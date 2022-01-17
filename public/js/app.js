@@ -148,7 +148,7 @@ async function removeAttendee(eventId, attendeeId, username, is_main_btn) {
 }
 
 function remove(id) {
-    let a = $("#" + id)[0];
+    let a = document.getElementById(id);
     if (a != undefined) {
         a.remove();
     }

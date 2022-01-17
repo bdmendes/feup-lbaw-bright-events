@@ -16,7 +16,7 @@ class EventPolicy
         if ($event->is_disabled) {
             return false;
         }
-        if (!$event->is_private || $event->organizer_id == $user->id) {
+        if (!$event->is_private || ($user == null || $event->organizer_id == $user->id)) {
             return true;
         }
         foreach ($event->attendances as $attendance) {
