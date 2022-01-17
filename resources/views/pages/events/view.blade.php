@@ -112,7 +112,6 @@
                     let commentsChannel = pusher.subscribe("comment-received-channel-{{$event->id}}");
 
                     commentsChannel.bind('comment-received', function(data) {
-                        alert("aosdfjasdojfoasd")
                         getComments();
                     });
 

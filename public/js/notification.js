@@ -1,4 +1,4 @@
-function getNotifications(){
+function getNotifications(event, showNewOnes = false){
     let refreshId = addRefreshIcon("notifications", true);
     let lastNotification = document.getElementsByClassName("notification");
     if(lastNotification.length > 0){
@@ -6,10 +6,10 @@ function getNotifications(){
     } else {
         lastNotification = null;
     }
-    let lastId = lastNotification != null ? lastNotification.id : null;
+    let lastId = lastNotification != null ? lastNotification.id.replace("notification", "") : null;
     let url = "/api/notifications";
     if(lastId != null){
-        url += "?lastSeen="+lastNotification;
+        url += "?last="+lastId;
     }
 
     let  options = {
@@ -19,20 +19,34 @@ function getNotifications(){
     .then((response) => response.text())
     .then(html => {
         remove(refreshId);
+        remove("emptyNotifications");
         let notifications = document.getElementById("notifications");
-        notifications.insertAdjacentHTML('beforeend', html);
+        notifications.insertAdjacentHTML('afterbegin', html);
+        let count = parseInt(document.getElementById("notificationCount").innerText);
         remove("notificationCount");
+        if(showNewOnes){
+            let texts = document.querySelectorAll(".notification-text");
+            console.log("count = " + texts.length + " - " + count);
+            for(let i=0; i<count; i++){
+
+                let text = texts[i].innerText;
+                addGrowlMessage(text, 'info');
+            }
+        }
+        if(count < 5){
+            getPastNotifications(null, 5 - count);
+        }
         refreshCounter();
+
     });
 }
 
-function getPastNotifications(){
+function getPastNotifications(event = null, size = 10){
     remove("emptyNotifications");
     let refreshId = addRefreshIcon("notifications", false);
     let notifications = document.getElementsByClassName("notification");
     let url = "/api/notifications/past";
     let offset = notifications.length;
-    let size = 10;
     url += "?" + "offset=" + offset + "&size="+size;
 
     let  options = {
@@ -49,9 +63,10 @@ function getPastNotifications(){
 
         let n = document.getElementById("notificationCount").innerText;
         if(parseInt(n) < size){
+            console.log("n " + n + " size = " + size);
             remove("getPastNotifications");
-        remove(document.getElementById("notificationCount"));
         }
+        remove("notificationCount");
     });
 }
 function readNotifications(){
@@ -171,4 +186,19 @@ function refreshCounter(){
     let notSeen = document.querySelectorAll(".notification[seen='0']").length;
     let counter = document.getElementById("notificationCounter");
     counter.innerHTML = notSeen;
+}
+
+let growlId = 0;
+function addGrowlMessage(message, type){
+    let id = growlId++;
+    let growls = document.getElementById("growls");
+    let newGrowlHTML =
+    `
+    <div id="growl${id}" class="growl ">
+    ${message}
+    </div>
+    `
+    growls.insertAdjacentHTML("beforeEnd", newGrowlHTML);
+    setTimeout(() => {document.getElementById("growl"+id).classList.add("opacity0");}, 3000);
+    setTimeout(() => {document.getElementById("growl"+id).remove();}, 4000);
 }

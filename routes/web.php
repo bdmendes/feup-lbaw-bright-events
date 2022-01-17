@@ -41,10 +41,3 @@ Route::post('users/{username}', 'User\UserController@block');
 Route::delete('users/{username}', 'User\UserController@delete');
 Route::get('users/{username}/edit', 'User\UserController@edit')->name('editProfile');
 Route::post('users/{username}/edit', 'User\UserController@editUser')->name('editUser');
-
-//Notifications
-Route::get('api/notifications', 'Notifications\NotificationController@get')->name('notifications');
-Route::get('api/notifications/past', 'Notifications\NotificationController@getPast')->name('pastNotifications');
-Route::post('api/notifications/read', 'Notifications\NotificationController@read')->name('readNotifications');
-Route::post('api/notifications/{id}', 'Notifications\NotificationController@edit')->name('editNotifcation');
-Route::delete('api/notifications/{id}', 'Notifications\NotificationController@delete');

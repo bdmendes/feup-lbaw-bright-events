@@ -1,1 +1,1 @@
-<a href="users/{{$user->id}}">{{$user->name}} </a>
+<a href="/users/{{$user->username}}">{{$user->name}} </a>

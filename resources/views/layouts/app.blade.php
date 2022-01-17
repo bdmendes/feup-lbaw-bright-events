@@ -42,7 +42,7 @@
             var channel = pusher.subscribe("notification-received-channel-{{Auth::user()->username}}");
 
             channel.bind('notification-received', function(data) {
-                getNotifications();
+                getNotifications(null, true);
 
             });
 
@@ -54,11 +54,18 @@
 </head>
 
 <body>
+
     @include('layouts.navbar')
 
-    <section id="content">
-        @yield('content')
-    </section>
+    <div class="w-100 position-relative">
+        <div id="growls">
+
+        </div>
+        <section id="content">
+
+            @yield('content')
+        </section>
+    </div>
 
     @include('layouts.footer')
 

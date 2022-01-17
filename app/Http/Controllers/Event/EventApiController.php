@@ -141,6 +141,8 @@ class EventApiController extends Controller
             'is_invite' => true
         ]);
         $returnHTML = view('partials.users.smallCard')->with('user', $user)->render();
+
+        event(new NotificationReceived('invite', [$user]));
         return response()->json(array('success' => true, 'html' => $returnHTML), 200);
     }
 
