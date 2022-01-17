@@ -69,7 +69,7 @@ class EventApiController extends Controller
             'body' => $data["body"]
         ]);
         event(new NotificationReceived('new comment', [$event->organizer]));
-        event(new EventPusher('comment', $event));
+        event(new EventPusher('comment', $comment->id, $event));
         if ($comment == null) {
             return 'Could not create comment';
         }
@@ -120,6 +120,7 @@ class EventApiController extends Controller
         } else {
             $poll_option->voters()->attach(Auth::id());
         }
+        event(new EventPusher('poll', $poll->id, $poll->event));
         return response("Vote change saved successfully", 200);
     }
 

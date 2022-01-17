@@ -51,7 +51,10 @@
                         <br>
                     @endforeach
                     @if (!$can_vote)
-                        <small class="text-muted mt-2">You must attend this event to vote in a poll</small>
+                        @if(Auth::id() != $poll->event->organizer->id)
+                            <small class="text-muted mt-2">You must attend this event to vote in a poll</small>
+
+                        @endif
                     @endif
                 </form>
             </div>
