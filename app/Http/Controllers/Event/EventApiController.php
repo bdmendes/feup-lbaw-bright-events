@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Event;
 
+use App\Events\NotificationReceived;
+use App\Events\EventPusher;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
@@ -64,6 +66,8 @@ class EventApiController extends Controller
             'parent_id' => $request->parent ?? null,
             'body' => $data["body"]
         ]);
+        event(new NotificationReceived('new comment', [$event->organizer]));
+        event(new EventPusher('comment', $event));
         if ($comment == null) {
             return 'Could not create comment';
         }
@@ -98,7 +102,7 @@ class EventApiController extends Controller
         $user = User::find($request->attendee_id);
 
         $returnHTML = view('partials.users.smallCard')->with('user', $user)->render();
-        return response()->json(array('success' => true, 'html'=>$returnHTML), 200);
+        return response()->json(array('success' => true, 'html' => $returnHTML), 200);
     }
 
     public function leaveEventClick(Request $request)
@@ -137,7 +141,9 @@ class EventApiController extends Controller
             'is_invite' => true
         ]);
         $returnHTML = view('partials.users.smallCard')->with('user', $user)->render();
-        return response()->json(array('success' => true, 'html'=>$returnHTML), 200);
+
+        event(new NotificationReceived('invite', [$user]));
+        return response()->json(array('success' => true, 'html' => $returnHTML), 200);
     }
 
     public function getInvites(Request $request)

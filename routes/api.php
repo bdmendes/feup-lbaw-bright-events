@@ -34,3 +34,10 @@ Route::post('events/{eventId}/comments/{commentId}', 'Event\EventApiController@d
 // Route::post('reports/comment', 'Report\ReportAPIController@reportComment');
 // Route::get('reports', 'Report\ReportAPIController@getReports');
 // Route::get('reports/{report_id}', 'Report\ReportAPIController@show');
+
+//Notifications
+Route::get('notifications', 'Notifications\NotificationController@get')->name('notifications');
+Route::get('notifications/past', 'Notifications\NotificationController@getPast')->name('pastNotifications');
+Route::post('notifications/read', 'Notifications\NotificationController@read')->name('readNotifications');
+Route::post('notifications/{id}', 'Notifications\NotificationController@edit')->name('editNotifcation');
+Route::delete('notifications/{id}', 'Notifications\NotificationController@delete');

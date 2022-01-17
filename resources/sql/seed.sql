@@ -392,6 +392,27 @@ LANGUAGE plpgsql;
 --$BODY$
 --LANGUAGE plpgsql;
 
+CREATE FUNCTION lbaw2134.new_comment_notification() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF 1=1 THEN
+        INSERT INTO lbaw2134.notifications
+        (notification_type, event_id, attendance_request_id, poll_id, comment_id, addressee_id)
+        SELECT * FROM (
+            (VALUES (CAST('New comment' AS lbaw2134.notification_type), NEW.event_id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.id)) AS foo
+            CROSS JOIN
+            (
+                SELECT organizer_id
+                FROM lbaw2134.events
+                WHERE id = NEW.event_id
+            ) AS bar
+        );
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
 CREATE FUNCTION lbaw2134.new_poll_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -524,6 +545,11 @@ CREATE TRIGGER accepted_invite_notification
     AFTER UPDATE ON lbaw2134.attendance_requests
     FOR EACH ROW
     EXECUTE PROCEDURE lbaw2134.accepted_invite_notification();
+
+CREATE TRIGGER new_comment_notification
+    AFTER INSERT ON lbaw2134.comments
+    FOR EACH ROW
+    EXECUTE PROCEDURE lbaw2134.new_comment_notification();
 
 CREATE TRIGGER new_poll_notification
     AFTER INSERT ON lbaw2134.polls
