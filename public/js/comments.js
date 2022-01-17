@@ -24,7 +24,7 @@ function getComments(parent) {
       });
 }
 
-function submitComment(parentId) {
+function submitComment() {
   const element_body = document.getElementById('new_comment_body');
   const value = element_body.value;
   if (value === '') return;
@@ -32,14 +32,15 @@ function submitComment(parentId) {
   const data = {
     body: value,
   };
+  addRefreshIcon('comment_area', true);
   fetch('/api/events/' + eventId + '/comments', {
     method: 'POST',
     body: JSON.stringify(data),
   })
       .then((response) => response.text())
       .then((html) => {
-        document.getElementById('comment_area')
-            .insertAdjacentHTML('afterbegin', html);
+        /*         document.getElementById('comment_area')
+                    .insertAdjacentHTML('afterbegin', html); */
         element_body.value = '';
       });
 }
@@ -106,11 +107,10 @@ function switchCommentReplyAreaDisplay(commentId) {
 
 function prependComment(commentId) {
   const eventId = window.location.pathname.split('/').slice(-1)[0];
-  fetch('/api/events/' + eventId + 'comments/' + commentId)
+  fetch('/api/events/' + eventId + '/comments/' + commentId)
       .then((response) => response.text())
       .then((html) => {
         const comment_area = document.getElementById('comment_area');
-        comment_area.insertAdjacentElement('afterbegin', html);
-        alert('inserted comment');
+        comment_area.insertAdjacentHTML('afterbegin', html);
       });
 }

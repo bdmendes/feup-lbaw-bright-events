@@ -178,7 +178,7 @@ class EventApiController extends Controller
         }
         $can_vote = $this->canVote($request->eventId, Auth::id());
         $polls = $event->polls()->getQuery()->orderBy('date', 'desc')->get();
-        return view('partials.events.pollList', compact('polls', 'can_vote'));
+        return view('partials.events.pollList', compact('polls', 'can_vote', 'event'));
     }
 
     public function getPoll(Request $request)
@@ -201,6 +201,8 @@ class EventApiController extends Controller
         }
         $poll->is_open = !$poll->is_open;
         $poll->save();
+        event(new NotificationReceived('poll state changed', $event->attendees));
+        event(new EventPusher('poll', $poll->id, $event));
         return response('Poll state successfully switched', 200);
     }
 

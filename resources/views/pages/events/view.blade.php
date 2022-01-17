@@ -113,12 +113,11 @@
                     let eventChannel = pusher.subscribe("event-channel-{{ $event->id }}");
 
                     eventChannel.bind('event', function(data) {
-                        if(data.message === 'comment'){
-                            //data.id = id do comment
-                            getComments();
-                        }
-                        else if(data.message === 'poll') {
-                            //data.id = id do poll
+                        if (data.message === 'comment') {
+                            remove('comment_area:refreshIcon');
+                            prependComment(data.id);
+                        } else if (data.message === 'poll') {
+                            updatePoll(data.id);
                         }
                     });
                 </script>
