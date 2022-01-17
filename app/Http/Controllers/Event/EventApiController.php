@@ -99,7 +99,10 @@ class EventApiController extends Controller
             return response("Poll option not found", 404);
         }
         if ($is_delete) {
-            $poll_option->voters()->detach(Auth::id());
+            $user = $poll_option->voters()->detach(Auth::id());
+            if ($user == null) {
+                return response("User did not previously vote for this option", 404);
+            }
         } else {
             $poll_option->voters()->attach(Auth::id());
         }
@@ -114,6 +117,43 @@ class EventApiController extends Controller
     public function removeVote(Request $request)
     {
         return $this->voteOnPoll($request, true);
+    }
+
+    public function submitPoll(Request $request)
+    {
+        $event = Event::find($request->eventId);
+        if ($event == null) {
+            return response("Event not found", 404);
+        }
+        $data = json_decode($request->getContent(), true);
+        if ($data["title"] == null || $data["description"] == null || $data["options"] == null || count($data["options"]) == 0) {
+            return response("Invalid request data", 403);
+        }
+        $poll = Poll::create([
+            'title' => $data["title"],
+            'description' => $data["description"],
+            'event_id' => $event->id
+        ]);
+        $options = [];
+        foreach ($data["options"] as $name) {
+            $option = PollOption::create([
+                'name' => $name,
+                'poll_id' => $poll->id
+            ]);
+            array_push($options, $option);
+        }
+        $poll->options()->saveMany($options);
+        return response(view('partials.events.poll', compact('poll')), 200);
+    }
+
+    public function getPolls(Request $request)
+    {
+        $event = Event::find($request->eventId);
+        if ($event == null) {
+            return 'Event not found';
+        }
+        $polls = $event->polls()->getQuery()->orderBy('date', 'desc')->get();
+        return view('partials.events.pollList', compact('polls'));
     }
 
     public function attendEventClick(Request $request)

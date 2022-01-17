@@ -48,7 +48,8 @@
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="polls-tab" data-bs-toggle="tab" data-bs-target="#polls" type="button"
-                    role="tab" aria-controls="polls" aria-selected="false" onclick="appendToUrl('#polls')">Polls</button>
+                    role="tab" aria-controls="polls" aria-selected="false"
+                    onclick="appendToUrl('#polls'); getPolls();">Polls</button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="attendees-tab" data-bs-toggle="tab" data-bs-target="#attendees"
@@ -113,9 +114,19 @@
             </div>
 
             <div class="tab-pane fade" id="polls" role="tabpanel" aria-labelledby="contact-tab">
-                @foreach ($event->polls as $poll)
-                    @include('partials.events.poll', compact('poll'))
-                @endforeach
+                @if (Auth::check() && Auth::id() == $event->organizer->id)
+                    <button id="new_poll_button" class="mt-4 mb-2" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#new_poll_area" aria-expanded="false" aria-controls="new_poll_area">
+                        Create poll
+                    </button>
+                    <div class="collapse" id="new_poll_area">
+                        <div class="card card-body">
+                            @include('partials.events.newPoll', compact('event'))
+                        </div>
+                    </div>
+                @endif
+                <div class="accordion accordion-flush mt-2" id="poll_area">
+                </div>
             </div>
 
             <div class="tab-pane fade" id="attendees" role="tabpanel" aria-labelledby="contact-tab">

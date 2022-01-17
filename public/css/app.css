@@ -77,3 +77,7 @@ li {
 .errorBorder {
     border: 1px solid red !important;
 }
+
+.form-control {
+    font-size: 1em !important;
+}
