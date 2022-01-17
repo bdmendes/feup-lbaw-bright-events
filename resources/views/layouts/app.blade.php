@@ -21,11 +21,10 @@
         // Fix for Firefox autofocus CSS bug
         // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
     </script>
-    <script type="text/javascript" src={{ asset('js/app.js') }} defer>
-    </script>
-    <script type="text/javascript" src={{ asset('js/notification.js')}}></script>
+    <script type="text/javascript" src={{ asset('js/app.js') }} defer></script>
+    <script type="text/javascript" src={{ asset('js/notification.js') }}></script>
     <script type="text/javascript" src={{ asset('js/comments.js') }}></script>
-
+    <script type="text/javascript" src={{ asset('js/polls.js') }}></script>
     <script src="//js.pusher.com/3.1/pusher.min.js"></script>
 
     <script>
@@ -34,22 +33,21 @@
             cluster: 'eu'
         });
 
-        function subscribeNotifications(user){
+        function subscribeNotifications(user) {
 
         }
         // Subscribe to the channel we specified in our Laravel Event
-        @if(Auth::check())
-            var channel = pusher.subscribe("notification-received-channel-{{Auth::user()->username}}");
-
+        @if (Auth::check())
+            var channel = pusher.subscribe("notification-received-channel-{{ Auth::user()->username }}");
+        
             channel.bind('notification-received', function(data) {
-                getNotifications(null, true);
-
+            getNotifications(null, true);
+        
             });
-
+        
         @endif
         // Bind a function to a Event (the full Laravel class)
-
-      </script>
+    </script>
 
 </head>
 

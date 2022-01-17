@@ -86,6 +86,10 @@ li {
     border: 1px solid red !important;
 }
 
+.form-control {
+    font-size: 1em !important;
+}
+
 .clickableIcon {
     cursor: pointer;
     transition: 0.5s;
@@ -170,12 +174,13 @@ div.bi {
 }
 
 #growls {
-    position: absolute;
+    z-index: 1;
+    position: fixed;
     display: flex;
     gap: 15px;
     flex-direction: column;
-    top: calc(15px);
-    right: calc(10px);
+    top: calc(30px);
+    right: calc(15px);
 }
 
 .growl {
