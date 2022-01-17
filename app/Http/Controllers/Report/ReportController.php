@@ -10,8 +10,8 @@ class ReportController extends Controller
 {
     public function index()
     {
-        $reports = Report::orderBy('date', 'desc')->get();
-        return view('pages.admin.reports', ["reports" => $reports]);
+        $reports = Report::paginate();
+        return view('pages.reports.browse', ["reports" => $reports->withQueryString()]);
     }
 
     public function show()
