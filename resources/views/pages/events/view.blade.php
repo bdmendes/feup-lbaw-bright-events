@@ -110,10 +110,16 @@
                     </form>
                 @endif
                 <script>
-                    let commentsChannel = pusher.subscribe("comment-received-channel-{{ $event->id }}");
+                    let eventChannel = pusher.subscribe("event-channel-{{ $event->id }}");
 
-                    commentsChannel.bind('comment-received', function(data) {
-                        getComments();
+                    eventChannel.bind('event', function(data) {
+                        if(data.message === 'comment'){
+                            //data.id = id do comment
+                            getComments();
+                        }
+                        else if(data.message === 'poll') {
+                            //data.id = id do poll
+                        }
                     });
                 </script>
                 <div id="comment_area">

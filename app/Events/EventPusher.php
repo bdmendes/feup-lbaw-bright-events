@@ -16,16 +16,18 @@ class EventPusher implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
+    public $id;
     private $channels;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($message, $event)
+    public function __construct($message, $id,  $event)
     {
         $this->message = $message;
-        $this->channels = ['comment-received-channel-' . $event->id];
+        $this->id = $id;
+        $this->channels = ['event-channel-' . $event->id];
     }
 
     /**
@@ -40,6 +42,6 @@ class EventPusher implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'comment-received';
+        return 'event';
     }
 }
