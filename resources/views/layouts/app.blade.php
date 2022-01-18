@@ -56,7 +56,7 @@
 
     @include('layouts.navbar')
 
-    <main class="w-100 position-relative" id ="main">
+    <section class="w-100 position-relative" id ="main">
         <div id="growls">
 
         </div>
@@ -64,7 +64,7 @@
 
             @yield('content')
         </section>
-    </main>
+    </section>
 
     @include('layouts.footer')
 
