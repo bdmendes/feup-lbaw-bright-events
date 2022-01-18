@@ -1,0 +1,6 @@
+@import url("colors.css");
+
+#navbar {
+    background-color: var(--light-color) !important;
+    padding: 10px;
+}
