@@ -1,0 +1,6 @@
+@import url("colors.css");
+
+.banner {
+    height: 100vh !important;
+    object-fit: cover;
+}

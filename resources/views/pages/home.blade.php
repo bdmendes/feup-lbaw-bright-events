@@ -2,15 +2,63 @@
 
 @section('title', 'home')
 
+@section ('styles')
+    <link href="{{ asset('css/home.css') }}" rel="stylesheet">
+@endsection
+
+@section ('scripts')
+    <script type="text/javascript" src={{ asset('js/home.js') }} defer></script>
+@endsection
+
 @section('content')
 
-    <div>
-        <img class="d-block w-100" src="/images/party.jpg"
-            style="margin: 0 auto; width: 100%; max-height: 400px; object-fit: cover;">
-        <div style=" position: relative; bottom: 100px; text-align: center;">
-            <h1 class="text-white">A bright community for bright experiences</h1>
+    <div id="banner" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img class="d-block w-100 banner" src="/images/banner/cooking.jpg" alt="First slide">
+
+        <div class="container">
+          <div class="carousel-caption">
+            <h1>Bright events for a bright community</h1>
+          </div>
         </div>
+      </div>
+
+      <div class="carousel-item">
+        <img class="d-block w-100 banner" src="/images/banner/party.jpg" alt="First slide">
+
+        <div class="container">
+          <div class="carousel-caption">
+            <h1>Bright events for a bright community</h1>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img class="d-block w-100 banner" src="/images/banner/carnival.jpg" alt="First slide">
+        <div class="container">
+          <div class="carousel-caption">
+            <h1>Bright events for a bright community</h1>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img class="d-block w-100 banner" src="/images/banner/dj.jpg" alt="First slide">
+        <div class="container">
+          <div class="carousel-caption">
+            <h1>Bright events for a bright community</h1>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img class="d-block w-100 banner" src="/images/banner/guitar.jpg" alt="First slide">
+        <div class="container">
+          <div class="carousel-caption">
+            <h1>Bright events for a bright community</h1>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
     <br>
 
