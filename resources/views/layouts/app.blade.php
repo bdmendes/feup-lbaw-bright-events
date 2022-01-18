@@ -25,6 +25,7 @@
     <script type="text/javascript" src={{ asset('js/notification.js') }}></script>
     <script type="text/javascript" src={{ asset('js/comments.js') }}></script>
     <script type="text/javascript" src={{ asset('js/polls.js') }}></script>
+    <script type="text/javascript" src={{ asset('js/style.js') }} defer></script>
     <script src="//js.pusher.com/3.1/pusher.min.js"></script>
 
     <script>
@@ -55,15 +56,15 @@
 
     @include('layouts.navbar')
 
-    <div class="w-100 position-relative">
+    <main class="w-100 position-relative" id ="main">
         <div id="growls">
 
         </div>
-        <section id="content">
+        <section id="content" class="container">
 
             @yield('content')
         </section>
-    </div>
+    </main>
 
     @include('layouts.footer')
 
