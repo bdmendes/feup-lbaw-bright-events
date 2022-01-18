@@ -52,11 +52,11 @@
 
 </head>
 
-<body>
+<body class="min-vh-100 d-flex flex-column">
 
     @include('layouts.navbar')
 
-    <section class="w-100 position-relative" id ="main">
+    <section class="w-100 position-relative wrapper flex-grow-1" id ="main">
         <div id="growls">
 
         </div>
