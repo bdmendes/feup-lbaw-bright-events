@@ -12,7 +12,7 @@
 
 @section('content')
 
-    <div id="banner" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+    <div id="banner" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000" data-bs-wrap="true" data-bs-pause="false">
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img class="d-block w-100 banner" src="/images/banner/cooking.jpg" alt="First slide">
