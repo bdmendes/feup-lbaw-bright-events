@@ -129,5 +129,13 @@
                 </style>
             </div>
         </div>
+        @if (Auth::check() && Auth::id() != $user->id)
+            <div class="text-end pe-5">
+                <a class="link-primary">
+                    <span id="report_user_{{ $user->id }}" style="font-size: 0.9em;" type="button" onclick="">Report
+                        user</span>
+                </a>
+            </div>
+        @endif
     </div>
 @endsection

@@ -14,6 +14,7 @@
                             <th scope="col">Motive</th>
                             <th scope="col">Handled</th>
                             <th scope="col">Type</th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -23,18 +24,27 @@
                                 <td>{{ $report->date->diffForHumans() }}</td>
                                 <td>{{ $report->report_motive }}</td>
                                 <td>{{ $report->handled_by_id ? 'Yes' : 'No' }}</td>
-                                @if (isset($report->reported_comment_id))
-                                    <td>Comment</td>
-                                @endif
-                                @if (isset($report->reported_event_id))
-                                    <td>Event</td>
-                                @endif
-                                @if (isset($report->reported_user_id))
-                                    <td>User</td>
-                                @endif
+                                <td>
+                                    @if (isset($report->reported_comment_id))
+                                        Comment
+                                    @else
+                                        @if (isset($report->reported_event_id))
+                                            Event
+                                        @else
+                                            @if (isset($report->reported_user_id))
+                                                User
+                                            @else
+                                                Unknown type
+                                            @endif
+                                        @endif
+                                    @endif
+                                </td>
+                                <td><i class="bi bi-chevron-compact-down"></i></td>
                             </tr>
-                            <tr data-bs-toggle="collapse" class="collapse border border-1" id="r{{ $report->id }}">
-                                <td colspan="5">PEEEENISSSSS</td>
+                            <tr class="collapse align-middle" id="r{{ $report->id }}">
+                                <td colspan="6">
+                                    @include('partials.reports.card', ['report' => $report])
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

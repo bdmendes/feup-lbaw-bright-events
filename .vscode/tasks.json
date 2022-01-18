@@ -18,7 +18,7 @@
         {
             "label": "Populate/Update db",
             "type": "shell",
-            "command": "php artisan db:seed",
+            "command": "php artisan db:seed --env local",
             "problemMatcher": []
         },
         {
