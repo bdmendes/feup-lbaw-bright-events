@@ -31,6 +31,9 @@
     <script type="text/javascript" src={{ asset('js/comments.js') }}></script>
     <script type="text/javascript" src={{ asset('js/polls.js') }}></script>
     <script type="text/javascript" src={{ asset('js/style.js') }} defer></script>
+
+    @yield('scripts')
+
     <script src="//js.pusher.com/3.1/pusher.min.js"></script>
 
     <script>
