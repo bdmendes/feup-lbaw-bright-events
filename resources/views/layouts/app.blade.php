@@ -61,7 +61,7 @@
         <div id="growls">
 
         </div>
-        <section id="content" class="container">
+        <section id="content" class="w-100">
 
             @yield('content')
         </section>

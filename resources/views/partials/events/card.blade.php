@@ -1,5 +1,5 @@
 <div class="text-dark card mb-3">
-    <div class="row gap-0">
+    <div class="row gap-0 w-100">
         <a href="{{ route('event', ['id' => $event->id]) }}" class="col" style="max-width: 250px;">
             <img src="/{{ $event->image->path ?? 'images/group.jpg' }}" class="img-fluid rounded-start"
                 alt="Event cover image" style="height: 150px; width: 100%; object-fit: cover;">
