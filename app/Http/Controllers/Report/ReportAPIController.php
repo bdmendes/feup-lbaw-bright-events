@@ -7,28 +7,13 @@ use Illuminate\Http\Request;
 
 class ReportAPIController extends Controller
 {
-    public function reportEvent()
+    public function getForm()
     {
-        dd('report event');
+        return view('partials.reports.form');
     }
 
-    public function reportUser()
+    public function registerReport(Request $request, $type, $id)
     {
-        dd('report user');
-    }
-
-    public function reportComment()
-    {
-        dd('report comment');
-    }
-
-    public function getReports()
-    {
-        dd('reports list');
-    }
-
-    public function show()
-    {
-        dd('get report details');
+        return;
     }
 }

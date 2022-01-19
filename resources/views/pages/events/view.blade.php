@@ -33,12 +33,10 @@
                 @include("partials.events.tags", ['event' => $event])
             </div>
             @if (Auth::check() && Auth::id() != $event->organizer_id)
-                <div class="text-end pe-">
-                    <a class="link-primary">
-                        <span id="report_event_{{ $event->id }}" style="font-size: 0.9em;" type="button"
-                            onclick="">Report
-                            event</span>
-                    </a>
+                <div id="report-container" class="text-end pe-1">
+                    <span class="link-primary" style="font-size: 0.9em;" type="button"
+                        onclick="getReportModal('event', {{ $event->id }});">Report
+                        event</span>
                 </div>
             @endif
         </div>
@@ -250,4 +248,6 @@
             redirectTab();
         });
     </script>
+
+    <script type="text/javascript" src={{ asset('js/report.form.js') }} defer></script>
 @endsection

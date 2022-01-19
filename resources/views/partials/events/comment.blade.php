@@ -27,13 +27,11 @@
                         class="bi bi-trash"></i></button>
             </div>
         @endif
-        @if (Auth::check() && Auth::id() != $comment->commenter_id)
+        @if (Auth::check() && Auth::id() != $comment->commenter_id && !isset($is_report))
             <div class="col col-2 align-self-end">
-                <a class="link-primary">
-                    <span id="report_comment_{{ $comment->id }}" style="font-size: 0.9em;" type="button"
-                        onclick="">Report
-                        comment</span>
-                </a>
+                <span class="link-primary" style="font-size: 0.9em;" type="button"
+                    onclick="getReportModal('comment', {{ $comment->id }});">Report
+                    comment</span>
             </div>
         @endif
     </div>

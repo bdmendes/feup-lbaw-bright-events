@@ -44,7 +44,8 @@
                         @include('partials.events.card', ['event' => $report->reportedEvent])
                     @else
                         @if (isset($report->reported_comment_id))
-                            @include('partials.events.comment', ['comment' => $report->reportedComment])
+                            @include('partials.events.comment', ['comment' => $report->reportedComment, 'is_report' =>
+                            true])
                         @else
                             Unrecognized Type
                         @endif
