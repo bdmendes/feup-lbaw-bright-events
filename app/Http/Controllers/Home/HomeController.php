@@ -13,7 +13,7 @@ class HomeController extends Controller
     public function home()
     {
         $events = $this->trendingEvents();
-        $users = User::where('is_admin', 'false')->take(3)->get();
+        $users = $this->trendingOrganizers();
         return view('pages.home', compact('events', 'users'));
     }
 
@@ -30,6 +30,21 @@ class HomeController extends Controller
             return $item['event'];
         });
         return $events;
+    }
+
+    protected function trendingOrganizers()
+    {
+        $orgs = User::where('is_admin', 'false')->get();
+        $orgs = $orgs->map(function ($item, $key) {
+            return ['score' => $item->score(), 'event' => $item];
+        });
+
+        
+        $orgs = $orgs->sort()->reverse()->take(3);
+        $orgs = $orgs->map(function ($item, $key) {
+            return $item['event'];
+        });
+        return $orgs;
     }
 
     public function redirect()

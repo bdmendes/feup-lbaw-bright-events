@@ -61,8 +61,9 @@ class User extends Authenticatable
         $attended_events = [];
         foreach ($this->attendances as $attendance) {
             $event = Event::findOrFail($attendance->event_id);
-            if (!$event->is_disabled)
+            if (!$event->is_disabled) {
                 $attended_events = Arr::add($attended_events, $attendance->event_id, $event);
+            }
         }
         return $attended_events;
     }
@@ -81,6 +82,16 @@ class User extends Authenticatable
         }
 
         return false;
+    }
+
+    public function score()
+    {
+        $score = 0;
+        foreach ($this->events as $event) {
+            $score += $event->score();
+        }
+
+        return $score;
     }
 
     public function scopeSearch($query, $search)
