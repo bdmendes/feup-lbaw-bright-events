@@ -7,8 +7,6 @@
 
 #navbar  {
     background-color: rgba(247, 255, 247, 0.3);
-
-    box-shadow: 0 0 10px 2px rgba(247, 255, 247, 0.3);
 }
 
 #navbar .navbar-collapse .nav-item, #navbar .navbar-brand {

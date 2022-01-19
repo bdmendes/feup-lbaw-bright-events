@@ -26,9 +26,6 @@ function navbarTransition() {
     console.log("rgba(247, 255, 247, " + (0.3 + percentage * 0.7) + ") !important");
 
     navbar.style.backgroundColor = "rgba(247, 255, 247, " + (0.3 + percentage * 0.7) + ")";
-    //background-color: rgba(247, 255, 247, 0.3) !important;
-
-    //box-shadow: 0 0 10px 2px rgba(247, 255, 247, 0.3);
 }
 
 function startCarousel() {
@@ -39,4 +36,5 @@ function startCarousel() {
 
 document.addEventListener("DOMContentLoaded", pullContentUp);
 document.addEventListener("scroll", navbarTransition);
+document.addEventListener("DOMContentLoaded", navbarTransition);
 document.addEventListener("DOMContentLoaded", startCarousel);
