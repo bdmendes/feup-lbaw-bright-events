@@ -80,17 +80,21 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <br><br>
-        <h2>Trending Organizers</h2>
-        <div class="row gap-4 my-4 w-100">
-            @foreach ($users as $user)
-                @include('partials.users.card', compact('user'))
-            @endforeach
-        </div>
-        <div>
-            <a href="{{ route('browseUsers') }}"><button type="button" class="btn btn-primary btn"
-                    style="font-size: 1em;">Explore users</button></a>
+
+            <br>
+            <hr>
+            <br>
+            
+            <h2>Trending Organizers</h2>
+            <div class="row gap-4 my-4 w-100">
+                @foreach ($users as $user)
+                    @include('partials.users.card', compact('user'))
+                @endforeach
+            </div>
+            <div>
+                <a href="{{ route('browseUsers') }}"><button type="button" class="btn btn-primary btn"
+                        style="font-size: 1em;">Explore users</button></a>
+            </div>
         </div>
     </div>
 @endsection
