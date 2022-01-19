@@ -10,20 +10,20 @@
 
 @section('content')
 <div class="d-flex justify-content-center">
-    <div class="col-6">
-        <form method="POST" action="{{ route('login') }}">
+    <div class="col-6 d-flex flex-column justify-content-center align-items-center">
+        <form method="POST" action="{{ route('login') }}" class="d-flex flex-column w-50 gap-4">
             {{ csrf_field() }}
 
-            <label class="d-block" for="email">E-mail</label>
-            <input onchange="removeErrors('email');" id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>
+            <h1>Login</h1>
+            
+            <input class="input" onchange="removeErrors('email');" id="email" type="email" name="email" value="{{ old('email') }}" placeholder="Email or username" required autofocus>
             @if ($errors->has('email'))
                 <span class="error" id="emailError">
                 {{ $errors->first('email') }}
                 </span>
             @endif
 
-            <label class="d-block" for="password" >Password</label>
-            <input onchange="removeErrors('password');" id="password" type="password" name="password" required>
+            <input class="input" onchange="removeErrors('password');" id="password" type="password" name="password" placeholder="Password" required>
             @if ($errors->has('password'))
                 <span class="error" id="passwordError">
                     {{ $errors->first('password') }}
@@ -34,10 +34,15 @@
                 <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
             </label>
 
-            <button type="submit">
+            <button class="btn btn-custom" type="submit">
                 Login
             </button>
-            <a class="button button-outline" href="{{ route('register') }}">Register</a>
+
+            <hr class="m-0">
+            <p class="not-registered">
+                Not registered yet?
+                <a class="register-link" href="{{ route('register') }}">Register now!</a>
+            </p>
         </form>
     </div>
     <div id="thumbnail" class="d-none d-xl-block col-xl-6 bg-dark">
