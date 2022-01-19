@@ -11,7 +11,7 @@
 @section('content')
 <div class="d-flex justify-content-center">
     <div class="col-6 d-flex flex-column justify-content-center align-items-center" id="login-col">
-        <form method="POST" action="{{ route('login') }}" class="d-flex flex-column w-50 gap-4">
+        <form method="POST" action="{{ route('login') }}" class="d-flex flex-column col-lg-6 col-md-8 col-sm-10 gap-4">
             {{ csrf_field() }}
 
             <h1>Login</h1>
