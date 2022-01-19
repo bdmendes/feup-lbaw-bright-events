@@ -52,7 +52,7 @@ class EventController extends Controller
             $date = date('Y-m-d', strtotime($request->query('end_date')));
             $events = $events->where('date', '<=', $date);
         }
-        return view('pages.events.browse', ['tags' => $tags, 'users' => $users, 'events' => $events->paginate($request->size ?? 5)->withQueryString(), 'request' => $request]);
+        return view('pages.events.browse', ['tags' => $tags, 'users' => $users, 'events' => $events->paginate($request->size ?? 6)->withQueryString(), 'request' => $request]);
     }
 
     public function getCardList($events)
