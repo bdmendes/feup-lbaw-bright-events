@@ -12,10 +12,10 @@
 
 @section('content')
 
-    <div id="banner" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000" data-bs-wrap="true" data-bs-pause="false">
+    <div id="banner" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000" data-bs-wrap="true" data-bs-pause="false">
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <img class="d-block w-100 banner" src="/images/banner/cooking.jpg" alt="First slide">
+        <img class="d-block w-100 banner" src="/images/banner/party.jpg" alt="First slide">
 
         <div class="container">
           <div class="carousel-caption">
@@ -25,7 +25,7 @@
       </div>
 
       <div class="carousel-item">
-        <img class="d-block w-100 banner" src="/images/banner/party.jpg" alt="First slide">
+        <img class="d-block w-100 banner" src="/images/banner/cooking.jpg" alt="First slide">
 
         <div class="container">
           <div class="carousel-caption">
@@ -33,6 +33,7 @@
           </div>
         </div>
       </div>
+
       <div class="carousel-item">
         <img class="d-block w-100 banner" src="/images/banner/carnival.jpg" alt="First slide">
         <div class="container">
