@@ -90,7 +90,7 @@
                     <h2 class="trending-header">Trending Organizers. <span class="text-muted">The engines behind our vibrant community.</span></h2>
                     <p class="trending-body">See for yourself who are the dynamic people who keep our community engaged.</p>
                 </div>
-                <div class="row d-flex justify-content-center w-100 gap-5 mt-5">
+                <div class="row d-flex justify-content-stretch w-100 gap-4 mt-4">
                     @foreach ($users as $user)
                     @include('partials.users.homeCard', compact('user'))
                     @endforeach

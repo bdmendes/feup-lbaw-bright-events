@@ -40,7 +40,7 @@ class HomeController extends Controller
         });
 
         
-        $orgs = $orgs->sort()->reverse()->take(3);
+        $orgs = $orgs->sort()->reverse()->take(4);
         $orgs = $orgs->map(function ($item, $key) {
             return $item['event'];
         });
