@@ -55,7 +55,7 @@
 
     <br>
 
-    <div>
+    <div id="trends">
         <h2>Trending Events</h2>
         @foreach ($events as $event)
             <div class="mt-4">

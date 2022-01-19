@@ -1,4 +1,4 @@
-    <nav class="navbar navbar-expand-md navbar-light py-4 fixed-top bg-dark" role="navigation" id="navbar">
+    <nav class="navbar navbar-expand-md navbar-light py-4 fixed-top" role="navigation" id="navbar">
         <a class="navbar-brand" href=" {{ route('home') }} ">
             <h1>Bright Events</h1>
         </a>
