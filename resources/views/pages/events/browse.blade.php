@@ -111,7 +111,7 @@
                 No events were found
             @else
                 @foreach ($events as $event)
-                    <div class="w-25 d-flex flex-column flex-grow-1">
+                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 d-flex flex-column flex-grow-1">
                         @include('partials.events.verticalCard', ['event' => $event])
                     </div>
                 @endforeach
