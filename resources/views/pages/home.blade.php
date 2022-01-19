@@ -55,18 +55,31 @@
 
     <br>
 
-    <div id="trends" class="bg-light">
-        <h2>Trending Events</h2>
-        @foreach ($events as $event)
-            <div class="mt-4">
-                @include('partials.events.card', ['event' => $event])
+    <div id="trends" class="bg-light py-5">
+        <div class="container">
+            <div class="row trending">
+                <div class="col-md-6 d-flex flex-column justify-content-center">
+                    <h2 class="trending-header">Trending Events. <span class="text-muted">What everybody is talking about.</span></h2>
+                    <p class="trending-body">These are the events that have everybody's heads spinning. Will you miss out on them? Check them out before it's too late.</p>
+                    <div>
+                        <a href="{{ route('browseEvents') }}"><button type="button" class="btn btn-primary btn"
+                                style="font-size: 1em;">See more</button></a>
+                        <a href="{{ route('createEvent') }}"><button type="button" class="btn btn-primary btn"
+                                style="font-size: 1em;">Create Event</button></a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div id="events-carousel" class="carousel carousel-fade slide w-100" data-bs-ride="carousel" data-bs-interval="4000" data-bs-wrap="true" data-bs-pause="false">
+                        <div class="carousel-inner mx-5" id="events-carousel-inner">
+                            @foreach ($events as $event)
+                                <div class="carousel-item">
+                                    @include('partials.events.verticalCard', ['event' => $event])
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
             </div>
-        @endforeach
-        <div>
-            <a href="{{ route('browseEvents') }}"><button type="button" class="btn btn-primary btn"
-                    style="font-size: 1em;">See more</button></a>
-            <a href="{{ route('createEvent') }}"><button type="button" class="btn btn-primary btn"
-                    style="font-size: 1em;">Create Event</button></a>
         </div>
         <br><br>
         <h2>Trending Organizers</h2>

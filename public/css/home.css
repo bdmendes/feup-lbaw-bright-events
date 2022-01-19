@@ -19,3 +19,15 @@
     position: relative;
     top: 100vh
 }
+
+.trending-header {
+    font-size: 50px;
+}
+
+.trending-header .text-muted {
+    font-size: 45px;
+}
+
+.trending-body {
+    font-size: 20px;
+}

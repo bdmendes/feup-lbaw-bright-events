@@ -31,5 +31,12 @@ function navbarTransition() {
     //box-shadow: 0 0 10px 2px rgba(247, 255, 247, 0.3);
 }
 
+function startCarousel() {
+    let eventsCarousel = document.getElementById("events-carousel-inner");
+
+    eventsCarousel.firstElementChild.classList.add("active");
+}
+
 document.addEventListener("DOMContentLoaded", pullContentUp);
 document.addEventListener("scroll", navbarTransition);
+document.addEventListener("DOMContentLoaded", startCarousel);
