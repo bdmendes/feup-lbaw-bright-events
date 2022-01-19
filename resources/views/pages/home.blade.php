@@ -12,7 +12,7 @@
 
 @section('content')
 
-    <div id="banner" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000" data-bs-wrap="true" data-bs-pause="false">
+    <div id="banner" class="carousel slide w-100 position-fixed" data-bs-ride="carousel" data-bs-interval="4000" data-bs-wrap="true" data-bs-pause="false">
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img class="d-block w-100 banner" src="/images/banner/party.jpg" alt="First slide">
@@ -55,7 +55,7 @@
 
     <br>
 
-    <div id="trends">
+    <div id="trends" class="bg-light">
         <h2>Trending Events</h2>
         @foreach ($events as $event)
             <div class="mt-4">

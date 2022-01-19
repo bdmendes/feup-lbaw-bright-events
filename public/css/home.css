@@ -14,3 +14,8 @@
 #navbar .navbar-collapse .nav-item, #navbar .navbar-brand {
     color: black !important;
 }
+
+#trends {
+    position: relative;
+    top: 100vh
+}
