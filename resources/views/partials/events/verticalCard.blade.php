@@ -11,8 +11,8 @@
                     @include("partials.events.tags", ['event' => $event])
                 </div>
                 <a class="text-dark" href="{{ route('event', ['id' => $event->id]) }}" style="text-decoration: none;">
-                    <h3 class="card-title">{{ Str::words($event->title, 15) }}</h3>
-                    <h4 class="card-text">{{ date('d/m/Y', strtotime($event->date)) }}
+                    <h3 class="card-title text-end">{{ Str::words($event->title, 15) }}</h3>
+                    <h4 class="card-text text-end">{{ date('d/m/Y', strtotime($event->date)) }}
                         @if (!empty($event->location))
                             @ {{ $event->location->name }},
                             {{ $event->location->city }},
