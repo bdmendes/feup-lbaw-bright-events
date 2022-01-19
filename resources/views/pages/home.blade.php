@@ -58,7 +58,7 @@
     <div id="trends" class="bg-light py-5">
         <div class="container">
             <div class="row trending">
-                <div class="col-md-6 d-flex flex-column justify-content-center">
+                <div class="col-md-6 d-flex flex-column justify-content-center mb-4">
                     <h2 class="trending-header">Trending Events. <span class="text-muted">What everybody is talking about.</span></h2>
                     <p class="trending-body">These are the events that have everybody's heads spinning. Will you miss out on them? Check them out before it's too late.</p>
                     <div>
@@ -70,7 +70,7 @@
                 </div>
                 <div class="col-md-6">
                     <div id="events-carousel" class="carousel carousel-fade slide w-100" data-bs-ride="carousel" data-bs-interval="4000" data-bs-wrap="true" data-bs-pause="false">
-                        <div class="carousel-inner mx-5" id="events-carousel-inner">
+                        <div class="carousel-inner" id="events-carousel-inner">
                             @foreach ($events as $event)
                                 <div class="carousel-item">
                                     @include('partials.events.verticalCard', ['event' => $event])
