@@ -25,7 +25,7 @@
       </div>
 
       <div class="carousel-item">
-        <img class="d-block w-100 banner" src="/images/banner/cooking.jpg" alt="First slide">
+        <img class="d-block w-100 banner" src="/images/banner/park.jpg" alt="First slide">
 
         <div class="container">
           <div class="carousel-caption">
@@ -35,7 +35,7 @@
       </div>
 
       <div class="carousel-item">
-        <img class="d-block w-100 banner" src="/images/banner/carnival.jpg" alt="First slide">
+        <img class="d-block w-100 banner" src="/images/banner/concert.jpg" alt="First slide">
         <div class="container">
           <div class="carousel-caption">
             <h1>Bright events for a bright community</h1>
@@ -43,15 +43,7 @@
         </div>
       </div>
       <div class="carousel-item">
-        <img class="d-block w-100 banner" src="/images/banner/dj.jpg" alt="First slide">
-        <div class="container">
-          <div class="carousel-caption">
-            <h1>Bright events for a bright community</h1>
-          </div>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img class="d-block w-100 banner" src="/images/banner/guitar.jpg" alt="First slide">
+        <img class="d-block w-100 banner" src="/images/banner/children.jpg" alt="First slide">
         <div class="container">
           <div class="carousel-caption">
             <h1>Bright events for a bright community</h1>
