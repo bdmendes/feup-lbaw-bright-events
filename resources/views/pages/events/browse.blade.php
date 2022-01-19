@@ -3,7 +3,7 @@
 @section('title', 'events')
 
 @section('content')
-    <div class="row gap-4">
+    <div class="d-flex">
         <div class="col-md-3 border rounded py-2">
 
             <h3 class="mb-3">Search</h3>
@@ -96,7 +96,7 @@
 
     </div>
 
-    <div class="col">
+    <div class="col-md-9">
         <div class="d-flex flex-row mb-4 align-items-center">
             <div>
                 <h2>Browse Events</h2>
@@ -106,20 +106,21 @@
                         style="font-size: 1em;">Create Event</button></a>
             </div>
         </div>
-        @if ($events->isEmpty())
-            No events were found
-        @else
-            @foreach ($events as $event)
-                <div class="mb-4">
-                    @include('partials.events.card', ['event' => $event])
-                </div>
-            @endforeach
-        @endif
+        <div class="d-flex flex-wrap justify-content-stretch w-100 gap-4 mt-4">
+            @if ($events->isEmpty())
+                No events were found
+            @else
+                @foreach ($events as $event)
+                    <div class="w-25 d-flex flex-column flex-grow-1">
+                        @include('partials.events.verticalCard', ['event' => $event])
+                    </div>
+                @endforeach
+            @endif
+        </div>
         @if ($events->links()->paginator->hasPages())
             <div class="mt-4">
                 {!! $events->links() !!}
             </div>
         @endif
-    </div>
     </div>
 @endsection
