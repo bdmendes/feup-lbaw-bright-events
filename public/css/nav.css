@@ -5,3 +5,21 @@
     padding: 10px;
     box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.1) !important;
 }
+
+#navbar .nav-item {
+    color: var(--primary-color) !important;
+}
+
+.navbar-brand h1 {
+    padding-top: 2px;
+}
+
+.navbar-brand h1, .navbar-brand h1 .highlight {
+    font-family: 'Spartan', sans-serif;
+    font-weight: 550;
+    font-size: 30px !important;
+}
+
+.navbar-brand h1 .highlight {
+    color: var(--primary-color);
+}

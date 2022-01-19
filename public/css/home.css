@@ -9,10 +9,6 @@
     background-color: rgba(247, 255, 247, 0.3);
 }
 
-#navbar .navbar-collapse .nav-item, #navbar .navbar-brand {
-    color: black !important;
-}
-
 #trends, #footer {
     position: relative;
     top: 68vh;
