@@ -84,17 +84,19 @@
             <br>
             <hr>
             <br>
+
+            <div class="row trending">
+                <div class="row">
+                    <h2 class="trending-header">Trending Organizers. <span class="text-muted">The engines behind our vibrant community.</span></h2>
+                    <p class="trending-body">See for yourself who are the dynamic people who keep our community engaged.</p>
+                </div>
+                <div class="row d-flex justify-content-center w-100 gap-5 mt-5">
+                    @foreach ($users as $user)
+                    @include('partials.users.homeCard', compact('user'))
+                    @endforeach
+                </div>
+            </div>
             
-            <h2>Trending Organizers</h2>
-            <div class="row gap-4 my-4 w-100">
-                @foreach ($users as $user)
-                    @include('partials.users.card', compact('user'))
-                @endforeach
-            </div>
-            <div>
-                <a href="{{ route('browseUsers') }}"><button type="button" class="btn btn-primary btn"
-                        style="font-size: 1em;">Explore users</button></a>
-            </div>
         </div>
     </div>
 @endsection

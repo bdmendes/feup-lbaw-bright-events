@@ -13,7 +13,7 @@ class HomeController extends Controller
     public function home()
     {
         $events = Event::all()->take(3);
-        $users = User::where('is_admin', 'false')->take(4)->get();
+        $users = User::where('is_admin', 'false')->take(3)->get();
         return view('pages.home', compact('events', 'users'));
     }
 
