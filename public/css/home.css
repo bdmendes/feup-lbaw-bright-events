@@ -4,3 +4,13 @@
     height: 100vh !important;
     object-fit: cover;
 }
+
+#navbar  {
+    background-color: rgba(247, 255, 247, 0.3) !important;
+
+    box-shadow: 0 0 10px 2px rgba(247, 255, 247, 0.3);
+}
+
+#navbar .navbar-collapse .nav-item, #navbar .navbar-brand {
+    color: black !important;
+}
