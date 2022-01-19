@@ -62,10 +62,8 @@
                     <h2 class="trending-header">Trending Events. <span class="text-muted">What everybody is talking about.</span></h2>
                     <p class="trending-body">These are the events that have everybody's heads spinning. Will you miss out on them? Check them out before it's too late.</p>
                     <div>
-                        <a href="{{ route('browseEvents') }}"><button type="button" class="btn btn-primary btn"
-                                style="font-size: 1em;">See more</button></a>
-                        <a href="{{ route('createEvent') }}"><button type="button" class="btn btn-primary btn"
-                                style="font-size: 1em;">Create Event</button></a>
+                        <a href="{{ route('browseEvents') }}"><button type="button" class="btn btn-custom btn">See more</button></a>
+                        <a href="{{ route('createEvent') }}"><button type="button" class="btn btn-custom btn">Create Event</button></a>
                     </div>
                 </div>
                 <div class="col-md-6">
