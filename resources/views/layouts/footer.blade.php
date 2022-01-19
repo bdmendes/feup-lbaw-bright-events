@@ -1,4 +1,4 @@
-<footer class="footer bg-light mt-auto">
+<footer class="footer bg-light mt-auto" id="footer">
     <div class="container-fluid bg-light mt-5 py-2 d-flex justify-content-between align-items-center">
     <div class="d-inline-flex align-items-center">
         @Bright Events 2021
