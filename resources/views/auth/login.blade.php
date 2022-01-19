@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section ('styles')
-    <link href="{{ asset('css/login.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/auth.css') }}" rel="stylesheet">
 @endsection
 
 @section ('scripts')
-    <script type="text/javascript" src={{ asset('js/login.js') }} defer></script>
+    <script type="text/javascript" src={{ asset('js/auth.js') }} defer></script>
 @endsection
 
 @section('content')
@@ -46,7 +46,7 @@
         </form>
     </div>
     <div id="thumbnail" class="d-none d-xl-block col-xl-6 bg-dark">
-        <img src="/images/login/login.jpg" alt="">
+        <img src="/images/auth/login.jpg" alt="">
     </div>
 </div>
 @endsection
