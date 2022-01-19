@@ -8,13 +8,11 @@
             <div class="modal-body">
                 <form id="report-form" method="POST">
                     @csrf
-                    <input id="report-type" type="hidden" name="type">
-                    <input id="report-id" type="hidden" name="id">
 
-
-                    <label for="form-select">Motive:</label>
-                    <select class="form-select" aria-label="Select report motive">
-                        <option selected>Choose one from below</option>
+                    <label for="report-form-select">Motive:</label>
+                    <select id="report-form-select" class="form-select form-control" aria-label="Select report motive"
+                        name="motive" required>
+                        <option value="placeholder" disabled selected>Choose one from below</option>
                         <option value="Sexual harassment">Sexual harassment</option>
                         <option value="Violence or bodily harm">Violence or bodily harm</option>
                         <option value="Nudity or explicit content">Nudity or explicit content</option>
@@ -22,9 +20,9 @@
                         <option value="Other">Other</option>
                     </select>
 
-                    <label for="form-description">Description:</label>
-                    <textarea id="form-description" name="description" rows="5"
-                        cols="33">Tell us in detail what is wrong.</textarea>
+                    <label for="report-form-description">Description:</label>
+                    <textarea class="form-control" id="report-form-description" name="description" rows="10" cols="50"
+                        placeholder="Tell us in detail what is wrong." required></textarea>
 
                 </form>
             </div>
