@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Events\NotificationReceived;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\File;
 use App\Models\Tag;
 use App\Models\AttendanceRequest;
+
 
 use Carbon\Carbon;
 use Validator;
@@ -50,7 +52,7 @@ class EventController extends Controller
             $date = date('Y-m-d', strtotime($request->query('end_date')));
             $events = $events->where('date', '<=', $date);
         }
-        return view('pages.events.browse', ['tags' => $tags, 'users' => $users, 'events' => $events->paginate($request->size ?? 5)->withQueryString(), 'request' => $request]);
+        return view('pages.events.browse', ['tags' => $tags, 'users' => $users, 'events' => $events->paginate($request->size ?? 6)->withQueryString(), 'request' => $request]);
     }
 
     public function getCardList($events)
@@ -140,7 +142,7 @@ class EventController extends Controller
         if ($event->organizer_id != Auth::user()->id) {
             return;
         }
-        
+
         if (!is_null($request->title) && $event->description != $request->description) {
             $event->description = $request->description;
         }
@@ -230,6 +232,7 @@ class EventController extends Controller
             $event->is_disabled = true;
             $event->save();
             //$event->delete();
+            event(new NotificationReceived('event deleted', $event->attendees));
         }
         if (Auth::user()->id === $organizer_id) {
             return redirect()->route('profile', ['username' => Auth::user()->username]);

@@ -106,7 +106,8 @@ CREATE TABLE lbaw2134.poll_options (
 
 CREATE TABLE lbaw2134.user_poll_options (
     voter_id INTEGER REFERENCES lbaw2134.users ON DELETE SET NULL ON UPDATE CASCADE,
-    poll_option_id INTEGER REFERENCES lbaw2134.poll_options ON DELETE CASCADE ON UPDATE CASCADE
+    poll_option_id INTEGER REFERENCES lbaw2134.poll_options ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY (voter_id, poll_option_id)
 );
 
 CREATE TABLE lbaw2134.comments (
@@ -395,6 +396,27 @@ LANGUAGE plpgsql;
 --$BODY$
 --LANGUAGE plpgsql;
 
+CREATE FUNCTION lbaw2134.new_comment_notification() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF 1=1 THEN
+        INSERT INTO lbaw2134.notifications
+        (notification_type, event_id, attendance_request_id, poll_id, comment_id, addressee_id)
+        SELECT * FROM (
+            (VALUES (CAST('New comment' AS lbaw2134.notification_type), NEW.event_id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.id)) AS foo
+            CROSS JOIN
+            (
+                SELECT organizer_id
+                FROM lbaw2134.events
+                WHERE id = NEW.event_id
+            ) AS bar
+        );
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
 CREATE FUNCTION lbaw2134.new_poll_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -425,7 +447,7 @@ BEGIN
         INSERT INTO lbaw2134.notifications
         (notification_type, event_id, attendance_request_id, poll_id, comment_id, addressee_id)
         SELECT * FROM (
-            (VALUES ('Closed poll', NEW.event_id, NULL, NEW.id, NULL)) AS foo
+            (VALUES (CAST('Closed Poll' AS lbaw2134.notification_type), NEW.event_id, CAST(NULL AS INTEGER), NEW.id, CAST(NULL AS INTEGER))) AS foo
             CROSS JOIN
             (
                 SELECT DISTINCT voter_id
@@ -527,6 +549,11 @@ CREATE TRIGGER accepted_invite_notification
     AFTER UPDATE ON lbaw2134.attendance_requests
     FOR EACH ROW
     EXECUTE PROCEDURE lbaw2134.accepted_invite_notification();
+
+CREATE TRIGGER new_comment_notification
+    AFTER INSERT ON lbaw2134.comments
+    FOR EACH ROW
+    EXECUTE PROCEDURE lbaw2134.new_comment_notification();
 
 CREATE TRIGGER new_poll_notification
     AFTER INSERT ON lbaw2134.polls
@@ -649,7 +676,7 @@ INSERT INTO lbaw2134.EVENTS VALUES
 	 (100, 'Vegan for beginners' ,'More and more people are interested in vegan/plant-based eating. Some are just curious, some want to get their feet wet, and some are ready to come to the V-side!', TO_TIMESTAMP('2021/12/29 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 105, 100) ,
 	 (101, 'Begin your taichi journey' ,'This series does seasonal training to help you develop a wide range of skills which will enhance both your health and your practice. We practices basic Tai Chi skills as posting, walking, breathing, stretching, energy work, bone tapping and hand movements.', TO_TIMESTAMP('2021/12/03 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 109, 101) ,
 	 (102, 'Knee pain corrective exercise workshop' ,'If you or a loved one is experiencing hip or knee pain, you wont want to miss this special event. This is an interactive workshop where you will perform the exercises while sitting at your computer.', TO_TIMESTAMP('2021/12/09 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 106, 102) ,
-	 (103, 'Baking from lbaw2134.Scratch 101' ,'Formerly known as Puff Pastry 101, weve shifted to include fun baking projects of all kinds! Bring a friend and join us on Instagram Live!', TO_TIMESTAMP('2021/12/18 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 109, 103) ,
+	 (103, 'Baking from Scratch 101' ,'Formerly known as Puff Pastry 101, weve shifted to include fun baking projects of all kinds! Bring a friend and join us on Instagram Live!', TO_TIMESTAMP('2021/12/18 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 109, 103) ,
 	 (104, 'Tech career fair' ,'We will be hosting a Tech Career Fair with our hiring partners from lbaw2134.fast growing startups and Fortune 500 companies in technology in the US/Canada.  There will be a focus on helping companies achieve their diversity and inclusivity initiative with more diverse candidates to their talent pool.', TO_TIMESTAMP('2021/12/10 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 102, 104) ,
 	 (105, 'Gentle yoga for terrible times' ,'Human beings are not meant to be in constant fight, flight, or freeze mode. Chronic stress takes a devastating toll on our mental and physical well-being. If you are exhausted, stressed out, burnt out, or just looking to relax and nourish your mind, body, and spirit, please join me for 75 minutes of gentle yoga', TO_TIMESTAMP('2021/12/17 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 109, 105) ,
 	 (106, 'The antidote: Womens circle' ,'The Antidote: Womens Circle is a virtual event that uses meditation and reflection to help women gracefully navigate todays world.', TO_TIMESTAMP('2021/12/16 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 102, 106) ,
@@ -770,7 +797,7 @@ INSERT INTO lbaw2134.ATTENDANCES (event_id, attendee_id) VALUES
 INSERT INTO lbaw2134.ATTENDANCE_REQUESTS VALUES
 	( 100, 108, 100, False, False ) ;
 INSERT INTO lbaw2134.POLLS VALUES
-	( 100, 103, 109, 'Do you want to change the schedule?',  '' , TO_TIMESTAMP('2021/12/18 00:00', 'YYYY/MM/DD/ HH24:MI'), True ) ,
+	( 100, 103, 109, 'Do you want to change the schedule?',  'I am afraid the current schedule might not be appropriate for everyone. Please feel free to vote and comment on your reasons on the forum.' , TO_TIMESTAMP('2021/12/18 00:00', 'YYYY/MM/DD/ HH24:MI'), True ) ,
 	( 101, 111, 107, 'What should we eat',  '' , TO_TIMESTAMP('2021/11/29 00:00', 'YYYY/MM/DD/ HH24:MI'), False ) ;
 INSERT INTO lbaw2134.POLL_OPTIONS VALUES
 	( 100, 'yes', 100 ) ,

@@ -1,0 +1,12 @@
+@import url("colors.css");
+
+#thumbnail {
+    right: 0;
+}
+
+#thumbnail img {
+    width: 100% !important;
+    height: auto;
+    object-position: 100% 50%;
+    object-fit: cover;
+}

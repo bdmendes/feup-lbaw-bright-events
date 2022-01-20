@@ -16,7 +16,10 @@ Route::get('events/{id}', "Event\EventController@get")->name('event');
 Route::post('events/{id}', "Event\EventController@disable");
 Route::get('events/{id}/edit', 'Event\EventController@indexEdit')->name('editEvent');
 Route::post('events/{id}/edit', 'Event\EventController@update');
-
+Route::get('test', function () {
+    event(new App\Events\NotificationReceived('teste'));
+    return "Event has been sent!";
+});
 
 // Reports
 Route::get('reports', 'Report\ReportController@index')->name('reportsDash');

@@ -1,7 +1,6 @@
-<div class="container-fluid bg-light">
-    <nav class="navbar navbar-expand-md navbar-light py-4" role="navigation">
+    <nav class="navbar navbar-expand-md navbar-light py-4 fixed-top d-flex align-items-center" role="navigation" id="navbar">
         <a class="navbar-brand" href=" {{ route('home') }} ">
-            <h1>Bright Events</h1>
+            <h1><span class="highlight">B</span>right Events</h1>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsable"
             aria-controls="collapsable" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,6 +14,7 @@
                 <h2>Users</h2>
             </a>
             @if (Auth::check())
+                @include('layouts.notifications')
                 @if (Auth::user()->is_admin)
                     <a class="nav-item nav-link" href="{{ route('reportsDash') }}">
                         <h2>Dashboard</h2>
@@ -37,6 +37,5 @@
             @endif
         </div>
     </nav>
-</div>
 
 @yield('navbar')

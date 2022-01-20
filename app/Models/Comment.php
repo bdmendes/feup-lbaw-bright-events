@@ -8,6 +8,7 @@ class Comment extends Model
 {
     public $timestamps  = false;
     protected $table = 'comments';
+    protected $dates = ['date'];
 
     protected $fillable = [
         'commenter_id',

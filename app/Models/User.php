@@ -84,6 +84,16 @@ class User extends Authenticatable
         return false;
     }
 
+    public function score()
+    {
+        $score = 0;
+        foreach ($this->events as $event) {
+            $score += $event->score();
+        }
+
+        return $score;
+    }
+
     public function scopeSearch($query, $search)
     {
         if ($search) {

@@ -54,7 +54,8 @@
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="polls-tab" data-bs-toggle="tab" data-bs-target="#polls" type="button"
-                    role="tab" aria-controls="polls" aria-selected="false" onclick="appendToUrl('#polls')">Polls</button>
+                    role="tab" aria-controls="polls" aria-selected="false"
+                    onclick="appendToUrl('#polls'); getPolls();">Polls</button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="attendees-tab" data-bs-toggle="tab" data-bs-target="#attendees"
@@ -122,12 +123,38 @@
                             onclick="submitComment();">Submit</button>
                     </form>
                 @endif
-                <div id="comment_area"></div>
+                <script>
+                    let eventChannel = pusher.subscribe("event-channel-{{ $event->id }}");
+
+                    eventChannel.bind('event', function(data) {
+                        if (data.message === 'comment') {
+                            remove('comment_area:refreshIcon');
+                            prependComment(data.id);
+                        } else if (data.message === 'poll') {
+                            updatePoll(data.id);
+                        }
+                    });
+                </script>
+                <div id="comment_area">
+
+                </div>
                 <button id="view_more_comments" style="display: none;" onclick="viewMoreComments();">View more</button>
             </div>
 
             <div class="tab-pane fade" id="polls" role="tabpanel" aria-labelledby="contact-tab">
-                <p>Polls not implemented yet</p>
+                @if (Auth::check() && Auth::id() == $event->organizer->id)
+                    <button id="new_poll_button" class="mt-4 mb-2" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#new_poll_area" aria-expanded="false" aria-controls="new_poll_area">
+                        Create poll
+                    </button>
+                    <div class="collapse" id="new_poll_area">
+                        <div class="card card-body">
+                            @include('partials.events.newPoll', compact('event'))
+                        </div>
+                    </div>
+                @endif
+                <div class="accordion accordion-flush mt-2" id="poll_area">
+                </div>
             </div>
 
             <div class="tab-pane fade" id="attendees" role="tabpanel" aria-labelledby="contact-tab">
@@ -165,19 +192,19 @@
                 @endif
 
                 <div class="p-4 d-flex gap-4 flex-wrap justify-content" id="attendees-list">
-                    @forelse ($event->attendees() as $user)
-                        <div id="{{ $user->username . '-entry' }}" class="border rounded d-flex p-1"
+                    @forelse ($event->attendances as $attendance)
+                        <div id="{{ $attendance->attendee->username . '-entry' }}" class="border rounded d-flex p-1"
                             style="width: 250px;">
                             @if (Auth::check() && Auth::user()->id == $event->organizer_id)
                                 @include('partials.users.smallCard', compact('user'), compact('event'))
                                 <div class="align-self-center" style="margin-left:auto;">
                                     <button id="{{ $user->username . '-btn' }}" class="btn btn-light"
-                                        onclick="removeAttendee({{ $event->id }}, {{ $user->id }}, '{{ $user->username }}', false)">
+                                        onclick="removeAttendee({{ $event->id }}, {{ $attendance->attendee->id }}, '{{ $attendance->attendee->username }}', false)">
                                         <i class="bi bi-x-circle"></i>
                                     </button>
                                 </div>
                             @else
-                                @include ('partials.users.smallCard', compact('user'))
+                                @include ('partials.users.smallCard', ['user' => $attendance->attendee])
                             @endif
                         </div>
                     @empty
