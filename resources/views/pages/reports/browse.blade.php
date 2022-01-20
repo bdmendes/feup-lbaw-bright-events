@@ -16,27 +16,13 @@
                             <th scope="col"></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach ($reports as $report)
-                            <tr>
-                                <th scope="row">{{ $report->id }}</th>
-                                <td>{{ $report->date->diffForHumans() }}</td>
-                                <td>{{ $report->report_motive }}</td>
-                                <td>{{ $report->handled_by_id ? 'Yes' : 'No' }}</td>
-                                <td>
-                                    {{ $report->type ?? 'Unknown type' }}
-                                </td>
-                                <td class="report-toggle" data-bs-toggle="collapse" href="#dets{{ $report->id }}">
-                                    <i class="bi bi-chevron-compact-down"></i>
-                                </td>
-                            </tr>
-                            <tr id="dets{{ $report->id }}" class="collapse align-middle">
-                                <td id="r{{ $report->id }}" colspan="6">
-                                    @include('partials.reports.card', ['report' => $report])
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
+
+                    @foreach ($reports as $report)
+                        <tbody id="r{{ $report->id }}">
+                            @include('partials.reports.card', ['report' => $report])
+                        </tbody>
+                    @endforeach
+
                 </table>
             @else
                 <h3>No reports to show</h3>
