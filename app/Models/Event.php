@@ -23,7 +23,8 @@ class Event extends Model
         'organizer_id',
         'is_disabled',
         'tags',
-        'cover_image_id'
+        'cover_image_id',
+        'location_id'
     ];
 
     public function organizer()

@@ -222,3 +222,12 @@ div.bi {
 ::-webkit-scrollbar-thumb:hover {
     background-color: var(--primary-color);
 }
+
+.transparent {
+    transition: color 1s;
+    color: transparent;
+}
+
+.black {
+    color: #000;
+}

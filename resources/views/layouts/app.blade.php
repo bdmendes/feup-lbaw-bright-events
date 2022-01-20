@@ -25,7 +25,15 @@
     <script type="text/javascript" src={{ asset('js/notification.js') }}></script>
     <script type="text/javascript" src={{ asset('js/comments.js') }}></script>
     <script type="text/javascript" src={{ asset('js/polls.js') }}></script>
+    <script type="text/javascript" src={{ asset('js/location.js') }}></script>
     <script src="//js.pusher.com/3.1/pusher.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
 
     <script>
         var pusher = new Pusher('5aaef3148145a5edc935', {
@@ -39,12 +47,12 @@
         // Subscribe to the channel we specified in our Laravel Event
         @if (Auth::check())
             var channel = pusher.subscribe("notification-received-channel-{{ Auth::user()->username }}");
-        
+
             channel.bind('notification-received', function(data) {
             getNotifications(null, true);
-        
+
             });
-        
+
         @endif
         // Bind a function to a Event (the full Laravel class)
     </script>

@@ -56,10 +56,10 @@
                 <!-- Event date -->
                 <div class="col-lg-6 col-sm-12 col-12 mb-2">
                     <label class="w-100"> Event date: </label>
-                    <input type="date" name="date"
+                    <input type="datetime-local" name="date"
                          id="date"
                          onchange="removeErrors('date');"
-                         @if (!empty($event)) value="{{ $event->date->format('Y-m-d') }}" @endif
+                         @if (!empty($event)) value="{{ $event->date->format('Y-m-d\TH:i') }}" @endif
                          class="@if ($errors->has('date')) errorBorder @endif" />
 
                     @if ($errors->has('date'))
@@ -82,6 +82,97 @@
                         <label class="btn btn-outline-primary" for="restriction2">Private</label>
                     </div>
                 </div>
+            </div>
+
+            <div class="p-3 w-100 content-float">
+                <label class="p-2 w-100">Location</label>
+                <div class="col-lg-6 col-12 p-3">
+                    <label class="p-2 w-100">Search:</label>
+                    <input type="text"
+                            placeholder="Search map"
+                           id="mapGlobalFilter"/>
+
+                    <button onclick="searchMap();" type="button">Search</button>
+
+                    <input type="hidden" id="lat" name="lat" />
+                    <input type="hidden" id="long" name="long" />
+
+                    <label class="p-2 w-100">City:</label>
+                    <input type="text" class="transparent" id="city" name="city" />
+
+                    <label class="p-2 w-100">Country:</label>
+                    <input type="text" class="transparent" id="country" name="country" readonly="readonly"/>
+
+                    <label class="p-2 w-100">Display name:</label>
+                    <input type="text" class="transparent" id="display_name" name="display_name"/>
+
+                    <label class="p-2 w-100">Postcode:</label>
+                    <input type="text" class="transparent" id="postcode" name="postcode" readonly="readonly"/>
+
+
+                </div>
+                <div class="col-lg-6 col-12">
+                    <div id="map"
+                        class="w-100"
+                        style="height: 400px">
+
+                    </div>
+
+                </div>
+                <script>
+                    let map = L.map('map').setView([51.505, -0.09], 13);
+                    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                    maxZoom: 18,
+                    id: 'mapbox/streets-v11',
+                    tileSize: 512,
+                    zoomOffset: -1,
+                    accessToken: 'pk.eyJ1IjoiYnJ1bm9nb21lczMwIiwiYSI6ImNreWxnbzltMzAwYTgydnBhaW81OGhha24ifQ.X-WsoAxJ_WcIlFoQpR4rFA'
+                }).addTo(map);
+
+                    let mapMarker = null;
+
+                    map.on('click',async function(ev)  {
+                        let cityHtml = document.getElementById("city");
+                        let postcodeHtml = document.getElementById("postcode");
+                        let countryHtml = document.getElementById("country");
+                        let displayNameHtml = document.getElementById("display_name");
+                        let latHtml = document.getElementById("lat");
+                        let longHtml = document.getElementById("long");
+                        cityHtml.classList.remove("black");
+                        postcodeHtml.classList.remove("black");
+                        countryHtml.classList.remove("black");
+                        displayNameHtml.classList.remove("black");
+                        if(mapMarker != null){
+                            map.removeLayer(mapMarker);
+                        }
+                        mapMarker = L.marker(ev.latlng).addTo(map);
+                        let data = await getAddress(ev.latlng.lat, ev.latlng.lng);
+                        let display_name = data['display_name'];
+                        let address = data["address"];
+                        let postcode = address["postcode"];
+                        let city = address["city"];
+                        let country = address["country"];
+
+                        console.log("Address = " + JSON.stringify(address));
+
+
+                        cityHtml.value = city;
+                        cityHtml.classList.add("black");
+
+                        postcodeHtml.value = postcode;
+                        postcodeHtml.classList.add("black");
+
+                        countryHtml.value = country;
+                        countryHtml.classList.add("black");
+
+                        displayNameHtml.value = display_name;
+                        displayNameHtml.classList.add("black");
+
+                        latHtml.value = ev.latlng.lat;
+                        longHtml.value = ev.latlng.lng;
+                    });
+                </script>
             </div>
 
             <!-- Tags -->

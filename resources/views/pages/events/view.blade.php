@@ -20,6 +20,24 @@
                 <label>Location: </label>
                 @if ($event->location ?? '')
                     {{ $event->location->pretty_print() }}
+                    <div id="map"
+                        class="w-100"
+                        style="height: 400px">
+                    </div>
+                    <script>
+                        let eventCoords = [{{$event->location->lat}}, {{$event->location->long}}];
+                        let map = L.map('map').setView(eventCoords, 17);
+                        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                        maxZoom: 18,
+                        id: 'mapbox/streets-v11',
+                        tileSize: 512,
+                        zoomOffset: -1,
+                        accessToken: 'pk.eyJ1IjoiYnJ1bm9nb21lczMwIiwiYSI6ImNreWxnbzltMzAwYTgydnBhaW81OGhha24ifQ.X-WsoAxJ_WcIlFoQpR4rFA'
+                    }).addTo(map);
+                    L.marker(eventCoords).addTo(map)
+                    </script>
+
                 @else
                     Not defined
                 @endif

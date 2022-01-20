@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Events\NotificationReceived;
 use App\Models\Event;
+use App\Models\Location;
 use App\Models\User;
 use App\Models\File;
 use App\Models\Tag;
@@ -105,6 +106,7 @@ class EventController extends Controller
         ]);
         $event->tags()->attach($request->tags);
 
+
         if ($request->cover_image) {
             $filename = 'event' . $event->id . '.' . $request->cover_image->extension();
             $request->cover_image->move(public_path('storage'), $filename);
@@ -120,9 +122,20 @@ class EventController extends Controller
                 'name' => $request->file('cover_image')->getClientOriginalName()
             ]);
             $event->cover_image_id = $file->id;
-            $event->save();
         }
 
+        if ($request->city) {
+            $location = Location::create([
+                'city' => $request->city,
+                'postcode' => $request->postcode,
+                'country' => $request->country,
+                'name' => $request->display_name,
+                'lat' => $request->lat,
+                'long' => $request->long
+            ]);
+            $event->location_id = $location->id;
+        }
+        $event->save();
         return redirect()->route('event', ['id' => $event->id]);
     }
 

@@ -15,7 +15,7 @@ function getNotifications(event, showNewOnes = false){
     let  options = {
         method: 'get'
       };
-    fetch(url, options)
+    fetch(url)
     .then((response) => response.text())
     .then(html => {
         remove(refreshId);
