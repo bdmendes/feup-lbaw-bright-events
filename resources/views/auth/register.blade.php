@@ -10,7 +10,7 @@
 
 @section('content')
 <div class="d-flex justify-content-center">
-    <div class="col-6 d-flex flex-column justify-content-center align-items-center" id="register-col">
+    <div class="col-6 d-flex flex-column justify-content-center align-items-center" id="edit-col">
         <form method="POST" action="{{ route('register') }}" class="d-flex flex-column col-lg-6 col-md-8 col-sm-10 gap-4">
             {{ csrf_field() }}
 
