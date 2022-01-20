@@ -153,45 +153,7 @@
                     @endif
 
                     map.on('click',async function(ev)  {
-                        let cityHtml = document.getElementById("city");
-                        let postcodeHtml = document.getElementById("postcode");
-                        let countryHtml = document.getElementById("country");
-                        let displayNameHtml = document.getElementById("display_name");
-                        let latHtml = document.getElementById("lat");
-                        let longHtml = document.getElementById("long");
-                        cityHtml.classList.remove("black");
-                        postcodeHtml.classList.remove("black");
-                        countryHtml.classList.remove("black");
-                        displayNameHtml.classList.remove("black");
-                        if(mapMarker != null){
-                            map.removeLayer(mapMarker);
-                        }
-                        mapMarker = L.marker(ev.latlng).addTo(map);
-                        let data = await getAddress(ev.latlng.lat, ev.latlng.lng);
-                        let display_name = data['display_name'];
-                        let address = data["address"];
-                        let postcode = address["postcode"];
-                        let city = address["city"];
-                        let country = address["country"];
-
-                        console.log("Address = " + JSON.stringify(address));
-
-
-                        cityHtml.value = city;
-
-
-                        postcodeHtml.value = postcode;
-
-
-                        countryHtml.value = country;
-
-
-                        displayNameHtml.value = display_name;
-
-
-                        latHtml.value = ev.latlng.lat;
-                        longHtml.value = ev.latlng.lng;
-                        giveBlack();
+                        clickMap(ev);
                     });
 
                     function giveBlack(){
