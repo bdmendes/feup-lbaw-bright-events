@@ -47,7 +47,7 @@
             <input class="input" id="password-confirm" type="password" name="password_confirmation" placeholder="Confirm your password" required >
 
             <select class="input" name="gender" name="gender" id="gender" required>
-                <option value="" selected disabled><span class="text-muted">Please select one of the following</span></option>
+                <option value="" selected disabled><span class="text-muted">Gender</span></option>
                 <option value="Female">Female</option>
                 <option value="Male">Male</option>
                 <option value="Other">Other</option>
