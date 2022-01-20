@@ -205,6 +205,20 @@ class EventController extends Controller
             $event->tags()->attach($request->tags);
         }
 
+        if ($request->city) {
+            $event->location->delete();
+
+            $location = Location::create([
+                'city' => $request->city,
+                'postcode' => $request->postcode,
+                'country' => $request->country,
+                'name' => $request->display_name,
+                'lat' => $request->lat,
+                'long' => $request->long
+            ]);
+            $event->location_id = $location->id;
+        }
+
         $event->save();
         return redirect()->route('event', ['id' => $event->id]);
     }

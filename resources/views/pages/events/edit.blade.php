@@ -94,20 +94,31 @@
 
                     <button onclick="searchMap();" type="button">Search</button>
 
-                    <input type="hidden" id="lat" name="lat" />
-                    <input type="hidden" id="long" name="long" />
+                    <input  id="lat" name="lat" type="hidden"
+                            value="{{$event->location->lat ?? ''}}" />
+                    <input id="long" name="long" type="hidden"
+                           value="{{$event->location->long ?? ''}}" />
 
                     <label class="p-2 w-100">City:</label>
-                    <input type="text" class="transparent" id="city" name="city" />
+                    <input id="city" name="city"
+                           type="text" class="transparent"
+                           value="{{$event->location->city ?? ''}}"/>
 
                     <label class="p-2 w-100">Country:</label>
-                    <input type="text" class="transparent" id="country" name="country" readonly="readonly"/>
+                    <input id="country" name="country" type="text" class="transparent"
+                           readonly="readonly"
+                           value="{{$event->location->country ?? ''}}"/>
 
                     <label class="p-2 w-100">Display name:</label>
-                    <input type="text" class="transparent" id="display_name" name="display_name"/>
+                    <input  id="display_name" name="display_name"
+                            type="text" class="transparent"
+                            value="{{$event->location->name ?? ''}}"/>
 
                     <label class="p-2 w-100">Postcode:</label>
-                    <input type="text" class="transparent" id="postcode" name="postcode" readonly="readonly"/>
+                    <input id="postcode" name="postcode"
+                           type="text" class="transparent"
+                           readonly="readonly"
+                           value="{{$event->location->postcode ?? ''}}"/>
 
 
                 </div>
@@ -120,7 +131,13 @@
 
                 </div>
                 <script>
-                    let map = L.map('map').setView([51.505, -0.09], 13);
+                    @if($event->location ?? '')
+                        let eventCoords = [{{$event->location->lat}}, {{$event->location->long}}];
+                        giveBlack();
+                    @else
+                        let eventCoords = [51.505, -0.09];
+                    @endif
+                    let map = L.map('map').setView(eventCoords, 17);
                     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
                     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                     maxZoom: 18,
@@ -129,8 +146,11 @@
                     zoomOffset: -1,
                     accessToken: 'pk.eyJ1IjoiYnJ1bm9nb21lczMwIiwiYSI6ImNreWxnbzltMzAwYTgydnBhaW81OGhha24ifQ.X-WsoAxJ_WcIlFoQpR4rFA'
                 }).addTo(map);
-
-                    let mapMarker = null;
+                    @if($event->location ?? '')
+                        let mapMarker = L.marker(eventCoords).addTo(map);
+                    @else
+                        let mapMarker = null;
+                    @endif
 
                     map.on('click',async function(ev)  {
                         let cityHtml = document.getElementById("city");
@@ -158,20 +178,32 @@
 
 
                         cityHtml.value = city;
-                        cityHtml.classList.add("black");
+
 
                         postcodeHtml.value = postcode;
-                        postcodeHtml.classList.add("black");
+
 
                         countryHtml.value = country;
-                        countryHtml.classList.add("black");
+
 
                         displayNameHtml.value = display_name;
-                        displayNameHtml.classList.add("black");
+
 
                         latHtml.value = ev.latlng.lat;
                         longHtml.value = ev.latlng.lng;
+                        giveBlack();
                     });
+
+                    function giveBlack(){
+                        let cityHtml = document.getElementById("city");
+                        let postcodeHtml = document.getElementById("postcode");
+                        let countryHtml = document.getElementById("country");
+                        let displayNameHtml = document.getElementById("display_name");
+                        cityHtml.classList.add("black");
+                        postcodeHtml.classList.add("black");
+                        countryHtml.classList.add("black");
+                        displayNameHtml.classList.add("black");
+                    }
                 </script>
             </div>
 
