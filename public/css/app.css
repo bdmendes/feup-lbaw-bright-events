@@ -94,6 +94,14 @@ footer {
     height: 5%;
 }
 
+#footer {
+    z-index: 1000;
+}
+
+#footer div {
+    background-color: white;
+}
+
 footer > span {
     flex: 1;
 }

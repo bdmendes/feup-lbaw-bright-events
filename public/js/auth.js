@@ -4,17 +4,18 @@ function thumbnailPlacing() {
     let login = document.getElementById("login-col");
     let register = document.getElementById("register-col");
     let editCol = document.getElementById("edit-col");
+    let footer = document.getElementById("footer");
 
     if (register) {
-        register.style.minHeight = window.innerHeight - navbar.offsetHeight + "px";
+        register.style.minHeight = window.innerHeight - navbar.offsetHeight - footer.offsetHeight + "px";
     }
 
     if (login) {
-        login.style.minHeight = window.innerHeight - navbar.offsetHeight + "px";
+        login.style.minHeight = window.innerHeight - navbar.offsetHeight - footer.offsetHeight + "px";
     }
 
     if (editCol) {
-        editCol.style.minHeight = window.innerHeight - navbar.offsetHeight + "px";
+        editCol.style.minHeight = window.innerHeight - navbar.offsetHeight - footer.offsetHeight + "px";
     }
 
 
@@ -22,3 +23,4 @@ function thumbnailPlacing() {
 }
 
 document.addEventListener("DOMContentLoaded", thumbnailPlacing);
+window.onresize = thumbnailPlacing;

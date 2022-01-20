@@ -1,0 +1,21 @@
+@import url("colors.css");
+
+#banner {
+    overflow: hidden;
+}
+
+#banner img {
+    height: 60vh !important;
+    object-fit: cover !important;
+    filter: blur(5px);
+    transform: scale(1.1);
+}
+
+#event-content {
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
+}
+
+#event-image img {
+    max-height: 400px !important;
+    object-fit: cover !important;
+}

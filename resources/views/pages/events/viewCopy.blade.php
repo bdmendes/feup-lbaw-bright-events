@@ -2,13 +2,7 @@
 
 @section('title', 'home')
 
-@section ('styles')
-    <link href="{{ asset('css/event.css') }}" rel="stylesheet">
-@endsection
-
 @section('scripts')
-<script type="text/javascript" src={{ asset('js/event.js') }} defer></script>
-
 <script>
         function inviteUser(eventId) {
             const username = document.getElementById("selectUser").value;
@@ -69,54 +63,47 @@
     <script type="text/javascript" src={{ asset('js/report.form.js') }} defer></script>
 @endsection
 
+
 @section('content')
-    <div id="banner" class="w-100 position-fixed">
-        <img class="w-100" src="/{{ $event->image->path ?? 'images/group.jpg' }}" alt="First slide">
-    </div>
+    <div class="container w-md-75 border rounded p-4">
+        <div class="w-100">
+            <img src="/{{ $event->image->path ?? 'images/group.jpg' }}" class="eventBackground mx-auto" />
+        </div>
+        <div class="p-1  w-100">
+            <div class="p-3  w-100">
+                <h1>{{ $event->title }}</h1>
+            </div>
 
-    <div id="event-content" class="container w-75 border rounded p-4 bg-light my-4">
-        <div id="event-header" class="row mb-4">
-            <div id="event-info" class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                <div class="p-3 w-100">
-                    <h1>{{ $event->title }}</h1>
-                </div>
-
-                <div class="p-3  w-100">
-                    <label>Date: </label>
-                    {{ $event->date->format('d/m/Y H:i') }}
-                </div>
-                <div class="p-3  w-100">
-                    <label>Location: </label>
-                    @if ($event->location ?? '')
-                        {{ $event->location->pretty_print() }}
-                    @else
-                        Not defined
-                    @endif
-                </div>
-                <div class="p-3  w-100">
-                    <label> Organizer: </label>
-                    @include('partials.users.smallCard', ['user' => $event->organizer])
-                </div>
-                <div class="p-3 w-100">
-                    <label> Tags: </label>
-                    @include("partials.events.tags", ['event' => $event])
-                </div>
-                @if (Auth::check() && Auth::id() != $event->organizer_id)
-                    <div id="report-container" class="text-end pe-1">
-                        <span class="link-primary" style="font-size: 0.9em;" type="button"
-                            onclick="getReportModal('event', {{ $event->id }});">Report
-                            event</span>
-                    </div>
+            <div class="p-3  w-100">
+                <label>Date: </label>
+                {{ $event->date->format('d/m/Y H:i') }}
+            </div>
+            <div class="p-3  w-100">
+                <label>Location: </label>
+                @if ($event->location ?? '')
+                    {{ $event->location->pretty_print() }}
+                @else
+                    Not defined
                 @endif
             </div>
-            <div id="event-image" class="col-6">
-                <img src="/{{ $event->image->path ?? 'images/group.jpg' }}" class="w-100" />
+            <div class="p-3  w-100">
+                <label> Organizer: </label>
+                @include('partials.users.smallCard', ['user' => $event->organizer])
             </div>
+            <div class="p-3 w-100">
+                <label> Tags: </label>
+                @include("partials.events.tags", ['event' => $event])
+            </div>
+            @if (Auth::check() && Auth::id() != $event->organizer_id)
+                <div id="report-container" class="text-end pe-1">
+                    <span class="link-primary" style="font-size: 0.9em;" type="button"
+                        onclick="getReportModal('event', {{ $event->id }});">Report
+                        event</span>
+                </div>
+            @endif
         </div>
-        
 
-        <div id="event-body">
-            <ul class="nav nav-tabs w-100 nav-fill" id="myTab" role="tablist">
+        <ul class="nav nav-tabs w-100 nav-fill" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description"
                     type="button" role="tab" aria-controls="description" aria-selected="true"
@@ -291,8 +278,6 @@
                 <p>Statistics not implemented yet</p>
             </div>
         </div>
-    </div>
-        
 
-</div>
+    </div>
 @endsection
