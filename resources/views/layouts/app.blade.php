@@ -25,41 +25,7 @@
     
     @yield('styles')
 
-    <script type="text/javascript">
-        // Fix for Firefox autofocus CSS bug
-        // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
-    </script>
-    <script type="text/javascript" src={{ asset('js/app.js') }} defer></script>
-    <script type="text/javascript" src={{ asset('js/notification.js') }}></script>
-    <script type="text/javascript" src={{ asset('js/comments.js') }}></script>
-    <script type="text/javascript" src={{ asset('js/polls.js') }}></script>
-    <script type="text/javascript" src={{ asset('js/style.js') }} defer></script>
-
     @yield('scripts')
-
-    <script src="//js.pusher.com/3.1/pusher.min.js"></script>
-
-    <script>
-        var pusher = new Pusher('5aaef3148145a5edc935', {
-            encrypted: true,
-            cluster: 'eu'
-        });
-
-        function subscribeNotifications(user) {
-
-        }
-        // Subscribe to the channel we specified in our Laravel Event
-        @if (Auth::check())
-            var channel = pusher.subscribe("notification-received-channel-{{ Auth::user()->username }}");
-        
-            channel.bind('notification-received', function(data) {
-            getNotifications(null, true);
-        
-            });
-        
-        @endif
-        // Bind a function to a Event (the full Laravel class)
-    </script>
 
 </head>
 

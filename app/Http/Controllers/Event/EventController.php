@@ -223,16 +223,21 @@ class EventController extends Controller
         ]);
     }
 
-    public function delete(Request $request)
+    public function disable(Request $request, $event_id)
     {
-        $event = Event::find($request->id);
+        $event = Event::find($event_id);
         if ($event != null) {
             $this->authorize('delete', $event);
+            $organizer_id = $event->organizer_id;
             $event->is_disabled = true;
             $event->save();
             //$event->delete();
             event(new NotificationReceived('event deleted', $event->attendees));
         }
-        return redirect()->route('profile', ['username' => Auth::user()->username]);
+        if (Auth::user()->id === $organizer_id) {
+            return redirect()->route('profile', ['username' => Auth::user()->username]);
+        } else {
+            return redirect()->route('reportsDash');
+        }
     }
 }
