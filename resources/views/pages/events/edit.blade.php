@@ -156,16 +156,6 @@
                         clickMap(ev);
                     });
 
-                    function giveBlack(){
-                        let cityHtml = document.getElementById("city");
-                        let postcodeHtml = document.getElementById("postcode");
-                        let countryHtml = document.getElementById("country");
-                        let displayNameHtml = document.getElementById("display_name");
-                        cityHtml.classList.add("black");
-                        postcodeHtml.classList.add("black");
-                        countryHtml.classList.add("black");
-                        displayNameHtml.classList.add("black");
-                    }
                 </script>
             </div>
 
