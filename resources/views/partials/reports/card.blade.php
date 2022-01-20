@@ -33,20 +33,25 @@
                         @endif
                         <div class="ms-auto pe-5">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-success mark-handled-action"
-                                    value="{{ $report->id }}">Mark as
-                                    handled</button>
+
+                                <button id="mark-handled{{ $report->id }}" type="button"
+                                    class="btn btn-success mark-handled-action" value="{{ $report->id }}"
+                                    {{ isset($report->handled_by_id) ? 'disabled' : '' }}>Dismiss</button>
+
                                 <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    data-bs-toggle="dropdown" aria-expanded="false"
+                                    {{ isset($report->handled_by_id) ? 'disabled' : '' }}>
                                     <span class="visually-hidden">Toggle Dropdown</span>
                                 </button>
                                 <ul class="dropdown-menu">
                                     @if ($report->type != 'comment')
-                                        <li value="{{ $report->id }}" class="dropdown-item block-action">Block
+                                        <li id="block{{ $report->id }}" value="{{ $report->id }}"
+                                            class="dropdown-item block-action">Block
                                         </li>
                                     @endif
                                     @if ($report->type != 'event')
-                                        <li value="{{ $report->id }}" class="dropdown-item delete-action">Delete
+                                        <li id="delete{{ $report->id }}" value="{{ $report->id }}"
+                                            class="dropdown-item delete-action">Delete
                                         </li>
                                     @endif
                                 </ul>

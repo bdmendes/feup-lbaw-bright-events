@@ -62,12 +62,13 @@ class ReportAPIController extends Controller
 
     public function markHandled(Request $request)
     {
-        /* $this->authorize('markHandled', Report::class); */
-
         $report = Report::find($request->reportId);
+
         if (is_null($report)) {
             return abort(404, "Couldn't find report");
         }
+
+        $this->authorize('markHandled', $report);
 
         $this->setHandler($report);
 
@@ -76,11 +77,12 @@ class ReportAPIController extends Controller
 
     public function block(Request $request)
     {
-        /* $this->authorize('block', Report::class); */
         $report = Report::find($request->reportId);
         if (is_null($report)) {
             return abort(404, "Couldn't find report");
         }
+
+        $this->authorize('block', $report);
 
         
         if (!is_null($report->reported_user_id)) {
@@ -110,66 +112,26 @@ class ReportAPIController extends Controller
         return view('partials.reports.card', ['report' => $report]);
     }
 
-    public function unblock($request)
-    {
-        /* $this->authorize('block', Report::class); */
-        $report = Report::find($request->reportId);
-        if (is_null($report)) {
-            return abort(404, "Couldn't find report");
-        }
-
-        
-        if (isset($report->reported_user_id)) {
-            $user = User::find($report->reported_user_id);
-            if (is_null($user)) {
-                abort('404', 'User not found');
-            }
-        
-            $user->is_blocked = false;
-            $user->save();
-        } else {
-            if (isset($report->reported_event_id)) {
-                $event = Event::find($report->reported_event_id);
-                if (is_null($event)) {
-                    abort('404', 'Event not found');
-                }
-        
-                $event->is_disabled = false;
-                $event->save();
-            } else {
-                abort(422, 'Unprocessable parameters');
-            }
-        }
-
-        $this->setHandler($report);
-
-        return view('partials.reports.card', ['report' => $report]);
-    }
-
     public function delete(Request $request)
     {
-        /* $this->authorize('delete', Report::class); */
-
         $report = Report::find($request->reportId);
         if (is_null($report)) {
             return abort(404, "Couldn't find report");
         }
+
+        $this->authorize('delete', $report);
 
         if ($report->type == 'user') {
             $user = User::find($report->reported_user_id);
-            if (is_null($user)) {
-                abort('404', 'User not found');
+            if (isset($user)) {
+                $user->delete();
             }
-        
-            $user->delete();
         } else {
             if ($report->type == 'comment') {
                 $comment = Comment::find($report->reported_comment_id);
-                if (is_null($comment)) {
-                    abort('404', 'Comment not found');
+                if (isset($comment)) {
+                    $comment->delete();
                 }
-            
-                $comment->delete();
             } else {
                 abort(500, 'Internal server error');
             }
@@ -177,6 +139,6 @@ class ReportAPIController extends Controller
 
         $this->setHandler($report);
         
-        return view('partials.reports.card', ['report' => $report]);
+        return view('partials.reports.card', ['report' => $report, 'request' => $request]);
     }
 }

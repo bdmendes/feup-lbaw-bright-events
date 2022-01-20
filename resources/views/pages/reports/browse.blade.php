@@ -3,6 +3,44 @@
 @section('content')
     <div>
         <h2>Reports Dashboard</h2>
+
+        <div class="mb-4" id="order">
+            <div class="d-flex flex-row align-items-center justify-content-between my-2">
+                <h4>Date</h4>
+                <div>
+                    <button
+                        onclick="location.href='{{ $request->fullUrlWithQuery(['sort_by' => 'date', 'order' => 'ascending']) }}'"
+                        type="button"
+                        class="{{ $request->query('sort_by') == 'date' && $request->query('order') == 'ascending' ? 'active' : '' }} btn btn-custom">
+                        <i class="bi bi-arrow-up" style="color: white;"></i>
+                    </button>
+                    <button
+                        onclick="location.href='{{ $request->fullUrlWithQuery(['sort_by' => 'date', 'order' => 'descending']) }}'"
+                        type="button"
+                        class="{{ $request->query('sort_by') == 'date' && $request->query('order') == 'descending' ? 'active' : '' }} btn btn-custom">
+                        <i class="bi bi-arrow-down" style="color: white;"></i>
+                    </button>
+                </div>
+
+                <h4>Filter</h4>
+                <div>
+                    <button
+                        onclick="location.href='{{ $request->query('filter') != 'handled' ? $request->fullUrlWithQuery(['filter' => 'handled']) : $request->fullUrlWithQuery(['filter' => '']) }}'"
+                        type="button" class="{{ $request->query('filter') == 'handled' ? 'active' : '' }} btn btn-custom">
+                        <span>Handled</span>
+                    </button>
+                    <button
+                        onclick="location.href='{{ $request->query('filter') != 'notHandled' ? $request->fullUrlWithQuery(['filter' => 'notHandled']) : $request->fullUrlWithQuery(['filter' => '']) }}'"
+                        type="button"
+                        class="{{ $request->query('filter') == 'notHandled' ? 'active' : '' }} btn btn-custom">
+                        <span>Not handled</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+
         <div class="mt-4">
             @if (!$reports->isEmpty())
                 <table class="table" id="reports">
