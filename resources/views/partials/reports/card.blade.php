@@ -27,10 +27,10 @@
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu">
-                            @if (!isset($report->reported_comment_id))
+                            @if ($report->type != 'comment')
                                 <li value="{{ $report->id }}" class="dropdown-item block-action">Block</li>
                             @endif
-                            @if (!isset($report->reported_event_id))
+                            @if ($report->type != 'event')
                                 <li value="{{ $report->id }}" class="dropdown-item delete-action">Delete</li>
                             @endif
                         </ul>
@@ -38,16 +38,21 @@
                 </div>
             </div>
             <div class="px-1">
-                @if (isset($report->reported_user_id))
+                @if ($report->type == 'user')
                     @include('partials.users.smallCard', ['user' => $report->reportedUser])
                 @else
-                    @if (isset($report->reported_event_id))
+                    @if ($report->type == 'event')
 
                         @include('partials.events.card', ['event' => $report->reportedEvent])
                     @else
-                        @if (isset($report->reported_comment_id))
-                            @include('partials.events.comment', ['comment' => $report->reportedComment, 'is_report' =>
-                            true])
+                        @if ($report->type == 'comment')
+                            @if (isset($report->reportedComment))
+                                @include('partials.events.comment', ['comment' => $report->reportedComment, 'is_report'
+                                =>
+                                true])
+                            @else
+                                Comment already deleted.
+                            @endif
                         @else
                             Unrecognized Type
                         @endif

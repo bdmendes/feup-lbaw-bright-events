@@ -12,6 +12,8 @@ CREATE TYPE lbaw2134.event_state AS ENUM ('cancelled', 'finished', 'on-going', '
 CREATE TYPE lbaw2134.notification_type AS ENUM ('Disabled event', 'Cancelled event', 'Join request', 'Accepted request', 'Declined request', 'Invite', 'Accepted invite', 'Declined invite', 'New comment', 'New poll', 'Closed Poll');
 CREATE TYPE lbaw2134.report_motive AS ENUM ('Sexual harassment', 'Violence or bodily harm', 'Nudity or explicit content', 'Hate speech', 'Other');
 
+
+CREATE TYPE lbaw2134.report_references AS ENUM ('event', 'user', 'comment');
 -------------------------------------------------
 -------------------- Tables ---------------------
 -------------------------------------------------
@@ -134,12 +136,13 @@ CREATE TABLE lbaw2134.reports (
     id SERIAL PRIMARY KEY,
     date TIMESTAMP DEFAULT NOW() NOT NULL,
     description VARCHAR(1000),
+    type lbaw2134.report_references NOT NULL,
     report_motive lbaw2134.report_motive NOT NULL,
     handled_by_id INTEGER REFERENCES lbaw2134.users ON DELETE SET NULL ON UPDATE CASCADE,
-    reported_event_id INTEGER REFERENCES lbaw2134.events ON DELETE CASCADE ON UPDATE CASCADE,
-    reported_user_id INTEGER REFERENCES lbaw2134.users ON DELETE CASCADE ON UPDATE CASCADE,
-    reported_comment_id INTEGER REFERENCES lbaw2134.comments ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT single_reference CHECK ((reported_event_id IS NOT NULL AND reported_user_id IS NULL AND reported_comment_id IS NULL) OR (reported_event_id IS NULL AND reported_user_id IS NOT NULL AND reported_comment_id IS NULL) OR (reported_event_id IS NULL AND reported_user_id IS NULL AND reported_comment_id IS NOT NULL))
+    reported_event_id INTEGER REFERENCES lbaw2134.events ON DELETE SET NULL ON UPDATE CASCADE,
+    reported_user_id INTEGER REFERENCES lbaw2134.users ON DELETE SET NULL ON UPDATE CASCADE,
+    reported_comment_id INTEGER REFERENCES lbaw2134.comments ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT single_reference CHECK ((reported_event_id IS NOT NULL AND reported_user_id IS NULL AND reported_comment_id IS NULL) OR (reported_event_id IS NULL AND reported_user_id IS NOT NULL AND reported_comment_id IS NULL) OR (reported_event_id IS NULL AND reported_user_id IS NULL AND reported_comment_id IS NOT NULL) OR (reported_event_id IS NULL AND reported_user_id IS NULL AND reported_comment_id IS NULL))
 );
 
 -------------------------------------------------
@@ -297,11 +300,11 @@ BEGIN
         INSERT INTO lbaw2134.notifications
         (notification_type, event_id, poll_id, comment_id, attendance_request_id, addressee_id)
         SELECT * FROM (
-            (VALUES (CAST('Disabled event' AS lbaw2134.notification_type), NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer))) AS foo
-            CROSS JOIN
+            (VALUES (CAST('Disabled event' AS lbaw2134.notification_type), NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), CAST(NULL AS Integer))) AS foo
+             CROSS JOIN
             (
-                SELECT att.id as attendance_request_id, att.attendee_id
-                FROM lbaw2134.attendances att
+                SELECT attendee_id
+                FROM lbaw2134.attendances
                 WHERE event_id = NEW.id
             ) AS bar
         );
@@ -815,4 +818,4 @@ INSERT INTO lbaw2134.COMMENTS  VALUES
     ( 121, 100, 103, 100, 'Agreed!', TO_TIMESTAMP('2021/02/19 00:00', 'YYYY/MM/DD/ HH24:MI') ) ;
 
 INSERT INTO lbaw2134.REPORTS VALUES
-	(100, TO_TIMESTAMP('2021/11/29 00:00', 'YYYY/MM/DD/ HH24:MI'), 'Is this a typo?', 'Nudity or explicit content', null, null, null, 120);
+	(100, TO_TIMESTAMP('2021/11/29 00:00', 'YYYY/MM/DD/ HH24:MI'), 'Is this a typo?', 'comment',  'Nudity or explicit content', null, null, null, 120);

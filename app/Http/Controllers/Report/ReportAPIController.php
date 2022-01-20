@@ -30,7 +30,7 @@ class ReportAPIController extends Controller
         
         $validator = Validator::make($request->all(), $rules, $messages = []);
 
-        if ($validator->errors()->all()) {
+        if ($validator->errors()->all() || !in_array($type, ['event', 'user', 'comment'])) {
             return response('Invalid input', 422)
                   ->header('Content-Type', 'text/plain');
         }
@@ -39,6 +39,7 @@ class ReportAPIController extends Controller
         
         $report = Report::create(['description' => $request->input('description'),
                         'report_motive' => $request->input('motive'),
+                        'type' => $type,
                         'reported_comment_id' => $type === 'comment' ? $id : null,
                         'reported_user_id' => $type === 'user' ? $id : null,
                         'reported_event_id' => $type === 'event' ? $id : null]);
@@ -51,7 +52,7 @@ class ReportAPIController extends Controller
     }
 
     
-    public function setHandler(Report $report)
+    private function setHandler(Report $report)
     {
         if (is_null($report->handled_by_id)) {
             $report->handled_by_id = Auth::id();
@@ -63,7 +64,7 @@ class ReportAPIController extends Controller
     {
         /* $this->authorize('markHandled', Report::class); */
 
-        $report = Report::find($request->id);
+        $report = Report::find($request->reportId);
         if (is_null($report)) {
             return abort(404, "Couldn't find report");
         }
@@ -73,11 +74,10 @@ class ReportAPIController extends Controller
         return view('partials.reports.card', ['report' => $report]);
     }
 
-    public function block($request)
+    public function block(Request $request)
     {
         /* $this->authorize('block', Report::class); */
-
-        $report = Report::find($request);
+        $report = Report::find($request->reportId);
         if (is_null($report)) {
             return abort(404, "Couldn't find report");
         }
@@ -92,18 +92,16 @@ class ReportAPIController extends Controller
             $user->is_blocked = true;
             $user->save();
         } else {
-            if (!is_null($report->handled_by_id)) {
-                if (!is_null($report->reported_event_id)) {
-                    $event = Event::find($report->reported_event_id);
-                    if (is_null($event)) {
-                        abort('404', 'Event not found');
-                    }
-        
-                    $event->is_blocked = true;
-                    $event->save();
+            if (!is_null($report->reported_event_id)) {
+                $event = Event::find($report->reported_event_id);
+                if (is_null($event)) {
+                    abort('404', 'Event not found');
                 }
+        
+                $event->is_disabled = true;
+                $event->save();
             } else {
-                abort(500, 'Internal server error');
+                abort(422, 'Unprocessable parameters');
             }
         }
 
@@ -114,15 +112,14 @@ class ReportAPIController extends Controller
 
     public function unblock($request)
     {
-        /* $this->authorize('unblock', Report::class); */
-
-        $report = Report::find($request);
+        /* $this->authorize('block', Report::class); */
+        $report = Report::find($request->reportId);
         if (is_null($report)) {
             return abort(404, "Couldn't find report");
         }
 
-       
-        if (!is_null($report->reported_user_id)) {
+        
+        if (isset($report->reported_user_id)) {
             $user = User::find($report->reported_user_id);
             if (is_null($user)) {
                 abort('404', 'User not found');
@@ -131,21 +128,18 @@ class ReportAPIController extends Controller
             $user->is_blocked = false;
             $user->save();
         } else {
-            if (!is_null($report->handled_by_id)) {
-                if (!is_null($report->reported_event_id)) {
-                    $event = Event::find($report->reported_event_id);
-                    if (is_null($event)) {
-                        abort('404', 'Event not found');
-                    }
-        
-                    $event->is_blocked = false;
-                    $event->save();
+            if (isset($report->reported_event_id)) {
+                $event = Event::find($report->reported_event_id);
+                if (is_null($event)) {
+                    abort('404', 'Event not found');
                 }
+        
+                $event->is_disabled = false;
+                $event->save();
             } else {
-                abort(500, 'Internal server error');
+                abort(422, 'Unprocessable parameters');
             }
         }
-        
 
         $this->setHandler($report);
 
@@ -161,27 +155,28 @@ class ReportAPIController extends Controller
             return abort(404, "Couldn't find report");
         }
 
-        if (is_null($report->handled_by_id)) {
-            if (!is_null($report->reported_user_id)) {
-                $user = User::find($report->reported_user_id);
-                if (is_null($user)) {
-                    abort('404', 'User not found');
-                }
+        if ($report->type == 'user') {
+            $user = User::find($report->reported_user_id);
+            if (is_null($user)) {
+                abort('404', 'User not found');
+            }
         
-                $user->delete();
-            } else {
-                if (!is_null($report->reported_comment_id)) {
-                    $comment = User::find($report->reported_comment_id);
-                    if (is_null($comment)) {
-                        abort('404', 'Comment not found');
-                    }
-            
-                    $comment->delete();
-                } else {
-                    abort(500, 'Internal server error');
+            $user->delete();
+        } else {
+            if ($report->type == 'comment') {
+                $comment = Comment::find($report->reported_comment_id);
+                if (is_null($comment)) {
+                    abort('404', 'Comment not found');
                 }
+            
+                $comment->delete();
+            } else {
+                abort(500, 'Internal server error');
             }
         }
+
+        $this->setHandler($report);
+        
         return view('partials.reports.card', ['report' => $report]);
     }
 }

@@ -16,7 +16,7 @@ for (let toggle of toggles) {
 let handledButtons = document.getElementsByClassName('mark-handled-action');
 for (let handleBtn of handledButtons) {
     handleBtn.addEventListener('click', function () {
-        fetch('/api/reports/' + handleBtn.value + '/markHandled', { method: 'POST' })
+        fetch('/api/reports/' + handleBtn.value + '/mark-handled', { method: 'POST' })
             .then((response) => {
                 if (response.ok) {
                     return response.text();
@@ -27,7 +27,6 @@ for (let handleBtn of handledButtons) {
                 }
             })
             .then((html) => {
-                console.log(html)
                 document.getElementById('r' + handleBtn.value).innerHTML = html;
             });
     }.bind(handleBtn));
@@ -70,3 +69,6 @@ for (let deleteBtn of deleteButtons) {
             });
     }.bind(deleteBtn));
 }
+
+// Add event listeners to ajax content
+// Modify card according to state

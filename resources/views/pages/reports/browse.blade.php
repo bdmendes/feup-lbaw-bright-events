@@ -24,25 +24,13 @@
                                 <td>{{ $report->report_motive }}</td>
                                 <td>{{ $report->handled_by_id ? 'Yes' : 'No' }}</td>
                                 <td>
-                                    @if (isset($report->reported_comment_id))
-                                        Comment
-                                    @else
-                                        @if (isset($report->reported_event_id))
-                                            Event
-                                        @else
-                                            @if (isset($report->reported_user_id))
-                                                User
-                                            @else
-                                                Unknown type
-                                            @endif
-                                        @endif
-                                    @endif
+                                    {{ $report->type ?? 'Unknown type' }}
                                 </td>
-                                <td class="report-toggle" data-bs-toggle="collapse" href="#rc{{ $report->id }}">
+                                <td class="report-toggle" data-bs-toggle="collapse" href="#dets{{ $report->id }}">
                                     <i class="bi bi-chevron-compact-down"></i>
                                 </td>
                             </tr>
-                            <tr id="rc{{ $report->id }}" class="collapse align-middle">
+                            <tr id="dets{{ $report->id }}" class="collapse align-middle">
                                 <td id="r{{ $report->id }}" colspan="6">
                                     @include('partials.reports.card', ['report' => $report])
                                 </td>
