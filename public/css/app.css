@@ -33,6 +33,24 @@ main {
     background-color: var(--primary-color) !important;
 }
 
+.page-item span, .page-item a {
+    color: var(--primary-color);
+}
+
+.page-item span:hover, .page-item a:hover {
+    color: var(--primary-color);
+}
+
+.page-item span:focus, .page-item a:focus {
+    color: var(--primary-color) !important;
+    box-shadow: 0 0 0 .25rem rgba(45,68,95,.25) !important;
+}
+
+.active span {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
 .input {
     border-radius: 5px !important;
 }
