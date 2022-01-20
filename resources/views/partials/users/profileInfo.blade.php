@@ -1,10 +1,10 @@
         <div class="d-flex flex-column">
             @if (is_null($user->profile_picture_id))
                 <img src="/images/user.png" alt="Generic Profile Picture" class="mb-3 rounded-circle w-100"
-                    style="object-fit: cover; width: 300px; height: 300px;">
+                    style="object-fit: cover; max-width: 400px">
             @else
                 <img src="/{{ $user->profile_picture->path }}" alt="{{ $user->name }}'s Profile Picture"
-                    class="mb-3 rounded-circle w-100" style="object-fit: cover; width: 300px; height: 300px;">
+                    class="mb-3 rounded-circle w-100" style="object-fit: cover; max-width: 400px">
             @endif
         </div>
         <div class="info w-100 px-3">
