@@ -33,6 +33,10 @@ main {
     background-color: var(--primary-color) !important;
 }
 
+.btn-custom:focus {
+    box-shadow: 0 0 1px 1px var(--dark-color) !important;
+}
+
 .page-item span, .page-item a {
     color: var(--primary-color);
 }
@@ -51,7 +55,12 @@ main {
     border-color: var(--primary-color) !important;
 }
 
+button.active {
+    background-color: var(--primary-color) !important;
+}
+
 .input {
+    border: 1px solid var(--dark-color);
     border-radius: 5px !important;
 }
 
