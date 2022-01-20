@@ -3,7 +3,7 @@
 @section('title', 'events')
 
 @section('content')
-    <div class="d-xs-block d-sm-none d-md-none d-lg-none d-xl-none p-4">
+    <div class="d-xs-block d-sm-none d-md-none d-lg-none d-xl-none p-5">
         @include('partials.events.search')
     </div>
     <div class="d-flex justify-content-end">
