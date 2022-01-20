@@ -11,8 +11,10 @@
 @endsection
 
 @section('content')
-<div class="col-12 d-xs-flex d-sm-flex d-md-flex d-lg-flex d-xl-none p-4 mx-4 gap-4">
-    @include('partials.users.profileInfo', compact('user'))
+<div id="small-user-banner" class="col-12 d-xs-flex d-sm-flex d-md-flex d-lg-flex d-xl-none justify-content-center p-4">
+    <div class="row w-100 p-0">
+        @include('partials.users.smallProfileInfo', compact('user'))
+    </div>
 </div>
 <div class="d-flex justify-content-end p-4 mx-4">
     <div class="d-none col-xl-3 d-xl-flex flex-column align-items-center p-4 gap-4 border" style="left:0;" id="user-banner">

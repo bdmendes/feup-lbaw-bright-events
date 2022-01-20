@@ -1,11 +1,11 @@
 <div class="text-dark card mb-3 event-card">
-    <div class="row gap-0 w-100">
-        <a href="{{ route('event', ['id' => $event->id]) }}" class="col" style="max-width: 250px;">
+    <div class="row">
+        <a href="{{ route('event', ['id' => $event->id]) }}" class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
             <img src="/{{ $event->image->path ?? 'images/group.jpg' }}" class="img-fluid rounded-start"
                 alt="Event cover image" style="height: 150px; width: 100%; object-fit: cover;">
         </a>
-        <div class="col-10">
-            <div class="card-body">
+        <div class="col-sm-12 col-md-12 col-lg-10 col-xl-10">
+            <div class="card-body w-100">
                 <div class="d-flex align-items-center justify-content-between gap-4">
                     <a class="text-dark" href="{{ route('event', ['id' => $event->id]) }}" style="text-decoration: none;">
                         <h3 class="card-title">{{ Str::words($event->title, 15) }}</h3>
