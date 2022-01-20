@@ -19,13 +19,7 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers;
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/';
+    protected $username;
 
     /**
      * Create a new controller instance.
@@ -37,15 +31,19 @@ class LoginController extends Controller
         session(['url.intended' => url()->previous()]);
         $this->redirectTo = session()->get('url.intended');
         $this->middleware('guest')->except('logout');
+        $this->username = $this->findUsername();
     }
 
-    public function getUser()
+    public function findUsername()
     {
-        return $request->user();
+        $login = request()->input('login');
+        $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        request()->merge([$fieldType => $login]);
+        return $fieldType;
     }
-
-    public function home()
+ 
+    public function username()
     {
-        return redirect('/');
+        return $this->username;
     }
 }
