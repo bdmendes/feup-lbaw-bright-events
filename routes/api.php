@@ -28,6 +28,7 @@ Route::get('events/{eventId}/comments/count', 'Event\EventApiController@getComme
 Route::post('events/{eventId}/comments', 'Event\EventApiController@submitComment')->name('createComment');
 Route::delete('events/{eventId}/comments/{commentId}', 'Event\EventApiController@deleteComment')->name('deleteComment');
 Route::get('events/{eventId}/comments/{commentId}', 'Event\EventApiController@getComment')->name('getComment');
+Route::post('events/{eventId}/join-requests/{requestId}', 'Event\EventApiController@answerJoinRequest');
 Route::post('events/{eventId}/polls/{pollId}/{pollOption}', 'Event\EventApiController@addVote')->name('addVote');
 Route::delete('events/{eventId}/polls/{pollId}/{pollOption}', 'Event\EventApiController@removeVote')->name('removeVote');
 Route::post('events/{eventId}/polls', 'Event\EventApiController@submitPoll')->name('createPoll');

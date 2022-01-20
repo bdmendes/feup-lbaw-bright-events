@@ -21,6 +21,9 @@ function getNotifications(event, showNewOnes = false){
         remove(refreshId);
         remove("emptyNotifications");
         let notifications = document.getElementById("notifications");
+        if(notifications == null){
+            return;
+        }
         notifications.insertAdjacentHTML('afterbegin', html);
         let count = parseInt(document.getElementById("notificationCount").innerText);
         remove("notificationCount");
@@ -117,7 +120,6 @@ function notificationEdit(id, isRead){
             "Accept": "application/json",
             "X-CSRF-Token": $('input[name="_token"]').val()
         }
-
       };
     fetch(url, options)
     .then((response) => response.text())
@@ -205,3 +207,4 @@ function addGrowlMessage(message, type){
     setTimeout(() => {document.getElementById("growl"+id).classList.add("opacity0");}, 3000);
     setTimeout(() => {document.getElementById("growl"+id).remove();}, 4000);
 }
+    window.addEventListener('load', getNotifications);

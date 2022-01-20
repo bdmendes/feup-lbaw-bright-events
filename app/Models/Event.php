@@ -57,6 +57,11 @@ class Event extends Model
         return $this->hasMany(Attendance::class, 'event_id');
     }
 
+    public function attendanceRequests()
+    {
+        return $this->hasMany(AttendanceRequest::class, 'event_id');
+    }
+
     public function attendees()
     {
         return $this->belongsToMany(User::class, 'attendances', 'event_id', 'attendee_id');
@@ -69,7 +74,7 @@ class Event extends Model
 
     public function getInvites()
     {
-        return AttendanceRequest::where('event_id', $this->id)->get();
+        return AttendanceRequest::where('event_id', $this->id)->where('is_invite', 'true')->get();
     }
 
     public function scopeSearch($query, $search)

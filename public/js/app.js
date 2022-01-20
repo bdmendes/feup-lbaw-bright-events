@@ -147,6 +147,8 @@ async function removeAttendee(eventId, attendeeId, username, is_main_btn) {
     }
 }
 
+
+
 function remove(id) {
     let a = document.getElementById(id);
     if (a != undefined) {
@@ -178,4 +180,27 @@ function appendToUrl(str) {
         "",
         trimEnd(window.location.pathname, "/") + str
     );
+}
+
+function answerJoinRequest(eventId, requestId, accept){
+    let url = "/api/events/" + eventId + "/join-requests/"+ requestId;
+    let data = {'accept' : accept};
+    let  options = {
+        method: 'post',
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "X-CSRF-Token": $('input[name="_token"]').val()
+        }
+      };
+    fetch(url, options)
+    .then((response) => response.text())
+    .then(html => {
+        remove("joinRequest"+requestId);
+        if(accept){
+
+        }
+
+    });
 }

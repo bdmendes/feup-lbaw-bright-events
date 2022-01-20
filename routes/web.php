@@ -16,10 +16,7 @@ Route::get('events/{id}', "Event\EventController@get")->name('event');
 Route::delete('events/{id}', 'Event\EventController@delete');
 Route::get('events/{id}/edit', 'Event\EventController@indexEdit')->name('editEvent');
 Route::post('events/{id}/edit', 'Event\EventController@update');
-Route::get('test', function () {
-    event(new App\Events\NotificationReceived('teste'));
-    return "Event has been sent!";
-});
+Route::post('events/{eventId}/join-request', 'Event\EventController@joinRequest')->name('joinRequest');
 
 // Reports
 Route::get('reports', 'Report\ReportController@index')->name('reportsDash');

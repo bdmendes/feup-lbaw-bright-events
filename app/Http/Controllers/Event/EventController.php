@@ -227,10 +227,31 @@ class EventController extends Controller
     {
         $event = Event::find($id);
         $this->authorize('view', $event);
+        $isAttendee = false;
+        foreach ($event->attendances as $attendance) {
+            if ($attendance->attendee_id == Auth::user()->id) {
+                $isAttendee =  true;
+            }
+        }
         $users = User::where('is_admin', 'false')->get();
         $invites = $event->getInvites();
-        return view("pages.events.view", compact('users', 'event', 'invites'));
+
+        return view("pages.events.view", compact('users', 'event', 'invites', 'isAttendee'));
     }
+
+    public function joinRequest($id)
+    {
+        $event = Event::find($id);
+        $this->authorize('joinRequest', $event);
+        AttendanceRequest::create([
+            'event_id' => $id,
+            'attendee_id' => Auth::user()->id,
+            'is_invite' => false
+        ]);
+        event(new NotificationReceived('join request', [$event->organizer]));
+        return 'ok';
+    }
+
 
     public function inviteUser($username)
     {
