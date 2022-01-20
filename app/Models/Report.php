@@ -19,16 +19,7 @@ class Report extends Model
      * @var array
      */
     protected $fillable = [
-        'description', 'report_motive', 'reported_comment_id', 'reported_user_id', 'reported_event_id'
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'handled_by_id',
+        'description', 'report_motive', 'handled_by_id', 'reported_comment_id', 'reported_user_id', 'reported_event_id'
     ];
 
     public function reportedUser()

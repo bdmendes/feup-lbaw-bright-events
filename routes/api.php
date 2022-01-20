@@ -29,9 +29,12 @@ Route::post('events/{eventId}/comments', 'Event\EventApiController@submitComment
 Route::post('events/{eventId}/comments/{commentId}', 'Event\EventApiController@deleteComment')->name('deleteComment');
 
 // Reports
-Route::get('reports/form', 'Report\ReportAPIController@getForm')->name('report');
+Route::get('reports/form', 'Report\ReportAPIController@getForm')->name('registerReport');
+Route::post('reports/{reportId}/markHandled', 'Report\ReportAPIController@markHandled');
+Route::post('reports/{reportId}/block', 'Report\ReportAPIController@block');
+Route::post('reports/{reportId}/delete', 'Report\ReportAPIController@delete');
 Route::post('reports/{type}/{id}', 'Report\ReportAPIController@registerReport');
-// Route::post('reports/event', 'Report\ReportAPIController@reportEvent')->name('report');
+
 // Route::post('reports/user', 'ReportAPIController@reportUser');
 // Route::post('reports/comment', 'Report\ReportAPIController@reportComment');
 // Route::get('reports', 'Report\ReportAPIController@getReports');

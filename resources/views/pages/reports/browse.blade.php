@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
     <div>
         <h2>Reports Dashboard</h2>
         <div class="mt-4">
@@ -19,7 +18,7 @@
                     </thead>
                     <tbody>
                         @foreach ($reports as $report)
-                            <tr data-bs-toggle="collapse" href="#r{{ $report->id }}">
+                            <tr>
                                 <th scope="row">{{ $report->id }}</th>
                                 <td>{{ $report->date->diffForHumans() }}</td>
                                 <td>{{ $report->report_motive }}</td>
@@ -39,10 +38,12 @@
                                         @endif
                                     @endif
                                 </td>
-                                <td><i class="bi bi-chevron-compact-down"></i></td>
+                                <td class="report-toggle" data-bs-toggle="collapse" href="#rc{{ $report->id }}">
+                                    <i class="bi bi-chevron-compact-down"></i>
+                                </td>
                             </tr>
-                            <tr class="collapse align-middle" id="r{{ $report->id }}">
-                                <td colspan="6">
+                            <tr id="rc{{ $report->id }}" class="collapse align-middle">
+                                <td id="r{{ $report->id }}" colspan="6">
                                     @include('partials.reports.card', ['report' => $report])
                                 </td>
                             </tr>
@@ -58,5 +59,6 @@
                 </div>
             @endif
         </div>
+        <script type="text/javascript" src={{ asset('js/report.dash.js') }} defer></script>
     </div>
 @endsection

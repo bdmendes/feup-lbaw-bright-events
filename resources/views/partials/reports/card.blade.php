@@ -1,4 +1,4 @@
-<div class="text-dark card border">
+<div id="reportCard{{ $report }}" class="text-dark card border">
     <div class="row gap-0">
         <div class="card-body">
             <h3 class="card-title">Report details</h3>
@@ -19,17 +19,19 @@
                 @endif
                 <div class="ms-auto pe-5">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-success">Mark as handled</button>
+                        <button type="button" class="btn btn-success mark-handled-action"
+                            value="{{ $report->id }}">Mark as
+                            handled</button>
                         <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu">
                             @if (!isset($report->reported_comment_id))
-                                <li><a class="dropdown-item" href="#">Block</a></li>
+                                <li value="{{ $report->id }}" class="dropdown-item block-action">Block</li>
                             @endif
                             @if (!isset($report->reported_event_id))
-                                <li><a class="dropdown-item" href="#">Delete</a></li>
+                                <li value="{{ $report->id }}" class="dropdown-item delete-action">Delete</li>
                             @endif
                         </ul>
                     </div>
