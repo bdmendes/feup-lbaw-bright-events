@@ -10,7 +10,7 @@ class ReportController extends Controller
 {
     public function index()
     {
-        $reports = Report::paginate();
+        $reports = Report::paginate(10);
         return view('pages.reports.browse', ["reports" => $reports->withQueryString()]);
     }
 

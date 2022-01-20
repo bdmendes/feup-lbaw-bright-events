@@ -38,7 +38,8 @@ function submitReport() {
     if (document.getElementById('report-form-select').value == 'placeholder') {
         document.getElementById('report-form-select').classList.add('is-invalid');
     }
-    if (document.getElementById('report-form-description').value === '') {
+    console.log(document.getElementById('report-form-description').value.length);
+    if (document.getElementById('report-form-description').value === '' || document.getElementById('report-form-description').value.length > 1000) {
         document.getElementById('report-form-description').classList.add('is-invalid');
     }
 

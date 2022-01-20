@@ -19,7 +19,7 @@ class Report extends Model
      * @var array
      */
     protected $fillable = [
-        'description', 'report_motive', 'reported_comment_id', 'reported_user_id', 'reported_event_id',
+        'description', 'report_motive', 'reported_comment_id', 'reported_user_id', 'reported_event_id'
     ];
 
     /**
