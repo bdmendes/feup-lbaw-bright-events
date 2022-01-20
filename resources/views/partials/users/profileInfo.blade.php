@@ -67,4 +67,10 @@
             @if (!is_null($user->bio))
                 <p>{{ $user->bio }}</p>
             @endif
+            @if (!is_null($user->birth_date))
+                <p>Born in: {{$user->birth_date}}</p>
+            @endif
+            @if (!is_null($user->gender))
+                <p>Gender: {{$user->gender}}</p>
+            @endif
         </div>
