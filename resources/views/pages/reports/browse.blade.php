@@ -27,7 +27,7 @@
                                     {{ $report->type ?? 'Unknown type' }}
                                 </td>
                                 <td class="report-toggle" data-bs-toggle="collapse" href="#dets{{ $report->id }}">
-                                    <i class="bi bi-chevron-compact-down"></i>
+                                    <i class="bi bi-chevron-down"></i>
                                 </td>
                             </tr>
                             <tr id="dets{{ $report->id }}" class="collapse align-middle">
