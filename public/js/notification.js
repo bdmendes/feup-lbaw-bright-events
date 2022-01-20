@@ -58,13 +58,16 @@ function getPastNotifications(event = null, size = 10){
         remove(refreshId);
         let notifications = document.getElementById("notifications");
 
+
+
         notifications.insertAdjacentHTML('beforeend', html);
-
-
         let n = document.getElementById("notificationCount").innerText;
-        if(parseInt(n) < size){
+        n = parseInt(n);
+        if(document.getElementsByClassName("notification").length > 0)
+            remove("emptyNotifications");
+        if(n < size){
             console.log("n " + n + " size = " + size);
-            remove("getPastNotifications");
+            remove("getPastNotifictaions");
         }
         remove("notificationCount");
     });
