@@ -28,3 +28,7 @@
 .event-subtitle label, .event-subtitle span {
     font-size: 20px;
 }
+
+#event-description {
+    font-size: 15px;
+}

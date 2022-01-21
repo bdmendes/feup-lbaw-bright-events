@@ -160,7 +160,7 @@
 
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="home-tab">
-                <div class="w-100 p-4">
+                <div id="event-description"class="w-100 p-4">
                     {{ $event->description ?? 'Event has no description' }}
                 </div>
                 <div class="d-flex justify-content-end">
