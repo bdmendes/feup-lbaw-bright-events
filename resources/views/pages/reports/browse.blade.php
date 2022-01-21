@@ -1,5 +1,12 @@
 @extends('layouts.app')
 
+@section('scripts')
+    <script type="text/javascript" src={{ asset('js/report.dash.js') }} defer></script>
+@endsection
+
+@include('layouts.breadcrumbs', ['pages'=>[['name' => 'Home', 'route'=> route('home')],['name' => 'Reports Dashboard',
+'route'=>route('reportsDash')]]])
+
 @section('content')
     <div class="p-4">
         <h2>Reports Dashboard</h2>
@@ -71,6 +78,5 @@
                 </div>
             @endif
         </div>
-        <script type="text/javascript" src={{ asset('js/report.dash.js') }} defer></script>
     </div>
 @endsection

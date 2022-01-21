@@ -6,10 +6,10 @@
     <link href="{{ asset('css/users.css') }}" rel="stylesheet">
 @endsection
 
-@section('content')
-    @include('partials.breadcrumbs', ['pages'=>[['name' => 'Home', 'route'=> route('home')],['name' => 'Users',
-    'route'=>route('browseUsers')]]])
+@include('layouts.breadcrumbs', ['pages'=>[['name' => 'Home', 'route'=> route('home')],['name' => 'Users',
+'route'=>route('browseUsers')]]])
 
+@section('content')
     <div class="d-flex align-items-center justify-content-center w-100 gap-4 mt-4">
         <h1>Browse Users</h1>
         <form action="{{ route('browseUsers') }}" method="GET" class="mb-0">
