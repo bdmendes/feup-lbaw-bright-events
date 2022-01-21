@@ -25,7 +25,7 @@ class EventController extends Controller
 {
     public function index(Request $request)
     {
-        $users = User::where('is_admin', 'false')->where()->get();
+        $users = User::where('is_admin', 'false')->get();
         $tags = Tag::all();
         $events = Event::search($request->query('global'));
         if ($request->filled('sort_by')) {
