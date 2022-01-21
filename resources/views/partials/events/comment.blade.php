@@ -28,7 +28,6 @@
             @endif
         @endif
         <div class="d-flex justify-content-between align-items-center gap-4 flex-grow-1">
-            {{ $comment->date->diffForHumans() }}
             @if (Auth::check() && Auth::id() == $comment->commenter_id)
                 <div class="col-auto">
                     <button

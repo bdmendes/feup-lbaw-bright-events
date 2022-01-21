@@ -287,7 +287,7 @@
                             let eventChannel = pusher.subscribe("event-channel-{{ $event->id }}");
 
                             eventChannel.bind('event', function(data) {
-                                if (data.message === 'comment') {
+                                if (data.message === 'comment' && !data.child) {
                                     remove('comment_area:refreshIcon');
                                     prependComment(data.id);
                                 } else if (data.message === 'poll') {

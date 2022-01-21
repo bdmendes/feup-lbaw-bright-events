@@ -85,7 +85,7 @@ class EventApiController extends Controller
             'body' => $data["body"]
         ]);
         event(new NotificationReceived('new comment', [$event->organizer]));
-        event(new EventPusher('comment', $comment->id, $event));
+        event(new EventPusher('comment', $comment->id, $event, $request->parent != null));
         if ($comment == null) {
             return 'Could not create comment';
         }

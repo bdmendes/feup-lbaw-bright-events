@@ -31,11 +31,11 @@ function submitComment() {
   fetch('/api/events/' + eventId + '/comments', {
     method: 'POST',
     body: JSON.stringify(data),
-  })
-      .then((response) => response.text())
-      .then((html) => {
-        element_body.value = '';
-      });
+  }).then((response) => {
+    if (response.ok) {
+      element_body.value = '';
+    }
+  });
 }
 
 function submitReply(parent) {
@@ -54,10 +54,9 @@ function submitReply(parent) {
   })
       .then((response) => response.text())
       .then((html) => {
-          console.log('comment_' + parent + '_replies');
-          document.getElementById('comment_' + parent + '_replies')
-              .insertAdjacentHTML('afterbegin', html);
-          element_body.value = '';
+        document.getElementById('comment_' + parent + '_replies')
+            .insertAdjacentHTML('afterbegin', html);
+        element_body.value = '';
       });
 }
 
