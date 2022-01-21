@@ -1,9 +1,9 @@
-        <div class="d-flex flex-column justify-content-center">
+        <div class="d-flex flex-column justify-content-center w-100">
             @if (is_null($user->profile_picture_id))
-                <img src="/images/user.png" alt="Generic Profile Picture" class="rounded-circle w-100"
+                <img id="profile-picture" src="/images/user.png" alt="Generic Profile Picture" class=" mb-3 rounded-circle"
                     style="object-fit: cover;">
             @else
-                <img src="/{{ $user->profile_picture->path }}" alt="{{ $user->name }}'s Profile Picture"
+                <img id="profile-picture" src="/{{ $user->profile_picture->path }}" alt="{{ $user->name }}'s Profile Picture"
                     class="mb-3 rounded-circle" style="object-fit: cover;">
             @endif
         </div>

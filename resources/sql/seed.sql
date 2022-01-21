@@ -49,6 +49,13 @@ CREATE TABLE lbaw2134.users (
     profile_picture_id INTEGER REFERENCES lbaw2134.files ON DELETE SET NULL ON UPDATE CASCADE
 );
 
+CREATE TABLE lbaw2134.password_resets (
+    id SERIAL PRIMARY KEY,
+    email TEXT UNIQUE NOT NULL,
+    token TEXT,
+    created_at TIMESTAMP
+);
+
 CREATE TABLE lbaw2134.events (
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,

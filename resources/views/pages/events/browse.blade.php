@@ -26,7 +26,7 @@
                 @else
                 @foreach ($events as $event)
                 <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 d-flex flex-column flex-grow-1">
-                    @include('partials.events.verticalCard', ['event' => $event])
+                    @include('partials.events.verticalCard', ['event' => $event, 'display_tags' => true])
                 </div>
                 @endforeach
                 @endif

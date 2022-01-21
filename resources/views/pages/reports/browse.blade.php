@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div>
+    <div class="p-4">
         <h2>Reports Dashboard</h2>
         <div class="mt-4">
             @if (!$reports->isEmpty())
@@ -30,7 +30,7 @@
                                     <i class="bi bi-chevron-down"></i>
                                 </td>
                             </tr>
-                            <tr id="dets{{ $report->id }}" class="collapse align-middle">
+                            <tr id="dets{{ $report->id }}" class="collapse slide align-middle">
                                 <td id="r{{ $report->id }}" colspan="6">
                                     @include('partials.reports.card', ['report' => $report])
                                 </td>

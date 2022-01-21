@@ -19,11 +19,11 @@
                 @endif
                 <div class="ms-auto pe-5">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-success mark-handled-action"
-                            value="{{ $report->id }}">Mark as
+                        <button type="button" class="btn btn-custom mark-handled-action"
+                            value="{{ $report->id }}" style="border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important;">Mark as
                             handled</button>
-                        <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split"
-                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <button type="button" class="btn btn-custom dropdown-toggle dropdown-toggle-split"
+                            data-bs-toggle="dropdown" aria-expanded="false" style="border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important;">
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu">
