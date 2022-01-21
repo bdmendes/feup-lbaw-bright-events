@@ -14,7 +14,8 @@
                 @break
 
             @case('Join request')
-                <!-- Event pusher NOT DONE-->
+                <!-- Event pusher and Trigger working-->
+
                 <span class="bi bi-calendar-plus"> </span>
                 @break
 

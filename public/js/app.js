@@ -170,36 +170,37 @@ function appendToUrl(str) {
       null, '', trimEnd(window.location.pathname, '/') + str);
 }
 
-function answerJoinRequest(eventId, requestId, attendeeId, accept) {
-  let url = '/api/events/' + eventId + '/join-requests/' + requestId;
-  let data = {'accept': accept};
-  let options = {
-    method: 'post',
-    body: JSON.stringify(data),
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'X-CSRF-Token': $('input[name="_token"]').val()
-    }
-  };
-  fetch(url, options).then((response) => response.text()).then(html => {
-    let divId = 'joinRequest' + requestId;
-    let username =
-        document.querySelector('#' + divId + ' .text-muted').innerText;
-    remove('joinRequest' + requestId);
-    if (accept) {
-      let div = document.createElement('div');
-      let parser = new DOMParser();
-      div.classList.add('border', 'rounded', 'd-flex', 'p-1');
-      div.style.width = '250px';
-      div.id = username + '-entry';
-      div.insertAdjacentHTML('beforeend', html);
+function answerJoinRequest(eventId, requestId, accept){
+    let url = "/api/events/" + eventId + "/join-requests/"+ requestId;
+    let data = {'accept' : accept};
+    let  options = {
+        method: 'post',
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "X-CSRF-Token": $('input[name="_token"]').val()
+        }
+      };
+    fetch(url, options)
+    .then((response) => response.text())
+    .then(html => {
+        let divId = "joinRequest"+requestId;
+        let username = document.querySelector("#"+divId + " .text-muted").innerText;
+        remove("joinRequest"+username);
+        if(accept){
+            let div = document.createElement("div");
+            div.classList.add("border", "rounded", "d-flex", "p-1");
+            div.style.width = "250px";
+            div.id = username + "-entry";
+            div.insertAdjacentHTML('beforeend', html);
 
-      let attendees = document.getElementById('attendees-list');
-      if (attendees.childElementCount == 1) {
-        attendees.removeChild(attendees.firstElementChild);
-      }
-      attendees.appendChild(div);
-    }
-  });
+            let attendees = document.getElementById("attendees-list");
+            if (attendees.childElementCount == 1) {
+                attendees.removeChild(attendees.firstElementChild);
+            }
+            attendees.appendChild(div);
+        }
+
+    });
 }

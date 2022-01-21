@@ -108,7 +108,7 @@ class Event extends Model
 
     public function getInvites()
     {
-        return AttendanceRequest::where('event_id', $this->id)->where('is_invite', 'true')->get();
+        return AttendanceRequest::where('event_id', $this->id)->where('is_invite', 'true')->where('is_handled', 'false')->get();
     }
 
     public function score()

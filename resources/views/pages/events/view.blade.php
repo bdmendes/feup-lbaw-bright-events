@@ -29,7 +29,7 @@
                         div.classList.add("border", "rounded", "d-flex", "p-1");
                         div.style.width = "250px";
                         div.innerHTML += html;
-
+                        remove("joinRequest"+username);
                         invitees.appendChild(div);
                     } else {
                         alert(xmlHTTP.status + ': Something went wrong');
@@ -124,7 +124,7 @@
                                     method="POST">
                                     @csrf
                                     <input type="hidden" name="accept" id="accept" value="true" />
-                                    <button class="btn btn-custom" type="submit">Accept invite</button>
+                                    <button class="btn btn-custom mx-2" type="submit">Accept invite</button>
                                 </form>
 
                                 <form
@@ -133,14 +133,18 @@
                                     @csrf
                                     <input type="hidden" name="reject" id="reject" value="false" />
 
-                                    <button class="btn btn-custom" type="submit">Reject invite</button>
+                                    <button class="btn btn-custom mx-2" type="submit">Reject invite</button>
                                 </form>
                             @elseif($event->is_private)
 
                                     @if($event->attendanceRequests()->getQuery()->where('attendee_id', Auth::id())->where('is_invite', 'false')->exists())
-                                    <button class="btn btn-custom" type="button"
+                                    <button class="btn btn-custom mx-2" type="button"
                                         disabled>
+                                        @if($event->attendanceRequests()->getQuery()->where('attendee_id', Auth::id())->where('is_invite', 'false')->where('is_handled', 'false')->exists())
                                         Join request pending
+                                        @else
+                                            Join request rejected
+                                        @endif
                                     </button>
                                     @else
                                         <form action="{{ route('joinRequest', ['eventId' => $event->id]) }}" method="POST">
@@ -188,6 +192,7 @@
         </div>
 
         <div id="event-body">
+            @if(!$event->is_private || ($event->is_private && $isAttendee) || $event->organizer_id == Auth::id())
             <ul class="nav nav-tabs w-100 nav-fill" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description"
@@ -215,6 +220,7 @@
                         onclick="appendToUrl('#statistics')">Statistics</button>
                 </li>
             </ul>
+            @endif
 
 
             <div class="tab-content" id="myTabContent">
@@ -352,22 +358,19 @@
                             </div>
 
                             <h3>Pending join requests</h3>
-                            <div id="joinRequests">
-                                @foreach ($event->attendanceRequests()->getQuery()->where('is_invite', 'false')->get()
-        as $request)
-                                    <div id="joinRequest{{ $request->id }}" class="border rounded d-flex p-1"
-                                        style="width: 250px;">
+                            <div id="joinRequests" >
+                                @foreach ($event->attendanceRequests()->getQuery()->where('is_invite', 'false')->where('is_handled', 'false')->get() as $request)
+                                    <div id="joinRequest{{$request->attendee->username}}" class="border rounded d-flex p-1" style="width: 250px;">
                                         <div class="col-10">
                                             @include('partials.users.smallCard', ['user' => $request->attendee])
                                         </div>
                                         <div class="d-flex align-items-center col-2">
                                             <span class="col-6 bi-check text-success fs-1 clickable"
-                                                title="Accept join request"
-                                                onclick="answerJoinRequest({{ $request->event_id }}, {{ $request->id }}, {{ $request->attendee_id }}, true)">
-                                            </span>
-                                            <span class="col-6 bi-x text-danger fs-1 clickable" title="Reject join request"
-                                                onclick="answerJoinRequest({{ $request->event_id }}, {{ $request->id }},{{ $request->attendee_id }}, false)">
-                                            </span>
+                                                    title="Accept join request"
+                                                    onclick="answerJoinRequest({{$request->event_id}}, {{$request->id}}, true)"> </span>
+                                            <span class="col-6 bi-x text-danger fs-1 clickable"
+                                                    title="Reject join request"
+                                                    onclick="answerJoinRequest({{$request->event_id}}, {{$request->id}}, false)"> </span>
                                         </div>
                                     </div>
                                 @endforeach

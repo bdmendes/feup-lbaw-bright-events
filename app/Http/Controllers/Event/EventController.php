@@ -94,9 +94,9 @@ class EventController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-            ->route('createEvent')
-            ->withErrors($validator)
-            ->withInput();
+                ->route('createEvent')
+                ->withErrors($validator)
+                ->withInput();
         }
 
         $event = Event::create([
@@ -242,21 +242,29 @@ class EventController extends Controller
         }
         $users = User::where('is_admin', 'false')->get();
         $invites = $event->getInvites();
-        $userInvite = $event->attendanceRequests()->getQuery()->where('attendee_id', Auth::id())->where('is_invite', 'true')->first();
+        $userInvite = $event->attendanceRequests()->getQuery()->where('attendee_id', Auth::id())->where('is_invite', 'true')->where('is_handled', 'false')->first();
         $ages = $event->getAgeStats();
         $genders = $event->getGenderStats();
-        return view("pages.events.view", compact('users', 'event', 'invites', 'ages', 'genders', 'isAttendee', 'userInvite'));
+        return view("pages.events.view", compact('users', 'event', 'invites', 'ages', 'genders', 'isAttendee', 'userInvite', 'isAttendee'));
     }
 
     public function joinRequest($id)
     {
         $event = Event::find($id);
         $this->authorize('joinRequest', $event);
-        AttendanceRequest::create([
-            'event_id' => $id,
-            'attendee_id' => Auth::user()->id,
-            'is_invite' => false
-        ]);
+        $joinRequest = AttendanceRequest::where('event_id', $event->id)->where('attendee_id', Auth::id())->first();
+        if ($joinRequest != null && $joinRequest->is_handled) {
+            $joinRequest->is_handled = false;
+            $joinRequest->is_invite = false;
+            $joinRequest->is_accepted = false;
+            $joinRequest->save();
+        } else {
+            AttendanceRequest::create([
+                'event_id' => $id,
+                'attendee_id' => Auth::user()->id,
+                'is_invite' => false
+            ]);
+        }
         event(new NotificationReceived('join request', [$event->organizer]));
         return redirect()->route('event', ['id' => $id]);
     }
@@ -273,6 +281,7 @@ class EventController extends Controller
                 return;
             }
         }
+
         AttendanceRequest::create([
             'event_id' => $this->id,
             'attendee_id' => $user->id,
@@ -284,6 +293,7 @@ class EventController extends Controller
     {
         $event = Event::find($request->eventId);
         $attendanceRequest = AttendanceRequest::find($request->inviteId);
+        $this->authorize("answerInvite", $attendanceRequest);
 
         event(new NotificationReceived('answer invite ', [$event->organizer]));
         if ($request->get('accept')) {
@@ -291,8 +301,11 @@ class EventController extends Controller
                 'event_id' => $event->id,
                 'attendee_id' => Auth::id()
             ]);
+            $attendanceRequest->is_accepted = true;
         }
-        $attendanceRequest->delete();
+        //$attendanceRequest->delete();
+        $attendanceRequest->is_handled = true;
+        $attendanceRequest->save();
         return redirect()->route('event', ['id' => $event->id]);
     }
 
