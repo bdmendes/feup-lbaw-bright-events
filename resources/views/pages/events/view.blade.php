@@ -168,11 +168,11 @@
                         @if (Auth::check())
                             @if (Auth::user()->id !== $event->organizer->id && !Auth::user()->is_admin)
                                 @if (Auth::user()->attends($event->id))
-                                    <button class="btn-light"
+                                    <button class="btn btn-custom"
                                         onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
                                         id="attend_button" type="submit">Leave event</button>
                                 @else
-                                    <button class="btn-light"
+                                    <button class="btn btn-custom"
                                         onclick="addAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
                                         id="attend_button">Attend
                                         event</button>
