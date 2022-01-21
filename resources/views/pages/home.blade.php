@@ -11,7 +11,6 @@
 @endsection
 
 @section('content')
-
     <div id="banner" class="carousel carousel-fade slide w-100 position-fixed" data-bs-ride="carousel"
         data-bs-interval="4000" data-bs-wrap="true" data-bs-pause="false">
         <div class="carousel-inner">

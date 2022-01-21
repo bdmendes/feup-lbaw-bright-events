@@ -232,8 +232,12 @@ class EventController extends Controller
         $this->authorize('view', $event);
         $isAttendee = false;
         foreach ($event->attendances as $attendance) {
-            if ($attendance->attendee_id == Auth::user()->id) {
-                $isAttendee =  true;
+            if (Auth::check()) {
+                if ($attendance->attendee_id == Auth::user()->id) {
+                    $isAttendee =  true;
+                }
+            } else {
+                $isAttendee = false;
             }
         }
         $users = User::where('is_admin', 'false')->get();

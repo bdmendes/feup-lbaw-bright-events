@@ -23,8 +23,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Spartan&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-    crossorigin=""/>
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
 
     @include('layouts.scripts')
 
@@ -37,12 +37,13 @@
 
     @include('layouts.navbar')
 
-    <section class="w-100 position-relative wrapper flex-grow-1" id ="main">
+
+
+    <section class="w-100 position-relative wrapper flex-grow-1" id="main">
         <div id="growls">
 
         </div>
         <section id="content" class="w-100 min-vh-100">
-
             @yield('content')
         </section>
     </section>
