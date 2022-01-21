@@ -85,6 +85,7 @@ CREATE TABLE lbaw2134.attendance_requests (
     event_id INTEGER REFERENCES lbaw2134.events ON DELETE CASCADE ON UPDATE CASCADE,
     attendee_id INTEGER REFERENCES lbaw2134.users ON DELETE SET NULL ON UPDATE CASCADE,
     is_accepted BOOLEAN DEFAULT FALSE NOT NULL,
+    is_handled BOOLEAN DEFAULT FALSE NOT NULL,
     is_invite BOOLEAN NOT NULL,
     UNIQUE(event_id, attendee_id)
 );
@@ -796,7 +797,7 @@ INSERT INTO lbaw2134.ATTENDANCES (event_id, attendee_id) VALUES
 	( 111, 106 ) ,
 	( 111, 108 ) ;
 INSERT INTO lbaw2134.ATTENDANCE_REQUESTS VALUES
-	( 100, 108, 100, False, False ) ;
+	( 100, 108, 100, False, ,False, False ) ;
 INSERT INTO lbaw2134.POLLS VALUES
 	( 100, 103, 109, 'Do you want to change the schedule?',  'I am afraid the current schedule might not be appropriate for everyone. Please feel free to vote and comment on your reasons on the forum.' , TO_TIMESTAMP('2021/12/18 00:00', 'YYYY/MM/DD/ HH24:MI'), True ) ,
 	( 101, 111, 107, 'What should we eat',  '' , TO_TIMESTAMP('2021/11/29 00:00', 'YYYY/MM/DD/ HH24:MI'), False ) ;
