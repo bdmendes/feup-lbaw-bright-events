@@ -15,11 +15,7 @@ function profilePicture() {
     let mpp = document.getElementById("medium-profile-picture");
     let spp = document.getElementById("small-profile-picture");
     
-    if (pp.offsetWidth == "0") {
-        pp.style.height = pp.style.minWidth + "px";
-    } else {
-        pp.style.height = pp.offsetWidth + "px";
-    }
+    pp.style.height = pp.offsetWidth + "px";
     spp.style.height = spp.offsetWidth + "px";
     mpp.style.height = mpp.offsetWidth + "px";
 }

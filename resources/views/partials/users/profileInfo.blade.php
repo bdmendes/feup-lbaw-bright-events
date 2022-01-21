@@ -1,4 +1,4 @@
-        <div class="d-flex flex-column justify-content-center">
+        <div class="d-flex flex-column justify-content-center w-100">
             @if (is_null($user->profile_picture_id))
                 <img id="profile-picture" src="/images/user.png" alt="Generic Profile Picture" class=" mb-3 rounded-circle"
                     style="object-fit: cover;">
