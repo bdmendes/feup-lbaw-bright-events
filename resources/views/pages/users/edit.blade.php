@@ -11,7 +11,7 @@
 @endsection
 
 @section('content')
-    @include('partials.breadcrumbs',
+    @include('layouts.breadcrumbs',
     ['pages'=>[['name' => 'Home', 'route'=> route('home')],
     ['name' => 'Users','route'=>route('browseUsers')],
     ['name' => $user->username, 'route'=>route('profile', ['username' => $user->username])],

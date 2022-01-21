@@ -116,9 +116,9 @@ button.nav-link.active {
     border-radius: 5px !important;
 }
 
-.input:invalid {
+/* input:valid {
     border: 1px solid var(--secondary-color);
-}
+} */
 
 .input:focus {
     border-color: var(--primary-color) !important;

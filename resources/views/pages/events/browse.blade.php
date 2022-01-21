@@ -2,7 +2,7 @@
 
 @section('title', 'events')
 
-@include('partials.breadcrumbs', ['pages'=>[['name' => 'Home', 'route'=> route('home')],['name' => 'Events',
+@include('layouts.breadcrumbs', ['pages'=>[['name' => 'Home', 'route'=> route('home')],['name' => 'Events',
 'route'=>route('browseEvents')]]])
 
 @section('content')

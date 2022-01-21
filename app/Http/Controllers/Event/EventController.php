@@ -149,10 +149,22 @@ class EventController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'description' => 'nullable|string',
-            'title' => 'required|string',
-            'date' => 'required|date'
+            'title' => 'required',
+            'description' => 'nullable|string|max:1000',
+            'cover_image' => 'nullable|mimes:png,jpg,jpe',
+            'date' => 'required|date|after:now'
+        ], $messages = [
+            'date.after' => 'An event cannot be set in the past!',
         ]);
+
+        $file = null;
+
+        if ($validator->fails()) {
+            return redirect()
+            ->route('createEvent')
+            ->withErrors($validator)
+            ->withInput();
+        }
 
         $event = Event::findOrFail($request->id);
         if ($event->organizer_id != Auth::user()->id) {
@@ -171,10 +183,6 @@ class EventController extends Controller
             $old_date = Carbon::parse($event->date);
             $new_date = Carbon::parse($request->date);
             if ($old_date->ne($new_date)) {
-                if ($new_date->isPast()) {
-                    $validator->getMessageBag()->add('date', 'Events cannot be set in the past');
-                    return redirect()->route("editEvent", ['id' => $event->id])->withErrors($validator)->withInput();
-                }
                 $event->date = $request->date;
             }
         }
