@@ -20,8 +20,6 @@ Route::post('events/{eventId}/join-request', 'Event\EventController@joinRequest'
 Route::post('events/{eventId}/invites/{inviteId}', 'Event\EventController@answerInvite')->name('answerInvite');
 // Reports
 Route::get('reports', 'Report\ReportController@index')->name('reportsDash');
-// Route::get('reports/{report_id}', 'Report\ReportController@show');
-// Route::post('reports/{report_id}', 'Report\ReportController@execute');
 
 // Authentication
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');

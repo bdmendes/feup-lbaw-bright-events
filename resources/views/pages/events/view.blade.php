@@ -69,6 +69,13 @@
     <script type="text/javascript" src={{ asset('js/report.form.js') }} defer></script>
 @endsection
 
+
+@include('layouts.breadcrumbs', ['pages'=>[
+['name' => 'Home', 'route'=> route('home')],
+['name' => 'Events','route'=>route('browseEvents')],
+['name' => $event->title, 'route'=>route('event', ['id' => $event->id])]]])
+
+
 @section('content')
     <div id="banner" class="w-100 position-fixed">
         <img class="w-100" src="/{{ $event->image->path ?? 'images/group.jpg' }}" alt="First slide">

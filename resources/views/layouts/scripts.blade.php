@@ -8,7 +8,6 @@ integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+
 <script type="text/javascript" src={{ asset('js/comments.js') }} defer></script>
 <script type="text/javascript" src={{ asset('js/attendees.js') }} defer></script>
 <script type="text/javascript" src={{ asset('js/notification.js') }}></script>
-<script type="text/javascript" src={{ asset('js/report.dash.js') }}></script>
 <script type="text/javascript" src={{ asset('js/report.form.js') }}></script>
 <script type="text/javascript" src={{ asset('js/polls.js') }}></script>
 <script type="text/javascript" src={{ asset('js/style.js') }} defer></script>
@@ -45,5 +44,3 @@ crossorigin=""></script>
     
     @endif
 </script>
-
-@yield('scripts')
