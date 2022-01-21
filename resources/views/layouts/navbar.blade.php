@@ -4,7 +4,7 @@
         </a>
         <div class="d-md-none d-flex align-items-center gap-4">
             @if (Auth::check())
-                @include('layouts.notifications')
+                @include('layouts.notifications', ['id' => 'small'])
             @endif
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsable"
                 aria-controls="collapsable" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,7 +20,7 @@
             </a>
             @if (Auth::check())
                 <div class="d-sm-none d-md-flex">
-                    @include('layouts.notifications')
+                    @include('layouts.notifications', ['id' => 'small'])
                 </div>
                 @if (Auth::user()->is_admin)
                     <a class="nav-item nav-link" href="{{ route('reportsDash') }}">
