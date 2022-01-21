@@ -42,6 +42,8 @@ function submitReport() {
         document.getElementById('report-form-description').classList.add('is-invalid');
     }
 
+    form.classList.add('was-validated');
+
     if (!form.checkValidity()) {
         return;
     }

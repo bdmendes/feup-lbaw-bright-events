@@ -11,6 +11,16 @@
 @endsection
 
 @section('content')
+    @if (empty($event))
+        @include('partials.breadcrumbs', ['pages'=>[['name' => 'Home', 'route'=> route('home')],['name' => 'Events',
+        'route'=>route('browseEvents')],['name' => 'Event creation',
+        'route'=>route('createEvent')]]])
+    @else
+        @include('partials.breadcrumbs', ['pages'=>[['name' => 'Home', 'route'=> route('home')],['name' => 'Events',
+        'route'=>route('browseEvents')],['name' => 'Edit event',
+        'route'=>route('editEvent', ['id' => $event->id])]]])
+    @endif
+
     <form id="eventCE" action="{{ empty($event) ? route('createEvent') : route('editEvent', [$event->id]) }}"
         enctype="multipart/form-data" method="post" class="d-flex justify-content-start mb-0">
         @csrf
