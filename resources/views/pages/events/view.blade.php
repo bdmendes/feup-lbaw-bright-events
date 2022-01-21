@@ -89,21 +89,7 @@
                     <label>Date: </label>
                     <span>{{ $event->date->format('d/m/Y H:i') }}</span>
                 </div>
-                <div class="w-100 event-subtitle">
-                    <label>Location: </label>
-                        @if ($event->location ?? '')
-                            <span class="w-50">
-                            {{ $event->location->pretty_print() }}
-                            </span>
 
-
-                        @else
-                        <span>
-                            Not defined
-                        </span>
-                        @endif
-
-                </div>
                 <div class="d-flex event-subtitle">
                     <div class="d-flex align-items-center gap-3">
                         <label> Organized by:</label>
@@ -129,133 +115,75 @@
                 @endif
             </div>
             <div class="event-image d-none d-lg-flex col-lg-6 col-xl-6">
+                <img src="/{{ $event->image->path ?? 'images/group.jpg' }}" class="w-100" />
+            </div>
+            <div class="d-flex justify-content-start">
+                @if ($event->organizer !== null)
+                    @if (Auth::check())
+                        @if (Auth::user()->id !== $event->organizer->id && !Auth::user()->is_admin)
+                            @if (Auth::user()->attends($event->id))
+                                <button class="btn btn-custom"
+                                    onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
+                                    id="attend_button" type="submit">Leave event</button>
+                            @elseif($userInvite)
+                                <form action="{{ route('answerInvite', ['eventId' => $event->id, 'inviteId' => $userInvite]) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="accept" id="accept" value="true" />
+                                    <button class="btn btn-primary mx-2" type="submit">Accept invite</button>
+                                </form>
 
-                <div id="map"
-                     class="w-100"
-                     style="height:300px"> </div>
-                     <script>
-                        let eventCoords = [{{$event->location->lat}}, {{$event->location->long}}];
-                        let map = L.map('map').setView(eventCoords, 17);
-                        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-                        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                        maxZoom: 18,
-                        id: 'mapbox/streets-v11',
-                        tileSize: 512,
-                        zoomOffset: -1,
-                        accessToken: 'pk.eyJ1IjoiYnJ1bm9nb21lczMwIiwiYSI6ImNreWxnbzltMzAwYTgydnBhaW81OGhha24ifQ.X-WsoAxJ_WcIlFoQpR4rFA'
-                    }).addTo(map);
-                    L.marker(eventCoords).addTo(map)
-                    </script>
+                                <form action="{{ route('answerInvite', ['eventId' => $event->id, 'inviteId' => $userInvite]) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="reject" id="reject" value="false" />
+
+                                    <button class="btn btn-primary mx-2" type="submit">Reject invite</button>
+                                </form>
+                            @elseif($event->is_private)
+
+                                    @if($event->attendanceRequests()->getQuery()->where('attendee_id', Auth::id())->where('is_invite', 'false')->exists())
+                                    <button class="btn btn-primary mx-2" type="button"
+                                        disabled>
+                                        Join request pending
+                                    </button>
+                                    @else
+                                        <form action="{{ route('joinRequest', ['eventId' => $event->id]) }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="id" id="id" value="{{ $event->id }}" />
+                                                <button class="btn btn-primary mx-2" type="submit">Request to join</button>
+                                        </form>
+                                    @endif
+                            @else
+                                <button class="btn btn-custom"
+                                    onclick="addAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
+                                    id="attend_button">Attend
+                                    event</button>
+                            @endif
+                        @else
+                            <form action="{{ route('event', ['id' => $event->id]) }}" method="POST">
+                                @csrf
+                                <button class="btn btn-custom mx-2" type="submit">
+                                    @if ($event->organizer->id === Auth::user()->id)
+                                        Delete event
+                                    @endif
+                                    @if (Auth::user()->is_admin)
+                                        Disable event
+                                    @endif
+                                </button>
+                            </form>
+                            @if (Auth::user()->id === $event->organizer->id)
+                                <form action="{{ route('editEvent', ['id' => $event->id]) }}">
+                                    <button class="btn btn-custom " type="submit">Edit event</button>
+                                </form>
+                            @endif
+                        @endif
+
+                    @else
+                        <button class="btn btn-custom"disabled>Login to attend event</button>
+                    @endif
+                @endif
             </div>
         </div>
-        <!--
-        @if(!$event->is_private || ($event->is_private && $isAttendee) || $event->organizer_id == Auth::id())
-            <ul class="nav nav-tabs w-100 nav-fill" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description"
-                        type="button" role="tab" aria-controls="description" aria-selected="true"
-                        onclick="appendToUrl('')">Description</button>
-                </li>
 
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="forum-tab" data-bs-toggle="tab" data-bs-target="#forum" type="button"
-                            role="tab" aria-controls="forum" aria-selected="false"
-                            onclick="appendToUrl('#forum'); getComments();">Forum</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="polls-tab" data-bs-toggle="tab" data-bs-target="#polls" type="button"
-                            role="tab" aria-controls="polls" aria-selected="false"
-                            onclick="appendToUrl('#polls'); getPolls();">Polls</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="attendees-tab" data-bs-toggle="tab" data-bs-target="#attendees"
-                            type="button" role="tab" aria-controls="attendees" aria-selected="false"
-                            onclick="appendToUrl('#attendees')">Attendees</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="statistics-tab" data-bs-toggle="tab" data-bs-target="#statistics"
-                            type="button" role="tab" aria-controls="statistics" aria-selected="false"
-                            onclick="appendToUrl('#statistics')">Statistics</button>
-                    </li>
-
-            </ul>
-        @endif
-        -->
-
-        <!--
-        <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="home-tab">
-                <div class="w-100 p-4">
-                    {{ $event->description ?? 'Event has no description' }}
-                </div>
-                <div class="d-flex justify-content-start">
-                    @if ($event->organizer !== null)
-                        @if (Auth::check())
-                            @if (Auth::user()->id !== $event->organizer->id && !Auth::user()->is_admin)
-                                @if (Auth::user()->attends($event->id))
-                                    <button class="btn btn-custom"
-                                        onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
-                                        id="attend_button" type="submit">Leave event</button>
-                                @elseif($userInvite)
-                                    <form action="{{ route('answerInvite', ['eventId' => $event->id, 'inviteId' => $userInvite]) }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="accept" id="accept" value="true" />
-                                        <button class="btn btn-primary mx-2" type="submit">Accept invite</button>
-                                    </form>
-
-                                    <form action="{{ route('answerInvite', ['eventId' => $event->id, 'inviteId' => $userInvite]) }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="reject" id="reject" value="false" />
-
-                                        <button class="btn btn-primary mx-2" type="submit">Reject invite</button>
-                                    </form>
-                                @elseif($event->is_private)
-
-                                        @if($event->attendanceRequests()->getQuery()->where('attendee_id', Auth::id())->where('is_invite', 'false')->exists())
-                                        <button class="btn btn-primary mx-2" type="button"
-                                            disabled>
-                                            Join request pending
-                                        </button>
-                                        @else
-                                            <form action="{{ route('joinRequest', ['eventId' => $event->id]) }}" method="POST">
-                                                    @csrf
-                                                    <input type="hidden" name="id" id="id" value="{{ $event->id }}" />
-                                                    <button class="btn btn-primary mx-2" type="submit">Request to join</button>
-                                            </form>
-                                        @endif
-                                @else
-                                    <button class="btn btn-custom"
-                                        onclick="addAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
-                                        id="attend_button">Attend
-                                        event</button>
-                                @endif
-                            @else
-                                <form action="{{ route('event', ['id' => $event->id]) }}" method="POST">
-                                    @csrf
-                                    <button class="btn btn-custom mx-2" type="submit">
-                                        @if ($event->organizer->id === Auth::user()->id)
-                                            Delete event
-                                        @endif
-                                        @if (Auth::user()->is_admin)
-                                            Disable event
-                                        @endif
-                                    </button>
-                                </form>
-                                @if (Auth::user()->id === $event->organizer->id)
-                                    <form action="{{ route('editEvent', ['id' => $event->id]) }}">
-                                        <button class="btn btn-custom " type="submit">Edit event</button>
-                                    </form>
-                                @endif
-                            @endif
-
-                        @else
-                            <button class="btn btn-custom"disabled>Login to attend event</button>
-                        @endif
-                    @endif
-                </div>
-            </div>
-
-        -->
         <div id="event-body">
             <ul class="nav nav-tabs w-100 nav-fill" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
@@ -288,74 +216,41 @@
 
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="home-tab">
+
                     <div class="w-100 p-4">
                         {{ $event->description ?? 'Event has no description' }}
                     </div>
-                    <div class="d-flex justify-content-start">
-                        @if ($event->organizer !== null)
-                            @if (Auth::check())
-                                @if (Auth::user()->id !== $event->organizer->id && !Auth::user()->is_admin)
-                                    @if (Auth::user()->attends($event->id))
-                                        <button class="btn btn-custom"
-                                            onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
-                                            id="attend_button" type="submit">Leave event</button>
-                                    @elseif($userInvite)
-                                        <form action="{{ route('answerInvite', ['eventId' => $event->id, 'inviteId' => $userInvite]) }}" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="accept" id="accept" value="true" />
-                                            <button class="btn btn-primary mx-2" type="submit">Accept invite</button>
-                                        </form>
-
-                                        <form action="{{ route('answerInvite', ['eventId' => $event->id, 'inviteId' => $userInvite]) }}" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="reject" id="reject" value="false" />
-
-                                            <button class="btn btn-primary mx-2" type="submit">Reject invite</button>
-                                        </form>
-                                    @elseif($event->is_private)
-
-                                            @if($event->attendanceRequests()->getQuery()->where('attendee_id', Auth::id())->where('is_invite', 'false')->exists())
-                                            <button class="btn btn-primary mx-2" type="button"
-                                                disabled>
-                                                Join request pending
-                                            </button>
-                                            @else
-                                                <form action="{{ route('joinRequest', ['eventId' => $event->id]) }}" method="POST">
-                                                        @csrf
-                                                        <input type="hidden" name="id" id="id" value="{{ $event->id }}" />
-                                                        <button class="btn btn-primary mx-2" type="submit">Request to join</button>
-                                                </form>
-                                            @endif
-                                    @else
-                                        <button class="btn btn-custom"
-                                            onclick="addAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
-                                            id="attend_button">Attend
-                                            event</button>
-                                    @endif
-                                @else
-                                    <form action="{{ route('event', ['id' => $event->id]) }}" method="POST">
-                                        @csrf
-                                        <button class="btn btn-custom mx-2" type="submit">
-                                            @if ($event->organizer->id === Auth::user()->id)
-                                                Delete event
-                                            @endif
-                                            @if (Auth::user()->is_admin)
-                                                Disable event
-                                            @endif
-                                        </button>
-                                    </form>
-                                    @if (Auth::user()->id === $event->organizer->id)
-                                        <form action="{{ route('editEvent', ['id' => $event->id]) }}">
-                                            <button class="btn btn-custom " type="submit">Edit event</button>
-                                        </form>
-                                    @endif
-                                @endif
-
+                    <div class="w-100 p-4">
+                        <label>Location: </label>
+                            @if ($event->location ?? '')
+                                <span class="w-50">
+                                {{ $event->location->pretty_print() }}
+                                </span>
                             @else
-                                <button class="btn btn-custom"disabled>Login to attend event</button>
+                            <span>
+                                Not defined
+                            </span>
                             @endif
-                        @endif
+                            <div id="map"
+                                class="w-100"
+                                style="height:300px">
+                            </div>
+                            <script>
+                                let eventCoords = [{{$event->location->lat}}, {{$event->location->long}}];
+                                let map = L.map('map').setView(eventCoords, 17);
+                                L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                                maxZoom: 18,
+                                id: 'mapbox/streets-v11',
+                                tileSize: 512,
+                                zoomOffset: -1,
+                                accessToken: 'pk.eyJ1IjoiYnJ1bm9nb21lczMwIiwiYSI6ImNreWxnbzltMzAwYTgydnBhaW81OGhha24ifQ.X-WsoAxJ_WcIlFoQpR4rFA'
+                            }).addTo(map);
+                            L.marker(eventCoords).addTo(map)
+                            </script>
+
                     </div>
+
                 </div>
 
                 @if(!$event->is_private || ($event->is_private && $isAttendee) || $event->organizer_id == Auth::id())
