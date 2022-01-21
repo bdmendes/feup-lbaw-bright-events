@@ -12,18 +12,19 @@ class NotificationController extends Controller
     public function get(Request $request)
     {
         $notifications = null;
+        if (!Auth::check()) {
+            abort(403, 'Unidentified user');
+        }
         if ($request == null || $request->last != null) {
             $notifications = Notification::where('addressee_id', Auth::user()->id)->where('is_seen', 'false')->where('id', '>', $request->last)->orderByDesc('date')->get();
         } else {
-
-            $notifications = Notification::where('addressee_id',  Auth::user()->id)->where('is_seen', 'false')->orderByDesc('date')->get();
+            $notifications = Notification::where('addressee_id', Auth::user()->id)->where('is_seen', 'false')->orderByDesc('date')->get();
         }
         return view('partials.notifications.list', ['notifications' => $notifications]);
     }
 
     public function getPast(Request $request)
     {
-
         $notifications = Notification::where('addressee_id', Auth::user()->id)->where('is_seen', 'true')->orderByDesc('date')->offset($request->get('offset'))->limit($request->get('size'))->get();
         return view('partials.notifications.list', ['notifications' => $notifications]);
     }

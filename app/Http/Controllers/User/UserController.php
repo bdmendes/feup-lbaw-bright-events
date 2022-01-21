@@ -27,14 +27,15 @@ class UserController extends Controller
         if (is_null($user) || $user->is_admin) {
             abort('404', 'User not found');
         }
-
-        $invitedEvents = Event::whereExists(function ($query) {
-            $query->select(DB::raw(1))->from('attendance_requests')->whereColumn('attendance_requests.event_id', 'events.id')->whereColumn('attendance_requests.attendee_id', DB::raw(Auth::id()))->whereColumn('attendance_requests.is_invite', DB::raw('true'))->whereColumn('attendance_requests.is_accepted', DB::raw('false'))->whereColumn('is_handled', DB::raw('false'));
-        })->get();
+        if (Auth::check()) {
+            $invitedEvents = Event::whereExists(function ($query) {
+                $query->select(DB::raw(1))->from('attendance_requests')->whereColumn('attendance_requests.event_id', 'events.id')->whereColumn('attendance_requests.attendee_id', DB::raw(Auth::id()))->whereColumn('attendance_requests.is_invite', DB::raw('true'))->whereColumn('attendance_requests.is_accepted', DB::raw('false'))->whereColumn('attendance_requests.is_handled', DB::raw('false'));
+            })->get();
+        }
         return view('pages.users.view', [
             'user' => $user,
             'attended_events' => $user->attended_events(),
-            'invited_events' => $invitedEvents
+            'invited_events' => $invitedEvents ?? null
         ]);
     }
 
@@ -54,17 +55,24 @@ class UserController extends Controller
     public function editUser(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'string|max:255',
-            'username' => 'string|max:255',
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
             'bio' => 'nullable|string|max:255',
-            'email' => 'string|email|max:255',
+            'email' => 'required|string|email|max:255',
             'birth_date' => 'nullable|date',
             'gender' => 'string|in:Female,Male,Other',
             'password' => 'nullable|string|min:6|confirmed',
             'profile_picture' => 'nullable|mimes:png,jpg,jpe',
         ]);
 
+        if ($validator->fails()) {
+            return redirect()
+                ->route('editProfile', ['username' => Auth::user()->username])
+                ->withErrors($validator)
+                ->withInput();
+        }
         $user = User::findOrFail($request->id);
+
 
         $this->authorize('edit', $user);
 
