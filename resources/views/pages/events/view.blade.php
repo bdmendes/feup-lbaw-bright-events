@@ -89,7 +89,11 @@
         <div id="event-header" class="row mb-4">
             <div id="event-info" class="d-flex flex-column col-sm-12 col-md-12 col-lg-6 col-xl-6 p-4 gap-3">
                 <div class="w-100">
-                    <h1 id="event-title">{{ $event->title }}</h1>
+                    <h1 id="event-title">{{ $event->title }}
+                         @if($event->is_private)<span class="bi bi-lock-fill fs-1"
+                                                      style="color: var(--primary-color);"
+                                                      title="This event is private"> </span> @endif
+                    </h1>
                 </div>
 
                 <div class="w-100 event-subtitle">
