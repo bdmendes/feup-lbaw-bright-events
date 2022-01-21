@@ -109,7 +109,7 @@
                 <div class="d-flex w-100 event-subtitle">
                     <div class="d-flex flex-column gap-3">
                         <label> Tags: </label>
-                        <span>
+                        <span id="tags">
                             @include("partials.events.tags", ['event' => $event])
                         </span>
                     </div>
@@ -126,6 +126,45 @@
                 <img src="/{{ $event->image->path ?? 'images/group.jpg' }}" class="w-100" />
             </div>
         </div>
+
+        <div class="d-flex justify-content-start">
+                    @if ($event->organizer !== null)
+                        @if (Auth::check())
+                            @if (Auth::user()->id !== $event->organizer->id && !Auth::user()->is_admin)
+                                @if (Auth::user()->attends($event->id))
+                                    <button class="btn btn-custom"
+                                        onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
+                                        id="attend_button" type="submit">Leave event</button>
+                                @else
+                                    <button class="btn btn-custom"
+                                        onclick="addAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
+                                        id="attend_button">Attend
+                                        event</button>
+                                @endif
+                            @else
+                                <form action="{{ route('event', ['id' => $event->id]) }}" method="POST">
+                                    @csrf
+                                    <button class="btn btn-custom mx-2" type="submit">
+                                        @if ($event->organizer->id === Auth::user()->id)
+                                            Delete event
+                                        @endif
+                                        @if (Auth::user()->is_admin)
+                                            Disable event
+                                        @endif
+                                    </button>
+                                </form>
+                                @if (Auth::user()->id === $event->organizer->id)
+                                    <form action="{{ route('editEvent', ['id' => $event->id]) }}">
+                                        <button class="btn btn-custom " type="submit">Edit event</button>
+                                    </form>
+                                @endif
+                            @endif
+
+                        @else
+                            <button class="btn btn-custom"disabled>Login to attend event</button>
+                        @endif
+                    @endif
+                </div>
         
 
         <div id="event-body">
@@ -163,51 +202,13 @@
                 <div id="event-description"class="w-100 p-4">
                     {{ $event->description ?? 'Event has no description' }}
                 </div>
-                <div class="d-flex justify-content-end">
-                    @if ($event->organizer !== null)
-                        @if (Auth::check())
-                            @if (Auth::user()->id !== $event->organizer->id && !Auth::user()->is_admin)
-                                @if (Auth::user()->attends($event->id))
-                                    <button class="btn btn-custom"
-                                        onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
-                                        id="attend_button" type="submit">Leave event</button>
-                                @else
-                                    <button class="btn btn-custom"
-                                        onclick="addAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
-                                        id="attend_button">Attend
-                                        event</button>
-                                @endif
-                            @else
-                                <form action="{{ route('event', ['id' => $event->id]) }}" method="POST">
-                                    @csrf
-                                    <button class="btn btn-primary mx-2" type="submit">
-                                        @if ($event->organizer->id === Auth::user()->id)
-                                            Delete event
-                                        @endif
-                                        @if (Auth::user()->is_admin)
-                                            Disable event
-                                        @endif
-                                    </button>
-                                </form>
-                                @if (Auth::user()->id === $event->organizer->id)
-                                    <form action="{{ route('editEvent', ['id' => $event->id]) }}">
-                                        <button class="btn btn-primary " type="submit">Edit event</button>
-                                    </form>
-                                @endif
-                            @endif
-
-                        @else
-                            <button disabled>Login to attend event</button>
-                        @endif
-                    @endif
-                </div>
             </div>
 
             <div class="tab-pane fade" id="forum" role="tabpanel" aria-labelledby="contact-tab">
                 @if (Auth::check() && !Auth::user()->is_admin)
-                    <form class="mt-4">
-                        <input type="text" id="new_comment_body" name="body" placeholder="What do you think of this event?">
-                        <button id="submit_comment_button" class="mt-2" type="button"
+                    <form class="mt-4 mb-4 d-flex gap-4 align-items-center justify-content-center">
+                        <input class="input" type="text" id="new_comment_body" name="body" placeholder="What do you think of this event?">
+                        <button id="submit_comment_button" class="btn btn-custom" type="button"
                             onclick="submitComment();">Submit</button>
                     </form>
                 @endif
@@ -223,26 +224,30 @@
                         }
                     });
                 </script>
-                <div id="comment_area">
+                <div id="comment_area" class="gap-4 d-flex flex-column">
 
                 </div>
-                <button id="view_more_comments" style="display: none;" onclick="viewMoreComments();">View more</button>
+                <button id="view_more_comments" class="btn btn-custom mt-4"style="display: none;" onclick="viewMoreComments();">
+                    View more
+                </button>
             </div>
 
             <div class="tab-pane fade" id="polls" role="tabpanel" aria-labelledby="contact-tab">
+                <div class="accordion accordion-flush mt-4" id="poll_area">
+                </div>
                 @if (Auth::check() && Auth::id() == $event->organizer->id)
-                    <button id="new_poll_button" class="mt-4 mb-2" type="button" data-bs-toggle="collapse"
+                <div class="my-4">
+                    <button class="btn btn-custom" id="new_poll_button" class="mt-4 mb-2" type="button" data-bs-toggle="collapse"
                         data-bs-target="#new_poll_area" aria-expanded="false" aria-controls="new_poll_area">
                         Create poll
                     </button>
-                    <div class="collapse" id="new_poll_area">
+                    <div class="collapse mt-4" id="new_poll_area">
                         <div class="card card-body">
                             @include('partials.events.newPoll', compact('event'))
                         </div>
                     </div>
-                @endif
-                <div class="accordion accordion-flush mt-2" id="poll_area">
                 </div>
+                @endif
             </div>
 
             <div class="tab-pane fade" id="attendees" role="tabpanel" aria-labelledby="contact-tab">

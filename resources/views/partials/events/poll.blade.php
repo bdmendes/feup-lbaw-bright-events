@@ -1,5 +1,5 @@
 <div class="accordion-item" id="poll_{{ $poll->id }}_entry">
-    <h2 class="accordion-header" id="poll_{{ $poll->id }}_item_header">
+    <h2 class="accordion-header border" id="poll_{{ $poll->id }}_item_header">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
             data-bs-target="#poll_{{ $poll->id }}_item_body" aria-expanded="false"
             aria-controls="poll_{{ $poll->id }}_item_body">
@@ -17,18 +17,18 @@
             </span>
         </button>
     </h2>
-    <div id="poll_{{ $poll->id }}_item_body" class="accordion-collapse collapse"
+    <div id="poll_{{ $poll->id }}_item_body" class="accordion-collapse collapse border mt-2"
         aria-labelledby="poll_{{ $poll->id }}_item">
         <div class="accordion-body">
             <div class="p-2">
                 @if (Auth::check() && Auth::id() == $poll->event->organizer_id)
                     <div class="ms-2" style="float:right;">
                         <button onclick="deletePoll({{ $poll->id }});" id="poll_{{ $poll->id }}_delete_btn"
-                            type="button" class="m-0 p-2"><i class="bi bi-trash"></i></button>
+                            type="button" class="btn btn-custom d-flex align-items-center justify-content-center m-0 p-2"><i class="bi bi-trash"></i></button>
                     </div>
                     <div class="ms-2" style="float:right;">
                         <button onclick="switchPollState({{ $poll->id }});"
-                            id="poll_{{ $poll->id }}_switch_state_btn" type="button" class="m-0 p-2"><i
+                            id="poll_{{ $poll->id }}_switch_state_btn" type="button" class="btn btn-custom d-flex align-items-center justify-content-center m-0 p-2"><i
                                 class="bi bi-file-lock2{{ $poll->is_open ? '-fill' : '' }}"></i></button>
                     </div>
                 @endif
