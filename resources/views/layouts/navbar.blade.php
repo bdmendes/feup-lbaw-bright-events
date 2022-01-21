@@ -1,27 +1,24 @@
-    <nav class="navbar navbar-expand-md navbar-light py-4 fixed-top d-flex align-items-center" role="navigation" id="navbar">
-        <a class="navbar-brand" href=" {{ route('home') }} ">
+    <nav class="navbar navbar-expand-md navbar-light py-4 fixed-top d-flex align-items-center justify-content-end" role="navigation" id="navbar">
+        <a class="navbar-brand me-auto" href=" {{ route('home') }} ">
             <h1><span class="highlight">B</span>right Events</h1>
         </a>
-        <div class="d-md-none d-flex align-items-center gap-4">
-            @if (Auth::check())
-                @include('layouts.notifications', ['id' => 'small'])
-            @endif
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsable"
-                aria-controls="collapsable" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        @if (Auth::check())
+        <div class="me-3">
+            @include('layouts.notifications')
         </div>
-        <div id="collapsable" class="collapse navbar-collapse">
+        @endif
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsable"
+            aria-controls="collapsable" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="collapsable" class="collapse navbar-collapse flex-grow-0">
             <a class="nav-item nav-link" href="{{ route('browseEvents') }}">
                 <h2>Events</h2>
             </a>
-            <a class="me-auto nav-item nav-link" href="{{ route('browseUsers') }}">
+            <a class="nav-item nav-link" href="{{ route('browseUsers') }}">
                 <h2>Users</h2>
             </a>
             @if (Auth::check())
-                <div class="d-sm-none d-md-flex">
-                    @include('layouts.notifications', ['id' => 'small'])
-                </div>
                 @if (Auth::user()->is_admin)
                     <a class="nav-item nav-link" href="{{ route('reportsDash') }}">
                         <h2>Dashboard</h2>
