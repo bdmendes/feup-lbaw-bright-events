@@ -35,12 +35,12 @@
                             <div class="btn-group">
 
                                 <button id="mark-handled{{ $report->id }}" type="button"
-                                    class="btn btn-success mark-handled-action" value="{{ $report->id }}"
-                                    {{ isset($report->handled_by_id) ? 'disabled' : '' }}>Dismiss</button>
+                                    class="btn btn-custom mark-handled-action" value="{{ $report->id }}"
+                                    {{ isset($report->handled_by_id) ? 'disabled' : '' }} style="border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important">Dismiss</button>
 
-                                <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+                                <button type="button" class="btn btn-custom dropdown-toggle dropdown-toggle-split"
                                     data-bs-toggle="dropdown" aria-expanded="false"
-                                    {{ isset($report->handled_by_id) ? 'disabled' : '' }}>
+                                    {{ isset($report->handled_by_id) ? 'disabled' : '' }} style="border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important">
                                     <span class="visually-hidden">Toggle Dropdown</span>
                                 </button>
                                 <ul class="dropdown-menu">
