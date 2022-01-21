@@ -52,10 +52,10 @@ async function clickMap(ev) {
   mapMarker = L.marker(ev.latlng).addTo(map);
   let data = await getAddress(ev.latlng.lat, ev.latlng.lng);
   let address = data['address'];
-  cityHtml.value = address['city'];
-  postcodeHtml.value = address['postcode'];
-  countryHtml.value = address['country'];
-  displayNameHtml.value = data['display_name'];
+  cityHtml.value = address['city'] == undefined ? '' : address['city'];
+  postcodeHtml.value = address['postcode'] == undefined ? '' : address['postcode'];
+  countryHtml.value = address['country'] == undefined ? '' : address['country'];
+  displayNameHtml.value = data['display_name'] == undefined ? '' : data['display_name'];
 
 
   latHtml.value = ev.latlng.lat;
