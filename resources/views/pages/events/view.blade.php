@@ -217,7 +217,7 @@
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="attendees-tab" data-bs-toggle="tab" data-bs-target="#attendees"
                         type="button" role="tab" aria-controls="attendees" aria-selected="false"
-                        onclick="replaceHash('#attendees')">Attendees</button>
+                        onclick="replaceHash('#attendees'); getAttendees();">Attendees</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="statistics-tab" data-bs-toggle="tab" data-bs-target="#statistics"
@@ -386,26 +386,13 @@
                         @endif
 
                         <div class="p-4 d-flex gap-4 flex-wrap justify-content" id="attendees-list">
-                            @forelse ($event->attendances as $attendance)
-                                <div id="{{ $attendance->attendee->username . '-entry' }}"
-                                    class="border rounded d-flex p-1" style="width: 250px;">
-                                    @if (Auth::check() && Auth::user()->id == $event->organizer_id)
-                                        @include('partials.users.smallCard', ['user' => $attendance->attendee, 'event' =>
-                                        $event])
-                                        <div class="align-self-center" style="margin-left:auto;">
-                                            <button id="{{ $user->username . '-btn' }}" class="btn btn-light"
-                                                onclick="removeAttendee({{ $event->id }}, {{ $attendance->attendee->id }}, '{{ $attendance->attendee->username }}', false)">
-                                                <i class="bi bi-x-circle"></i>
-                                            </button>
-                                        </div>
-                                    @else
-                                        @include ('partials.users.smallCard', ['user' => $attendance->attendee])
-                                    @endif
-                                </div>
-                            @empty
-                                <p>No attendees around here...</p>
-                            @endforelse
+
                         </div>
+                        <button id="view_more_attendees" class="btn btn-custom mt-4" style="display: none;"
+                            onclick="viewMoreAttendees();">
+                            View more
+                        </button>
+
                     </div>
                     <div class="tab-pane fade" id="statistics" role="tabpanel" aria-labelledby="contact-tab">
                         <br>
