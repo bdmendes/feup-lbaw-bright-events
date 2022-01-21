@@ -18,15 +18,15 @@
             {{ $comment->body }}
         </div>
 
-        <div class="mt-3 d-flex align-items-center" style="display: inline-block; cursor: pointer;" onclick="switchCommentReplyAreaDisplay({{ $comment->id }});">
+        <div class="mt-3 d-flex align-items-center gap-3">
             @if ($comment->parent == null)
                 @if (Auth::check() && !Auth::user()->is_admin)
-                <button class="p-0 m-0 btn btn-custom px-3">
+                <button onclick="switchCommentReplyAreaDisplay({{ $comment->id }});" class="px-3 m-0 btn btn-custom">
                     Reply
                 </button>
             @endif
-            <span class="ms-2 span-btn d-flex flex-colum align-items-center px-3">
-                <span id="comment_{{ $comment->id }}_reply_count" style="border-bottom: 1px solid black">
+            <span class="span-btn d-flex flex-colum align-items-center" style="cursor:pointer">
+                <span onclick="switchCommentReplyAreaDisplay({{ $comment->id }});" id="comment_{{ $comment->id }}_reply_count" style="border-bottom: 1px solid black">
                     Replies
                 </span>
             </span>
