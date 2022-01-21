@@ -5,11 +5,6 @@ function deleteComment(eventId, commentId, parentId) {
     if (response.ok) {
       const comment = document.getElementById('event_comment_' + commentId);
       if (comment != null) comment.remove();
-      if (parentId == null) return;
-      const reply_number =
-          document.getElementById('comment_' + parentId + '_reply_count');
-      const curr_count = parseInt(reply_number.innerHTML);
-      reply_number.innerHTML = curr_count - 1;
     }
   });
 }
@@ -39,8 +34,6 @@ function submitComment() {
   })
       .then((response) => response.text())
       .then((html) => {
-        /*         document.getElementById('comment_area')
-                    .insertAdjacentHTML('afterbegin', html); */
         element_body.value = '';
       });
 }
@@ -61,13 +54,10 @@ function submitReply(parent) {
   })
       .then((response) => response.text())
       .then((html) => {
-        document.getElementById('comment_' + parent + '_replies')
-            .insertAdjacentHTML('afterbegin', html);
-        element_body.value = '';
-        const reply_number =
-            document.getElementById('comment_' + parent + '_reply_count');
-        const curr_count = parseInt(reply_number.innerHTML);
-        reply_number.innerHTML = curr_count + 1;
+          console.log('comment_' + parent + '_replies');
+          document.getElementById('comment_' + parent + '_replies')
+              .insertAdjacentHTML('afterbegin', html);
+          element_body.value = '';
       });
 }
 

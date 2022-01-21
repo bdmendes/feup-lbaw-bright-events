@@ -3,6 +3,44 @@
 @section('content')
     <div class="p-4">
         <h2>Reports Dashboard</h2>
+
+        <div class="mb-4" id="order">
+            <div class="d-flex flex-row align-items-center justify-content-between my-2">
+                <h4>Date</h4>
+                <div>
+                    <button
+                        onclick="location.href='{{ $request->fullUrlWithQuery(['sort_by' => 'date', 'order' => 'ascending']) }}'"
+                        type="button"
+                        class="{{ $request->query('sort_by') == 'date' && $request->query('order') == 'ascending' ? 'active' : '' }} btn btn-custom">
+                        <i class="bi bi-arrow-up" style="color: white;"></i>
+                    </button>
+                    <button
+                        onclick="location.href='{{ $request->fullUrlWithQuery(['sort_by' => 'date', 'order' => 'descending']) }}'"
+                        type="button"
+                        class="{{ $request->query('sort_by') == 'date' && $request->query('order') == 'descending' ? 'active' : '' }} btn btn-custom">
+                        <i class="bi bi-arrow-down" style="color: white;"></i>
+                    </button>
+                </div>
+
+                <h4>Filter</h4>
+                <div>
+                    <button
+                        onclick="location.href='{{ $request->query('filter') != 'handled' ? $request->fullUrlWithQuery(['filter' => 'handled']) : $request->fullUrlWithQuery(['filter' => '']) }}'"
+                        type="button" class="{{ $request->query('filter') == 'handled' ? 'active' : '' }} btn btn-custom">
+                        <span>Handled</span>
+                    </button>
+                    <button
+                        onclick="location.href='{{ $request->query('filter') != 'notHandled' ? $request->fullUrlWithQuery(['filter' => 'notHandled']) : $request->fullUrlWithQuery(['filter' => '']) }}'"
+                        type="button"
+                        class="{{ $request->query('filter') == 'notHandled' ? 'active' : '' }} btn btn-custom">
+                        <span>Not handled</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+
         <div class="mt-4">
             @if (!$reports->isEmpty())
                 <table class="table" id="reports">
@@ -16,27 +54,13 @@
                             <th scope="col"></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach ($reports as $report)
-                            <tr>
-                                <th scope="row">{{ $report->id }}</th>
-                                <td>{{ $report->date->diffForHumans() }}</td>
-                                <td>{{ $report->report_motive }}</td>
-                                <td>{{ $report->handled_by_id ? 'Yes' : 'No' }}</td>
-                                <td>
-                                    {{ $report->type ?? 'Unknown type' }}
-                                </td>
-                                <td class="report-toggle" data-bs-toggle="collapse" href="#dets{{ $report->id }}">
-                                    <i class="bi bi-chevron-down"></i>
-                                </td>
-                            </tr>
-                            <tr id="dets{{ $report->id }}" class="collapse slide align-middle">
-                                <td id="r{{ $report->id }}" colspan="6">
-                                    @include('partials.reports.card', ['report' => $report])
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
+
+                    @foreach ($reports as $report)
+                        <tbody id="r{{ $report->id }}">
+                            @include('partials.reports.card', ['report' => $report])
+                        </tbody>
+                    @endforeach
+
                 </table>
             @else
                 <h3>No reports to show</h3>

@@ -10,16 +10,19 @@
     color: var(--primary-color) !important;
 }
 
-.navbar-brand h1 {
-    padding-top: 2px;
-}
-
-.navbar-brand h1, .navbar-brand h1 .highlight {
-    font-family: 'Spartan', sans-serif;
+.navbar-brand h1,
+.navbar-brand h1 .highlight {
+    font-family: "Spartan", sans-serif;
     font-weight: 550;
     font-size: 30px !important;
 }
 
 .navbar-brand h1 .highlight {
     color: var(--primary-color);
+}
+
+@media only screen and (max-width: 768px) {
+    .navbar-brand {
+        flex: 1 1 100%;
+    }
 }

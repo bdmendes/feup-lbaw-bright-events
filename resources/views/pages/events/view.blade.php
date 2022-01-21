@@ -2,7 +2,7 @@
 
 @section('title', 'home')
 
-@section ('styles')
+@section('styles')
     <link href="{{ asset('css/event.css') }}" rel="stylesheet">
 @endsection
 
@@ -76,9 +76,9 @@
 
     <div id="event-content" class="container w-75 border rounded p-4 bg-light my-4">
         <div class="event-image col-sm-12 col-md-12 d-flex d-lg-none d-xl-none">
-                <img src="/{{ $event->image->path ?? 'images/group.jpg' }}" class="w-100" />
+            <img src="/{{ $event->image->path ?? 'images/group.jpg' }}" class="w-100" />
 
-            </div>
+        </div>
         <div id="event-header" class="row mb-4">
             <div id="event-info" class="d-flex flex-column col-sm-12 col-md-12 col-lg-6 col-xl-6 p-4 gap-3">
                 <div class="w-100">
@@ -119,13 +119,17 @@
                                     onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
                                     id="attend_button" type="submit">Leave event</button>
                             @elseif($userInvite)
-                                <form action="{{ route('answerInvite', ['eventId' => $event->id, 'inviteId' => $userInvite]) }}" method="POST">
+                                <form
+                                    action="{{ route('answerInvite', ['eventId' => $event->id, 'inviteId' => $userInvite]) }}"
+                                    method="POST">
                                     @csrf
                                     <input type="hidden" name="accept" id="accept" value="true" />
                                     <button class="btn btn-custom" type="submit">Accept invite</button>
                                 </form>
 
-                                <form action="{{ route('answerInvite', ['eventId' => $event->id, 'inviteId' => $userInvite]) }}" method="POST">
+                                <form
+                                    action="{{ route('answerInvite', ['eventId' => $event->id, 'inviteId' => $userInvite]) }}"
+                                    method="POST">
                                     @csrf
                                     <input type="hidden" name="reject" id="reject" value="false" />
 
@@ -171,7 +175,7 @@
                         @endif
 
                     @else
-                        <button class="btn btn-custom"disabled>Login to attend event</button>
+                        <button class="btn btn-custom" disabled>Login to attend event</button>
                     @endif
                 @endif
                 @if (Auth::check() && Auth::id() != $event->organizer_id)
@@ -221,23 +225,21 @@
                     </div>
                     <div class="w-100 p-4">
                         <label>Location: </label>
-                            @if ($event->location ?? '')
-                                <span class="w-50">
+                        @if ($event->location ?? '')
+                            <span class="w-50">
                                 {{ $event->location->pretty_print() }}
-                                </span>
-                            @else
+                            </span>
+                        @else
                             <span>
                                 Not defined
                             </span>
-                            @endif
-                            <div id="map"
-                                class="w-100"
-                                style="height:300px">
-                            </div>
-                            <script>
-                                let eventCoords = [{{$event->location->lat}}, {{$event->location->long}}];
-                                let map = L.map('map').setView(eventCoords, 17);
-                                L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                        @endif
+                        <div id="map" class="w-100" style="height:300px">
+                        </div>
+                        <script>
+                            let eventCoords = [{{ $event->location->lat }}, {{ $event->location->long }}];
+                            let map = L.map('map').setView(eventCoords, 17);
+                            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
                                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                                 maxZoom: 18,
                                 id: 'mapbox/streets-v11',
@@ -246,58 +248,62 @@
                                 accessToken: 'pk.eyJ1IjoiYnJ1bm9nb21lczMwIiwiYSI6ImNreWxnbzltMzAwYTgydnBhaW81OGhha24ifQ.X-WsoAxJ_WcIlFoQpR4rFA'
                             }).addTo(map);
                             L.marker(eventCoords).addTo(map)
-                            </script>
+                        </script>
 
                     </div>
 
                 </div>
 
-                @if(!$event->is_private || ($event->is_private && $isAttendee) || $event->organizer_id == Auth::id())
-                <div class="tab-pane fade" id="forum" role="tabpanel" aria-labelledby="contact-tab">
-                    @if (Auth::check() && !Auth::user()->is_admin)
-                        <form class="mt-4 mb-4 d-flex gap-4 align-items-center justify-content-center">
-                            <input class="input" type="text" id="new_comment_body" name="body" placeholder="What do you think of this event?">
-                            <button id="submit_comment_button" class="btn btn-custom" type="button"
-                                onclick="submitComment();">Submit</button>
-                        </form>
-                    @endif
-                    <script>
-                        let eventChannel = pusher.subscribe("event-channel-{{ $event->id }}");
+                @if (!$event->is_private || ($event->is_private && $isAttendee) || $event->organizer_id == Auth::id())
+                    <div class="tab-pane fade" id="forum" role="tabpanel" aria-labelledby="contact-tab">
+                        @if (Auth::check() && !Auth::user()->is_admin)
+                            <form class="mt-4 mb-4 d-flex gap-4 align-items-center justify-content-center"
+                                onsubmit=" event.preventDefault(); submitComment(); return false;">
+                                <input class="input" type="text" id="new_comment_body" name="body"
+                                    placeholder="What do you think of this event?">
+                                <button id="submit_comment_button" class="btn btn-custom" type="button"
+                                    onclick="submitComment();">Submit</button>
+                            </form>
+                        @endif
+                        <script>
+                            let eventChannel = pusher.subscribe("event-channel-{{ $event->id }}");
 
-                        eventChannel.bind('event', function(data) {
-                            if (data.message === 'comment') {
-                                remove('comment_area:refreshIcon');
-                                prependComment(data.id);
-                            } else if (data.message === 'poll') {
-                                updatePoll(data.id);
-                            }
-                        });
-                    </script>
-                    <div id="comment_area" class="gap-4 d-flex flex-column">
+                            eventChannel.bind('event', function(data) {
+                                if (data.message === 'comment') {
+                                    remove('comment_area:refreshIcon');
+                                    prependComment(data.id);
+                                } else if (data.message === 'poll') {
+                                    updatePoll(data.id);
+                                }
+                            });
+                        </script>
+                        <div id="comment_area" class="gap-4 d-flex flex-column">
 
-                    </div>
-                    <button id="view_more_comments" class="btn btn-custom mt-4"style="display: none;" onclick="viewMoreComments();">
-                        View more
-                    </button>
-                </div>
-
-                <div class="tab-pane fade" id="polls" role="tabpanel" aria-labelledby="contact-tab">
-                    <div class="accordion accordion-flush mt-4" id="poll_area">
-                    </div>
-                    @if (Auth::check() && Auth::id() == $event->organizer->id)
-                    <div class="my-4">
-                        <button class="btn btn-custom" id="new_poll_button" class="mt-4 mb-2" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#new_poll_area" aria-expanded="false" aria-controls="new_poll_area">
-                            Create poll
-                        </button>
-                        <div class="collapse mt-4" id="new_poll_area">
-                            <div class="card card-body">
-                                @include('partials.events.newPoll', compact('event'))
-                            </div>
                         </div>
+                        <button id="view_more_comments" class="btn btn-custom mt-4" style="display: none;"
+                            onclick="viewMoreComments();">
+                            View more
+                        </button>
                     </div>
-                    @endif
-                </div>
+
+                    <div class="tab-pane fade" id="polls" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="accordion accordion-flush mt-4" id="poll_area">
+                        </div>
+                        @if (Auth::check() && Auth::id() == $event->organizer->id)
+                            <div class="my-4">
+                                <button class="btn btn-custom" id="new_poll_button" class="mt-4 mb-2" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#new_poll_area" aria-expanded="false"
+                                    aria-controls="new_poll_area">
+                                    Create poll
+                                </button>
+                                <div class="collapse mt-4" id="new_poll_area">
+                                    <div class="card card-body">
+                                        @include('partials.events.newPoll', compact('event'))
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
 
                     <div class="tab-pane fade" id="polls" role="tabpanel" aria-labelledby="contact-tab">
                         @if (Auth::check() && Auth::id() == $event->organizer->id)
@@ -346,19 +352,22 @@
                             </div>
 
                             <h3>Pending join requests</h3>
-                            <div id="joinRequests" >
-                                @foreach ($event->attendanceRequests()->getQuery()->where('is_invite', 'false')->get() as $request)
-                                    <div id="joinRequest{{$request->id}}" class="border rounded d-flex p-1" style="width: 250px;">
+                            <div id="joinRequests">
+                                @foreach ($event->attendanceRequests()->getQuery()->where('is_invite', 'false')->get()
+        as $request)
+                                    <div id="joinRequest{{ $request->id }}" class="border rounded d-flex p-1"
+                                        style="width: 250px;">
                                         <div class="col-10">
                                             @include('partials.users.smallCard', ['user' => $request->attendee])
                                         </div>
                                         <div class="d-flex align-items-center col-2">
                                             <span class="col-6 bi-check text-success fs-1 clickable"
-                                                    title="Accept join request"
-                                                    onclick="answerJoinRequest({{$request->event_id}}, {{$request->id}}, {{$request->attendee_id}}, true)"> </span>
-                                            <span class="col-6 bi-x text-danger fs-1 clickable"
-                                                    title="Reject join request"
-                                                    onclick="answerJoinRequest({{$request->event_id}}, {{$request->id}},{{$request->attendee_id}}, false)"> </span>
+                                                title="Accept join request"
+                                                onclick="answerJoinRequest({{ $request->event_id }}, {{ $request->id }}, {{ $request->attendee_id }}, true)">
+                                            </span>
+                                            <span class="col-6 bi-x text-danger fs-1 clickable" title="Reject join request"
+                                                onclick="answerJoinRequest({{ $request->event_id }}, {{ $request->id }},{{ $request->attendee_id }}, false)">
+                                            </span>
                                         </div>
                                     </div>
                                 @endforeach
@@ -370,10 +379,11 @@
 
                         <div class="p-4 d-flex gap-4 flex-wrap justify-content" id="attendees-list">
                             @forelse ($event->attendances as $attendance)
-                                <div id="{{ $attendance->attendee->username . '-entry' }}" class="border rounded d-flex p-1"
-                                    style="width: 250px;">
+                                <div id="{{ $attendance->attendee->username . '-entry' }}"
+                                    class="border rounded d-flex p-1" style="width: 250px;">
                                     @if (Auth::check() && Auth::user()->id == $event->organizer_id)
-                                        @include('partials.users.smallCard', ['user' => $attendance->attendee, 'event' => $event])
+                                        @include('partials.users.smallCard', ['user' => $attendance->attendee, 'event' =>
+                                        $event])
                                         <div class="align-self-center" style="margin-left:auto;">
                                             <button id="{{ $user->username . '-btn' }}" class="btn btn-light"
                                                 onclick="removeAttendee({{ $event->id }}, {{ $attendance->attendee->id }}, '{{ $attendance->attendee->username }}', false)">
@@ -390,7 +400,22 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="statistics" role="tabpanel" aria-labelledby="contact-tab">
-                        <p>Statistics not implemented yet</p>
+                        <br>
+                        <h2 class="m-2">{{ $event->attendees()->count() }} attendees</h2>
+                        <div class="d-flex">
+                            <div class="col">
+                                @include('partials.charts.ageChart', ['age0' => $ages[0], 'age1' => $ages[1], 'age2' =>
+                                $ages[2],
+                                'age3'
+                                =>
+                                $ages[3]])
+                            </div>
+                            <div class="col-4">
+                                @include('partials.charts.genderChart', ['male' => $genders[0], 'female' => $genders[1],
+                                'other' =>
+                                $genders[2]])
+                            </div>
+                        </div>
                     </div>
                 @endif
             </div>

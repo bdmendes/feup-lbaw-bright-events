@@ -38,7 +38,8 @@ class EventController extends Controller
             $events = $events->orderBy('date', 'desc');
         }
         if ($request->filled('organizer')) {
-            $events = $events->where('organizer_id', '=', $request->query('organizer'));
+            $user = User::where('username', $request->query('organizer'))->first();
+            $events = $events->where('organizer_id', '=', $user->id ?? null);
         }
         if ($request->filled('tag')) {
             $events = $events->tag($request->query('tag'));
@@ -82,19 +83,20 @@ class EventController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:1000',
             'cover_image' => 'nullable|mimes:png,jpg,jpe',
-            'date' => 'required'
+            'date' => 'required|date|after:now'
+        ], $messages = [
+            'date.after' => 'An event cannot be set in the past!',
         ]);
 
         $file = null;
 
-        if (!is_null($request->date)) {
-            $date = Carbon::parse($request->date);
-            if ($date->isPast()) {
-                $validator->getMessageBag()->add('date', 'Events cannot be set in the past');
-                return redirect()->route("createEvent")->withErrors($validator)->withInput();
-            }
+        if ($validator->fails()) {
+            return redirect()
+            ->route('createEvent')
+            ->withErrors($validator)
+            ->withInput();
         }
 
         $event = Event::create([
@@ -230,14 +232,20 @@ class EventController extends Controller
         $this->authorize('view', $event);
         $isAttendee = false;
         foreach ($event->attendances as $attendance) {
-            if ($attendance->attendee_id == Auth::user()->id) {
-                $isAttendee =  true;
+            if (Auth::check()) {
+                if ($attendance->attendee_id == Auth::user()->id) {
+                    $isAttendee =  true;
+                }
+            } else {
+                $isAttendee = false;
             }
         }
         $users = User::where('is_admin', 'false')->get();
         $invites = $event->getInvites();
         $userInvite = $event->attendanceRequests()->getQuery()->where('attendee_id', Auth::id())->where('is_invite', 'true')->first();
-        return view("pages.events.view", compact('users', 'event', 'invites', 'isAttendee', 'userInvite'));
+        $ages = $event->getAgeStats();
+        $genders = $event->getGenderStats();
+        return view("pages.events.view", compact('users', 'event', 'invites', 'ages', 'genders', 'isAttendee', 'userInvite'));
     }
 
     public function joinRequest($id)

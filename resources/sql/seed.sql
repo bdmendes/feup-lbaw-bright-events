@@ -113,7 +113,7 @@ CREATE TABLE lbaw2134.poll_options (
 );
 
 CREATE TABLE lbaw2134.user_poll_options (
-    voter_id INTEGER REFERENCES lbaw2134.users ON DELETE SET NULL ON UPDATE CASCADE,
+    voter_id INTEGER REFERENCES lbaw2134.users ON DELETE CASCADE ON UPDATE CASCADE,
     poll_option_id INTEGER REFERENCES lbaw2134.poll_options ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (voter_id, poll_option_id)
 );
