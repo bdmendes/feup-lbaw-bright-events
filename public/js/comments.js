@@ -54,7 +54,6 @@ function submitReply(parent) {
   })
       .then((response) => response.text())
       .then((html) => {
-        alert('hey');
         document.getElementById('comment_' + parent + '_replies')
             .insertAdjacentHTML('afterbegin', html);
         element_body.value = '';
