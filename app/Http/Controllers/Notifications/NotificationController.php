@@ -16,9 +16,9 @@ class NotificationController extends Controller
             abort(403, 'Unidentified user');
         }
         if ($request == null || $request->last != null) {
-            $notifications = Notification::where('addressee_id', Auth::user()->id)->where('is_seen', 'false')->where('id', '>', $request->last)->orderByDesc('date')->get();
+            $notifications = Notification::where('addressee_id', Auth::user()->id)->where('is_seen', 'false')->where('id', '>', $request->last)->orderByDesc('id')->get();
         } else {
-            $notifications = Notification::where('addressee_id', Auth::user()->id)->where('is_seen', 'false')->orderByDesc('date')->get();
+            $notifications = Notification::where('addressee_id', Auth::user()->id)->where('is_seen', 'false')->orderByDesc('id')->get();
         }
         return view('partials.notifications.list', ['notifications' => $notifications]);
     }
