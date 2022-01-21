@@ -2,12 +2,10 @@
 
 @section('title', 'events')
 
-
+@include('partials.breadcrumbs', ['pages'=>[['name' => 'Home', 'route'=> route('home')],['name' => 'Events',
+'route'=>route('browseEvents')]]])
 
 @section('content')
-    @include('partials.breadcrumbs', ['pages'=>[['name' => 'Home', 'route'=> route('home')],['name' => 'Events',
-    'route'=>route('browseEvents')]]])
-
     <div class="d-xs-block d-sm-none d-md-none d-lg-none d-xl-none p-5">
         @include('partials.events.search')
     </div>

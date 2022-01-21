@@ -37,8 +37,6 @@
 
     @include('layouts.navbar')
 
-
-
     <section class="w-100 position-relative wrapper flex-grow-1" id="main">
         <div id="growls">
 

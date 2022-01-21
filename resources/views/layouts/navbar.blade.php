@@ -42,6 +42,7 @@
                 </a>
             @endif
         </div>
+        @include('partials.breadcrumbs')
     </nav>
 
     @yield('navbar')
