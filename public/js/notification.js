@@ -70,7 +70,7 @@ function getPastNotifications(event = null, size = 10){
             remove("emptyNotifications");
         if(n < size){
             console.log("n " + n + " size = " + size);
-            remove("getPastNotifictaions");
+            remove("getPastNotifications");
         }
         remove("notificationCount");
     });
