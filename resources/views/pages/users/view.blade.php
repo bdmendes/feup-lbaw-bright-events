@@ -129,5 +129,13 @@
                 </style>
             </div>
         </div>
+        @if (Auth::check() && Auth::id() != $user->id)
+            <div class="text-end pe-5">
+                <span class="link-primary" style="font-size: 0.9em;" type="button"
+                    onclick="getReportModal('user', {{ $user->id }});">Report
+                    user</span>
+            </div>
+        @endif
     </div>
+    <script type="text/javascript" src={{ asset('js/report.form.js') }} defer></script>
 @endsection

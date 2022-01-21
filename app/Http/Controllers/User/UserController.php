@@ -16,7 +16,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $users = User::search($request->query('global'))->where('is_admin', 'false');
-        return view('pages.users.browse', ['users' => $users->paginate($request->size ?? 10)->withQueryString(), 'request' => $request]);
+        return view('pages.users.browse', ['users' => $users->paginate($request->size ?? 9)->withQueryString(), 'request' => $request]);
     }
 
     public function show($username)

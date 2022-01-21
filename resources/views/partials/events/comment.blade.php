@@ -6,7 +6,7 @@
             @if ($comment->parent == null)
                 <div class="mt-3" style="display: inline-block; cursor: pointer;"
                     onclick="switchCommentReplyAreaDisplay({{ $comment->id }});">
-                    @if (Auth::check())
+                    @if (Auth::check() && !Auth::user()->is_admin)
                         <button class="p-0 m-0" style="height: 20px;">Reply</button>
                     @endif
                     <span class="ms-2">
@@ -27,12 +27,19 @@
                         class="bi bi-trash"></i></button>
             </div>
         @endif
+        @if (Auth::check() && Auth::id() != $comment->commenter_id && !isset($is_report))
+            <div class="col col-2 align-self-end">
+                <span class="link-primary" style="font-size: 0.9em;" type="button"
+                    onclick="getReportModal('comment', {{ $comment->id }});">Report
+                    comment</span>
+            </div>
+        @endif
     </div>
 
     @if ($comment->parent == null)
         <div id="comment_{{ $comment->id }}_reply_area" class="mt-4"
             style="margin-left: 5%; display: none;">
-            @if (Auth::check())
+            @if (Auth::check() && !Auth::user()->is_admin)
                 <form class="mt-4">
                     <input type="text" id="comment_{{ $comment->id }}_reply_body" name="body"
                         placeholder="What's your thought about this user's input?">

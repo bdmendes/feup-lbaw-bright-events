@@ -23,7 +23,6 @@
                 @else
                     Not defined
                 @endif
-
             </div>
             <div class="p-3  w-100">
                 <label> Organizer: </label>
@@ -33,6 +32,13 @@
                 <label> Tags: </label>
                 @include("partials.events.tags", ['event' => $event])
             </div>
+            @if (Auth::check() && Auth::id() != $event->organizer_id)
+                <div id="report-container" class="text-end pe-1">
+                    <span class="link-primary" style="font-size: 0.9em;" type="button"
+                        onclick="getReportModal('event', {{ $event->id }});">Report
+                        event</span>
+                </div>
+            @endif
         </div>
 
         <ul class="nav nav-tabs w-100 nav-fill" id="myTab" role="tablist">
@@ -63,6 +69,7 @@
             </li>
         </ul>
 
+
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="home-tab">
                 <div class="w-100 p-4">
@@ -71,7 +78,7 @@
                 <div class="d-flex justify-content-end">
                     @if ($event->organizer !== null)
                         @if (Auth::check())
-                            @if (Auth::user()->id !== $event->organizer->id)
+                            @if (Auth::user()->id !== $event->organizer->id && !Auth::user()->is_admin)
                                 @if (Auth::user()->attends($event->id))
                                     <button class="btn-light"
                                         onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
@@ -85,13 +92,20 @@
                             @else
                                 <form action="{{ route('event', ['id' => $event->id]) }}" method="POST">
                                     @csrf
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <input type="hidden" name="id" id="id" value="{{ $event->id }}" />
-                                    <button class="btn btn-primary mx-2" type="submit">Delete event</button>
+                                    <button class="btn btn-primary mx-2" type="submit">
+                                        @if ($event->organizer->id === Auth::user()->id)
+                                            Delete event
+                                        @endif
+                                        @if (Auth::user()->is_admin)
+                                            Disable event
+                                        @endif
+                                    </button>
                                 </form>
-                                <form action="{{ route('editEvent', ['id' => $event->id]) }}">
-                                    <button class="btn btn-primary " type="submit">Edit event</button>
-                                </form>
+                                @if (Auth::user()->id === $event->organizer->id)
+                                    <form action="{{ route('editEvent', ['id' => $event->id]) }}">
+                                        <button class="btn btn-primary " type="submit">Edit event</button>
+                                    </form>
+                                @endif
                             @endif
 
                         @else
@@ -102,7 +116,7 @@
             </div>
 
             <div class="tab-pane fade" id="forum" role="tabpanel" aria-labelledby="contact-tab">
-                @if (Auth::check())
+                @if (Auth::check() && !Auth::user()->is_admin)
                     <form class="mt-4">
                         <input type="text" id="new_comment_body" name="body" placeholder="What do you think of this event?">
                         <button id="submit_comment_button" class="mt-2" type="button"
@@ -202,6 +216,7 @@
                 <p>Statistics not implemented yet</p>
             </div>
         </div>
+
     </div>
 
     <script>
@@ -260,4 +275,6 @@
             redirectTab();
         });
     </script>
+
+    <script type="text/javascript" src={{ asset('js/report.form.js') }} defer></script>
 @endsection
