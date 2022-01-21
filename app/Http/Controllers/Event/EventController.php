@@ -202,7 +202,9 @@ class EventController extends Controller
         $this->authorize('view', $event);
         $users = User::where('is_admin', 'false')->get();
         $invites = $event->getInvites();
-        return view("pages.events.view", compact('users', 'event', 'invites'));
+        $ages = $event->getAgeStats();
+        $genders = $event->getGenderStats();
+        return view("pages.events.view", compact('users', 'event', 'invites', 'ages', 'genders'));
     }
 
     public function inviteUser($username)

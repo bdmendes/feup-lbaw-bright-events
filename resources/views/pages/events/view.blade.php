@@ -213,7 +213,20 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="statistics" role="tabpanel" aria-labelledby="contact-tab">
-                <p>Statistics not implemented yet</p>
+                <br>
+                <h2 class="m-2">{{ $event->attendees()->count() }} attendees</h2>
+                <div class="d-flex">
+                    <div class="col">
+                        @include('partials.charts.ageChart', ['age0' => $ages[0], 'age1' => $ages[1], 'age2' => $ages[2],
+                        'age3'
+                        =>
+                        $ages[3]])
+                    </div>
+                    <div class="col-4">
+                        @include('partials.charts.genderChart', ['male' => $genders[0], 'female' => $genders[1], 'other' =>
+                        $genders[2]])
+                    </div>
+                </div>
             </div>
         </div>
 
