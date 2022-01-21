@@ -12,10 +12,16 @@ function thumbnailPlacing() {
 
 function profilePicture() {
     let pp = document.getElementById("profile-picture");
+    let mpp = document.getElementById("medium-profile-picture");
     let spp = document.getElementById("small-profile-picture");
     
-    pp.style.height = pp.offsetWidth + "px";
+    if (pp.offsetWidth == "0") {
+        pp.style.height = pp.style.minWidth + "px";
+    } else {
+        pp.style.height = pp.offsetWidth + "px";
+    }
     spp.style.height = spp.offsetWidth + "px";
+    mpp.style.height = mpp.offsetWidth + "px";
 }
 
 document.addEventListener("DOMContentLoaded", thumbnailPlacing);

@@ -6,10 +6,10 @@
     color: black;
 }
 
-#small-user-banner .img {
-    max-width: 33%;
+#small-user-banner img {
+    width: 75% !important;
 }
 
-#small-user-banner img {
-    max-width: 400px;
+#small-user-banner img, #user-banner img {
+    max-width: 100% !important;
 }

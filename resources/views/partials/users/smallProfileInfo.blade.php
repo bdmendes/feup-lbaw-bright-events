@@ -1,13 +1,13 @@
         <div class="col-12 d-flex d-sm-flex d-md-none d-lg-none d-xl-none flex-column justify-content-center align-items-center">
             @if (is_null($user->profile_picture_id))
-                <img id="small-profile-picture" src="/images/user.png" alt="Generic Profile Picture" class="profile-picture mb-3 rounded-circle"
+                <img id="medium-profile-picture" src="/images/user.png" alt="Generic Profile Picture" class="profile-picture mb-3 rounded-circle"
                     style="object-fit: cover;">
             @else
-                <img id="small-profile-picture" src="/{{ $user->profile_picture->path }}" alt="{{ $user->name }}'s Profile Picture"
+                <img id="medium-profile-picture" src="/{{ $user->profile_picture->path }}" alt="{{ $user->name }}'s Profile Picture"
                     class="profile-picture mb-3 rounded-circle" style="object-fit: cover;">
             @endif
         </div>
-        <div class="d-none d-md-flex col-sm-12 col-md-4 flex-column justify-content-center">
+        <div class="d-none d-md-flex col-sm-12 col-md-4 flex-column justify-content-center align-items-center">
             @if (is_null($user->profile_picture_id))
                 <img id="small-profile-picture" src="/images/user.png" alt="Generic Profile Picture" class="rounded-circle w-100"
                     style="object-fit: cover;">
