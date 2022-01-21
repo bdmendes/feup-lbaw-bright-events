@@ -405,15 +405,15 @@
                     <div class="tab-pane fade" id="statistics" role="tabpanel" aria-labelledby="contact-tab">
                         <br>
                         <h2 class="m-2">{{ $event->attendees()->count() }} attendees</h2>
-                        <div class="d-flex">
-                            <div class="col">
+                        <div class="row h-100 d-flex align-items-center">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                 @include('partials.charts.ageChart', ['age0' => $ages[0], 'age1' => $ages[1], 'age2' =>
                                 $ages[2],
                                 'age3'
                                 =>
                                 $ages[3]])
                             </div>
-                            <div class="col-4">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                 @include('partials.charts.genderChart', ['male' => $genders[0], 'female' => $genders[1],
                                 'other' =>
                                 $genders[2]])
