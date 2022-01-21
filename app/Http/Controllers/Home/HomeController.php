@@ -19,7 +19,7 @@ class HomeController extends Controller
 
     protected function trendingEvents()
     {
-        $events = Event::all();
+        $events = Event::where('is_private', 'false')->get();
         $events = $events->map(function ($item, $key) {
             return ['score' => $item->score(), 'event' => $item];
         });
