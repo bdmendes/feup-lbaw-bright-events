@@ -18,7 +18,7 @@
 
                 <input class="input" onchange="removeErrors('login');" id="login" type="text" name="login"
                     value="{{ old('username') ?: old('email') }}" placeholder="Email or username" required autofocus>
-                @if ($errors->has('email') || $errors->has('email'))
+                @if ($errors->has('username') || $errors->has('email'))
                     <span class="error" id="loginError">
                         {{ $errors->first('username') ?: $errors->first('email') }}
                     </span>
@@ -41,10 +41,14 @@
                 </button>
 
                 <hr class="m-0">
-                <p class="not-registered">
+                <div class="not-registered">
                     Not registered yet?
                     <a class="register-link" href="{{ route('register') }}">Register now!</a>
-                </p>
+                </div>
+                <div class="lost-password">
+                    Trouble remembering?
+                    <a class="recover-link" href="{{ route('recoverPassword') }}">Recover your password</a>
+                </div>
             </form>
         </div>
         <div id="thumbnail" class="d-none d-xl-block col-xl-6 bg-dark">
