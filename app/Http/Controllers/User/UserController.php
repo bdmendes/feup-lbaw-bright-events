@@ -29,7 +29,7 @@ class UserController extends Controller
         }
         if (Auth::check()) {
             $invitedEvents = Event::whereExists(function ($query) {
-                $query->select(DB::raw(1))->from('attendance_requests')->whereColumn('attendance_requests.event_id', 'events.id')->whereColumn('attendance_requests.attendee_id', DB::raw(Auth::id()))->whereColumn('attendance_requests.is_invite', DB::raw('true'))->whereColumn('attendance_requests.is_accepted', DB::raw('false'));
+                $query->select(DB::raw(1))->from('attendance_requests')->whereColumn('attendance_requests.event_id', 'events.id')->whereColumn('attendance_requests.attendee_id', DB::raw(Auth::id()))->whereColumn('attendance_requests.is_invite', DB::raw('true'))->whereColumn('attendance_requests.is_accepted', DB::raw('false'))->whereColumn('attendance_requests.is_handled', DB::raw('false'));
             })->get();
         }
         return view('pages.users.view', [
@@ -67,12 +67,12 @@ class UserController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-            ->route('editProfile', ['username' => Auth::user()->username])
-            ->withErrors($validator)
-            ->withInput();
+                ->route('editProfile', ['username' => Auth::user()->username])
+                ->withErrors($validator)
+                ->withInput();
         }
         $user = User::findOrFail($request->id);
-        
+
 
         $this->authorize('edit', $user);
 

@@ -28,4 +28,9 @@ class AttendanceRequestPolicy
 
         return true;
     }
+
+    public function answerInvite(?User $user, AttendanceRequest $request)
+    {
+        return $request->is_invite && $user->id == $request->attendee_id;
+    }
 }

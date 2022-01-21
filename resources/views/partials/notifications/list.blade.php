@@ -14,47 +14,48 @@
                 @break
 
             @case('Join request')
-                <!-- Event pusher NOT DONE-->
+                <!-- Event pusher and Trigger working-->
+
                 <span class="bi bi-calendar-plus"> </span>
                 @break
 
             @case('Accepted request')
-                <!-- Event pusher NOT DONE-->
+                <!--  Event pusher and Trigger working-->
                 <span class="bi bi-calendar-check"> </span>
                 @break
 
             @case('Declined request')
-                <!-- Event pusher NOT DONE-->
+                <!--  Event pusher and Trigger working-->
                 <span class="bi bi-calendar-x"> </span>
                 @break
 
             @case('Invite')
-                <!-- Event pusher done-->
+                <!--  Event pusher and Trigger working-->
                 <span class="bi bi-envelope-plus"> </span>
                 @break
 
             @case('Accepted invite')
-                <!-- Event pusher NOT DONE-->
+                <!--  Event pusher and Trigger working-->
                 <span class="bi bi-envelope-check"> </span>
                 @break
 
             @case('Declined Invite')
-                <!-- Event pusher done-->
+                <!--  Event pusher and Trigger working-->
                 <span class="bi bi-envelope-dash"> </span>
                 @break
 
             @case('New comment')
-                <!-- Event pusher DONE-->
+                <!-- Event pusher and Trigger working-->
                 <span class="bi bi-card-text"> </span>
                 @break
 
             @case('New poll')
-                <!-- Event pusher DONE-->
+                <!--  Event pusher and Trigger working-->
                 <span class="bi bi-list"> </span>
                 @break
 
             @case('Closed Poll')
-                <!-- Event pusher done-->
+                <!--  Event pusher and Trigger working-->
                 @break
             @default
                 {{$notification->notication_type}}

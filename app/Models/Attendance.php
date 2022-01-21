@@ -16,7 +16,7 @@ class Attendance extends Model
      * @var array
      */
     protected $fillable = [
-        'event_id', 'attendee_id',
+        'event_id', 'attendee_id', 'is_handled'
     ];
 
     public function attendee()

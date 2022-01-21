@@ -250,6 +250,11 @@ class EventApiController extends Controller
 
         $attendance->delete();
 
+        $attendanceRequest = AttendanceRequest::where("event_id", $request->event_id)->where("attendee_id", $request->attendee_id)->first();
+        if ($attendanceRequest != null) {
+            $attendanceRequest->delete();
+        }
+
         return response("Successfully left attendance list.", 200);
     }
 
@@ -265,11 +270,31 @@ class EventApiController extends Controller
                 return response("Is already attendee already", 203);
             }
         }
-        AttendanceRequest::create([
-            'event_id' => $event->id,
-            'attendee_id' => $user->id,
-            'is_invite' => true
-        ]);
+
+        $attendanceRequest = AttendanceRequest::where('event_id', $event->id)->where('attendee_id', $user->id)->first();
+        if ($attendanceRequest != null) {
+            if (!$attendanceRequest->is_invite && !$attendanceRequest->is_handled) {
+                $attendance = Attendance::create([
+                    'event_id' => $event->id,
+                    'attendee_id' => $attendanceRequest->attendee_id
+                ]);
+                $attendanceRequest->is_accepted = true;
+                $attendanceRequest->is_handled = true;
+                $attendanceRequest->save();
+                event(new NotificationReceived('answer join request', [$attendanceRequest->attendee]));
+            } else {
+                $attendanceRequest->is_invite = true;
+                $attendanceRequest->is_accepted = false;
+                $attendanceRequest->is_handled = false;
+                $attendanceRequest->save();
+            }
+        } else {
+            AttendanceRequest::create([
+                'event_id' => $event->id,
+                'attendee_id' => $user->id,
+                'is_invite' => true
+            ]);
+        }
         $returnHTML = view('partials.users.smallCard')->with('user', $user)->render();
 
         event(new NotificationReceived('invite', [$user]));
@@ -288,16 +313,17 @@ class EventApiController extends Controller
 
         $this->authorize('acceptJoinRequest', $event);
 
-
-        event(new NotificationReceived('answer join request', [$attendanceRequest->attendee]));
-
         if ($request->accept) {
             $attendance = Attendance::create([
                 'event_id' => $event->id,
                 'attendee_id' => $attendanceRequest->attendee_id
             ]);
+            $attendanceRequest->is_accepted = true;
         }
-        $attendanceRequest->delete();
+        //$attendanceRequest->delete();
+        $attendanceRequest->is_handled = true;
+        $attendanceRequest->save();
+        event(new NotificationReceived('answer join request', [$attendanceRequest->attendee]));
         if ($request->accept) {
             return view('partials.users.removableSmallCard', ['attendance' => $attendance]);
         } else {
