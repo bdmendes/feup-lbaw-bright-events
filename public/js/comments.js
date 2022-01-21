@@ -39,8 +39,6 @@ function submitComment() {
   })
       .then((response) => response.text())
       .then((html) => {
-        /*         document.getElementById('comment_area')
-                    .insertAdjacentHTML('afterbegin', html); */
         element_body.value = '';
       });
 }
@@ -61,6 +59,7 @@ function submitReply(parent) {
   })
       .then((response) => response.text())
       .then((html) => {
+        console.log('comment_' + parent + '_replies');
         document.getElementById('comment_' + parent + '_replies')
             .insertAdjacentHTML('afterbegin', html);
         element_body.value = '';
@@ -79,7 +78,7 @@ function viewMoreComments() {
       .then((response) => response.text())
       .then((html) => {
         document.getElementById('comment_area')
-            .insertAdjacentHTML('afterend', html);
+            .insertAdjacentHTML('beforeend', html);
         updateViewMoreCommentsButton();
       });
 }

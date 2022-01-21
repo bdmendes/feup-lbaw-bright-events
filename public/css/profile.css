@@ -1,0 +1,17 @@
+#user-banner, .event-card {
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
+}
+
+.info i, .info p {
+    color: black;
+}
+
+#small-user-banner img {
+    width: 75% !important;
+}
+
+#small-user-banner img, #user-banner img {
+    object-fit: cover;
+    max-width: 100% !important;
+    width: 100%;
+}

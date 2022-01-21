@@ -280,4 +280,28 @@ class EventApiController extends Controller
     {
         return response("Not implemented yet", 501);
     }
+
+    public function answerJoinRequest(Request $request)
+    {
+        $event = Event::find($request->eventId);
+        $attendanceRequest = AttendanceRequest::find($request->requestId);
+
+        $this->authorize('acceptJoinRequest', $event);
+
+
+        event(new NotificationReceived('answer join request', [$attendanceRequest->attendee]));
+
+        if ($request->accept) {
+            $attendance = Attendance::create([
+                'event_id' => $event->id,
+                'attendee_id' => $attendanceRequest->attendee_id
+            ]);
+        }
+        $attendanceRequest->delete();
+        if ($request->accept) {
+            return view('partials.users.removableSmallCard', ['attendance' => $attendance]);
+        } else {
+            return 'deleted';
+        }
+    }
 }

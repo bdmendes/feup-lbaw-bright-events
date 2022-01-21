@@ -5,7 +5,7 @@
 @endsection
 
 @section('scripts')
-    {{-- <script type="text/javascript" src={{ asset('js/auth.js') }} defer></script> --}}
+    <script type="text/javascript" src={{ asset('js/auth.js') }} defer></script>
 @endsection
 
 @section('content')

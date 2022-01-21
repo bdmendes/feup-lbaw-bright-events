@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\AttendanceRequest;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -19,12 +20,17 @@ class EventPolicy
         if (!$event->is_private || ($user == null || $event->organizer_id == $user->id)) {
             return true;
         }
+        if ($event->is_private && $user == null) {
+            return false;
+        }
+        /*
         foreach ($event->attendances as $attendance) {
             if ($attendance->attendee_id == $user->id) {
                 return true;
             }
         }
-        return false;
+        */
+        return true;
     }
 
     public function create(Event $Event)
@@ -40,5 +46,28 @@ class EventPolicy
     public function block(User $user)
     {
         return $user->is_admin;
+    }
+
+    public function joinRequest(?User $user, Event $event)
+    {
+        if (!$event->is_private) {
+            return false;
+        }
+        foreach ($event->attendances as $attendance) {
+            if ($attendance->attendee_id == $user->id)
+                return false;
+        }
+        return true;
+    }
+
+    public function acceptJoinRequest(?User $user, Event $event)
+    {
+
+        if ($event->organizer_id != Auth::id()) {
+            return false;
+        }
+
+
+        return true;
     }
 }

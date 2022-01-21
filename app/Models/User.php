@@ -56,6 +56,12 @@ class User extends Authenticatable
         return $this->hasMany(Attendance::class, 'attendee_id');
     }
 
+    public function attendanceRequest()
+    {
+        return $this->hasMany(AttendanceRequest::class, 'attendee_id');
+    }
+
+
     public function attended_events()
     {
         $attended_events = [];

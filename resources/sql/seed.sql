@@ -26,10 +26,11 @@ CREATE TABLE lbaw2134.files (
 
 CREATE TABLE lbaw2134.locations (
     id SERIAL PRIMARY KEY,
-    address TEXT NOT NULL,
-    city TEXT NOT NULL,
-    coords TEXT NOT NULL,
-    name TEXT,
+    postcode TEXT ,
+    city TEXT ,
+    lat TEXT NOT NULL,
+    long TEXT NOT NULL,
+    name TEXT NOT NULL,
     country lbaw2134.Country NOT NULL
 );
 
@@ -112,7 +113,7 @@ CREATE TABLE lbaw2134.poll_options (
 );
 
 CREATE TABLE lbaw2134.user_poll_options (
-    voter_id INTEGER REFERENCES lbaw2134.users ON DELETE SET NULL ON UPDATE CASCADE,
+    voter_id INTEGER REFERENCES lbaw2134.users ON DELETE CASCADE ON UPDATE CASCADE,
     poll_option_id INTEGER REFERENCES lbaw2134.poll_options ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (voter_id, poll_option_id)
 );
@@ -654,19 +655,19 @@ CREATE INDEX user_notification_idx  ON lbaw2134.notifications USING HASH (addres
 --------------------Populate database----------------
 -----------------------------------------------------
 INSERT INTO lbaw2134.LOCATIONS values
-	( 100, '484 Weeping Birch Street', 'Soito', '40.4690667 -8.1110545', 'Northview', 'Portugal' ),
-	( 101, '42514 Old Gate Junction', 'Craoteil', '48.7803815 2.4549884', 'Dawn', 'France' ),
-	( 102, '98032 Ronald Regan Point', 'Anchorage', '61.148769 -149.8010811', 'Hollow Ridge', 'United States' ),
-	( 103, '93608 Grayhawk Drive', 'Pocohuanca', '-14.216667 -73.083333', 'Canary', 'Peru' ),
-	( 104, '594 Fairfield Pass', 'Lluchubamba', '-7.5231833 -77.9710098', 'Esker', 'Peru' ),
-	( 105, '994 Laurel Drive', 'Washington', '38.9003669 -77.0351137', 'Di Loreto', 'United States' ),
-	( 106, '7 Hermina Plaza', 'San Diego', '32.903454 -117.2195678', 'Kings', 'United States' ),
-	( 107, '729 Badeau Terrace', 'Paris La Daofense', '48.892701 2.233089', 'Dottie', 'France' ),
-	( 108, '15814 Browning Junction', 'Paris 05', '43.4945737 5.8978018', 'Bowman', 'France' ),
-	( 109, '67 Tennessee Junction', 'Puerto Maldonado', '-12.5909084 -69.1963141', 'Meadow Vale', 'Peru' ),
-	( 110, '93 Porter Court', 'Paris 02', '43.4945737 5.8978018', 'Comanche', 'France' ),
-	( 111, '5997 Burning Wood Way', 'Mantes-la-Jolie', '48.9990813 1.6899473', 'Manufacturers', 'France' ),
-	( 112, '5 Redwing Center', 'Aco', '-9.3601019 -77.553344', 'Old Shore', 'Peru' );
+	( 100, null, 'Soito', '40.4690667', '-8.1110545',  '484 Weeping Birch Street', 'Portugal' ),
+	( 101, null, 'Craoteil', '48.7803815' , '2.4549884' , '42514 Old Gate Junction', 'France' ),
+	( 102, null, 'Anchorage', '61.148769' ,'-149.8010811', '98032 Ronald Regan Point', 'United States' ),
+	( 103, null, 'Pocohuanca', '-14.216667', '-73.083333', '93608 Grayhawk Drive', 'Peru' ),
+	( 104, null, 'Lluchubamba', '-7.5231833' ,'-77.9710098', '594 Fairfield Pass', 'Peru' ),
+	( 105, null, 'Washington', '38.9003669', '-77.0351137', '994 Laurel Drive', 'United States' ),
+	( 106, null, 'San Diego', '32.903454' ,'-117.2195678', '7 Hermina Plaza', 'United States' ),
+	( 107, null, 'Paris La Daofense', '48.892701' , '2.233089', '729 Badeau Terrace', 'France' ),
+	( 108, null, 'Paris 05', '43.4945737', '5.8978018', '15814 Browning Junction', 'France' ),
+	( 109, null, 'Puerto Maldonado', '-12.5909084',  '-69.1963141', '67 Tennessee Junction', 'Peru' ),
+	( 110, null, 'Paris 02', '43.4945737' , '5.8978018', '93 Porter Court', 'France' ),
+	( 111, null, 'Mantes-la-Jolie', '48.9990813', '1.6899473', '5997 Burning Wood Way', 'France' ),
+	( 112, null, 'Aco', '-9.3601019' , '-77.553344', '5 Redwing Center', 'Peru' );
 INSERT INTO lbaw2134.USERS VALUES
 	 (110, 'admin@admin.com', 'admin', '$2y$10$2ZQsdg13mHYK6QeLEVjPPOp5sJmAjlOrUU7tRlIpa8tMKB6EW5Ef2', 'LBAW2134', True, '','null', date '1978-09-28', False, 'Male', null ) ,
      (100, 'danial1978@gmail.com', 'danial1978', '$2y$10$WNIrrB/6C7yPQpvScdXSs.y/mLdxJ8PajD0YxWnugGEfAJsqtCh2e', 'Breanda Marple', False, '','null', date '1978-09-28', False, 'Female', null ) ,

@@ -10,7 +10,7 @@
 
 @section('content')
 <div class="d-flex justify-content-center">
-    <div class="col-6 d-flex flex-column justify-content-center align-items-center" id="register-col">
+    <div class="col-6 d-flex flex-column justify-content-center align-items-center" id="edit-col">
         <form method="POST" action="{{ route('register') }}" class="d-flex flex-column col-lg-6 col-md-8 col-sm-10 gap-4">
             {{ csrf_field() }}
 
@@ -47,7 +47,7 @@
             <input class="input" id="password-confirm" type="password" name="password_confirmation" placeholder="Confirm your password" required >
 
             <select class="input" name="gender" name="gender" id="gender" required>
-                <option value="" selected disabled><span class="text-muted">Please select one of the following</span></option>
+                <option value="" selected disabled><span class="text-muted">Gender</span></option>
                 <option value="Female">Female</option>
                 <option value="Male">Male</option>
                 <option value="Other">Other</option>
