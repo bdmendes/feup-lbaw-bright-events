@@ -17,7 +17,7 @@ Route::post('events/{id}', "Event\EventController@disable");
 Route::get('events/{id}/edit', 'Event\EventController@indexEdit')->name('editEvent');
 Route::post('events/{id}/edit', 'Event\EventController@update');
 Route::post('events/{eventId}/join-request', 'Event\EventController@joinRequest')->name('joinRequest');
-Route::post('events/{eventId}/invites/{inviteId}', 'Event\EventController@answerInvite')->name('answerInvite');
+
 // Reports
 Route::get('reports', 'Report\ReportController@index')->name('reportsDash');
 // Route::get('reports/{report_id}', 'Report\ReportController@show');

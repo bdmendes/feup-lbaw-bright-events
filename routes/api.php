@@ -37,7 +37,6 @@ Route::get('events/{eventId}/polls/{pollId}', 'Event\EventApiController@getPoll'
 Route::post('events/{eventId}/polls/{pollId}', 'Event\EventApiController@switchPollState')->name('switchPollState');
 Route::delete('events/{eventId}/polls/{pollId}', 'Event\EventApiController@removePoll')->name('removePoll');
 
-
 // Reports
 Route::get('reports/form', 'Report\ReportAPIController@getForm')->name('registerReport');
 Route::post('reports/{reportId}/mark-handled', 'Report\ReportAPIController@markHandled');

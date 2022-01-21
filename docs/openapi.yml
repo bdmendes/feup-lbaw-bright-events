@@ -1048,35 +1048,6 @@ paths:
         "404":
           description: "Comment not found"
 
-  /events/{eventId}/invites/{inviteId}:
-    post:
-      operationId: "R316"
-      summary: "R316: Answer invite"
-      description: "Answer invite to an event. Access: AU"
-      tags:
-        - "M03: Events and Event Content"
-      requestBody:
-        description: "Invite information"
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                inviteId:
-                  type: string
-                accept:
-                  type: boolean
-              required: [inviteId, accept]
-      responses:
-        "200":
-          description: "Ok. Invite created."
-        "401":
-          description: "Unauthorized. User must be an organizer"
-        "500":
-          description: "Internal server error. Invalid data"
-
-
   /api/events/{id}/invites:
     get:
       operationId: "R315"
