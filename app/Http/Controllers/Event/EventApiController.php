@@ -288,18 +288,20 @@ class EventApiController extends Controller
 
         $this->authorize('acceptJoinRequest', $event);
 
-        //$attendanceRequest->is_accepted = $request->accept;
-        //$attendanceRequest->save();
+
         event(new NotificationReceived('answer join request', [$attendanceRequest->attendee]));
 
         if ($request->accept) {
-            Attendance::create([
+            $attendance = Attendance::create([
                 'event_id' => $event->id,
                 'attendee_id' => $attendanceRequest->attendee_id
             ]);
         }
         $attendanceRequest->delete();
-
-        return 'ok';
+        if ($request->accept) {
+            return view('partials.users.removableSmallCard', ['attendance' => $attendance]);
+        } else {
+            return 'deleted';
+        }
     }
 }

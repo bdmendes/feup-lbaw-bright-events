@@ -96,7 +96,7 @@ async function leaveEventClick(eventId, attendeeId, username) {
     xmlHTTP.send("event_id=" + eventId + "&attendee_id=" + attendeeId);
 }
 
-async function addAttendee(eventId, attendeeId, username, is_main_btn) {
+async function addAttendee(eventId, attendeeId, username, is_main_btn, makeRequest = true) {
     let btn;
 
     if (is_main_btn) {
@@ -110,8 +110,8 @@ async function addAttendee(eventId, attendeeId, username, is_main_btn) {
             '<div class="spinner-border" role="status"><span class="sr-only"></span></div>';
         btn.onclick = "";
     }
-
-    await attendEventClick(eventId, attendeeId, username);
+    if(makeRequest)
+        await attendEventClick(eventId, attendeeId, username);
     console.log("done");
 
     if (btn != null && is_main_btn) {
@@ -182,7 +182,7 @@ function appendToUrl(str) {
     );
 }
 
-function answerJoinRequest(eventId, requestId, accept){
+function answerJoinRequest(eventId, requestId, attendeeId,  accept){
     let url = "/api/events/" + eventId + "/join-requests/"+ requestId;
     let data = {'accept' : accept};
     let  options = {
@@ -197,9 +197,22 @@ function answerJoinRequest(eventId, requestId, accept){
     fetch(url, options)
     .then((response) => response.text())
     .then(html => {
+        let divId = "joinRequest"+requestId;
+        let username = document.querySelector("#"+divId + " .text-muted").innerText;
         remove("joinRequest"+requestId);
         if(accept){
+            let div = document.createElement("div");
+            let parser = new DOMParser();
+            div.classList.add("border", "rounded", "d-flex", "p-1");
+            div.style.width = "250px";
+            div.id = username + "-entry";
+            div.insertAdjacentHTML('beforeend', html);
 
+            let attendees = document.getElementById("attendees-list");
+            if (attendees.childElementCount == 1) {
+                attendees.removeChild(attendees.firstElementChild);
+            }
+            attendees.appendChild(div);
         }
 
     });

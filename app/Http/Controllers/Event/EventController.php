@@ -249,7 +249,7 @@ class EventController extends Controller
             'is_invite' => false
         ]);
         event(new NotificationReceived('join request', [$event->organizer]));
-        return 'ok';
+        return redirect()->route('event', ['id' => $id]);
     }
 
 

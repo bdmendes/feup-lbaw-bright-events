@@ -215,15 +215,15 @@
                             @foreach ($event->attendanceRequests()->getQuery()->where('is_invite', 'false')->get() as $request)
                                 <div id="joinRequest{{$request->id}}" class="border rounded d-flex p-1" style="width: 250px;">
                                     <div class="col-10">
-                                        @include('partials.users.smallCard', ['user' => $users->find($request->attendee_id)])
+                                        @include('partials.users.smallCard', ['user' => $request->attendee])
                                     </div>
                                     <div class="d-flex align-items-center col-2">
                                         <span class="col-6 bi-check text-success fs-1 clickable"
                                                 title="Accept join request"
-                                                onclick="answerJoinRequest({{$request->event_id}}, {{$request->id}}, true)"> </span>
+                                                onclick="answerJoinRequest({{$request->event_id}}, {{$request->id}}, {{$request->attendee_id}}, true)"> </span>
                                         <span class="col-6 bi-x text-danger fs-1 clickable"
                                                 title="Reject join request"
-                                                onclick="answerJoinRequest({{$request->event_id}}, {{$request->id}}, false)"> </span>
+                                                onclick="answerJoinRequest({{$request->event_id}}, {{$request->id}},{{$request->attendee_id}}, false)"> </span>
                                     </div>
                                 </div>
                             @endforeach
