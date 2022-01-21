@@ -117,7 +117,7 @@
 
             <div class="tab-pane fade" id="forum" role="tabpanel" aria-labelledby="contact-tab">
                 @if (Auth::check() && !Auth::user()->is_admin)
-                    <form class="mt-4">
+                    <form class="mt-4" onsubmit="event.preventDefault(); submitComment(); return false;">
                         <input type="text" id="new_comment_body" name="body" placeholder="What do you think of this event?">
                         <button id="submit_comment_button" class="mt-2" type="button"
                             onclick="submitComment();">Submit</button>

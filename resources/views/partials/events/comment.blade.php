@@ -40,7 +40,8 @@
         <div id="comment_{{ $comment->id }}_reply_area" class="mt-4"
             style="margin-left: 5%; display: none;">
             @if (Auth::check() && !Auth::user()->is_admin)
-                <form class="mt-4">
+                <form class="mt-4"
+                    onsubmit=" event.preventDefault(); submitReply({{ $comment->id }}); return false;">
                     <input type="text" id="comment_{{ $comment->id }}_reply_body" name="body"
                         placeholder="What's your thought about this user's input?">
                     <button id="submit_comment_button" class="mt-2 p-0 m-0" style="height: 20px; " type="button"
