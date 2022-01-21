@@ -20,8 +20,24 @@ class EventApiController extends Controller
 {
     public function getAttendees(Request $request)
     {
-        $event = Event::findOrFail($request->id);
-        dd(json_encode($event->attendees, JSON_PRETTY_PRINT));
+        $event = Event::find($request->eventId);
+        if ($event == null) {
+            return 'Event not found';
+        }
+        $start = $request->start ?? 0;
+        $size = $request->size ?? 5;
+        $attendances = $event->attendances->skip($start)->take($size);
+        return view('partials.events.attendancesList', compact('attendances', 'event'));
+    }
+
+    public function getAttendeesCount(Request $request)
+    {
+        $event = Event::find($request->eventId);
+        if ($event == null) {
+            return 'Event not found';
+        }
+        $count = $event->attendances->count();
+        return strval($count);
     }
 
     public function getComments(Request $request)
@@ -69,7 +85,7 @@ class EventApiController extends Controller
             'body' => $data["body"]
         ]);
         event(new NotificationReceived('new comment', [$event->organizer]));
-        event(new EventPusher('comment', $comment->id, $event));
+        event(new EventPusher('comment', $comment->id, $event, $request->parent != null));
         if ($comment == null) {
             return 'Could not create comment';
         }

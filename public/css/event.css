@@ -44,7 +44,11 @@
     border-radius: 5px !important;
 }
 
-.event-comment, .event-comment .input, #new_poll_area, .accordion-header, .accordion-collapse, #new_poll_options_area .input {
+.event-comment {
+    background-color: white !important; 
+}
+
+.event-comment, .event-comment .input, #new_poll_area, .accordion-header, .accordion-collapse, #new_poll_options_area .input, .event_attendant, .event-invitee, .event-organizer {
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
 }
 
@@ -62,4 +66,8 @@
 
 .accordion-button:focus {
     box-shadow: 0 0 0 .25rem rgba(45,68,95,.25) !important;
+}
+
+.event_attendant, .event-invitee, .event-organizer {
+    background-color: white !important;
 }

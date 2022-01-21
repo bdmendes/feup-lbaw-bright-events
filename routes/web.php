@@ -27,10 +27,10 @@ Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register', 'Auth\RegisterController@register');
-Route::get('recover', 'Auth\RecoverController@showRecoverPasswordForm')->middleware('guest')->name('recoverPassword');
-Route::post('recover', 'Auth\RecoverController@submitRecoverPasswordForm')->name('recoverPassword');
+Route::get('recover', 'Auth\RecoverController@showRecoverPasswordForm')->middleware('guest')->name('recoverPasswordForm');
+Route::post('recover', 'Auth\RecoverController@submitRecoverPasswordForm')->name('recoverPasswordPost');
 Route::get('reset', 'Auth\RecoverController@showResetPasswordForm')->middleware('guest')->name('password.reset');
-Route::post('reset', 'Auth\RecoverController@submitResetPasswordForm')->name('password.reset');
+Route::post('reset', 'Auth\RecoverController@submitResetPasswordForm')->name('password.update');
 
 //Users
 Route::get('users', 'User\UserController@index')->name('browseUsers');

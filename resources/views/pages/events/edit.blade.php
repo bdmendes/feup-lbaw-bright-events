@@ -48,7 +48,8 @@
                         <input class="input" id="title" type="text" name="title"
                             class="col-lg-8 col-12
                         @if ($errors->has('title')) errorBorder @endif"
-                            onchange="removeErrors('title');" placeholder="Insert event title" @if (!empty($event)) value="{{ $event->title }}" @endif />
+                            onchange="removeErrors('title');" placeholder="Insert event title"
+                            value="{{ empty($event) ? old('title') : $event->title }}" />
 
                         @if ($errors->has('title'))
                             <span id="titleError" class="error">
@@ -58,8 +59,9 @@
                     </div>
                     <div class="col-lg-6 col-12">
                         <h4>Event Date:</h4>
-                        <input class="input" type="datetime-local" name="date" id="date"
-                            onchange="removeErrors('date');" @if (!empty($event)) value="{{ $event->date->format('Y-m-d\TH:i') }}" @endif class="@if ($errors->has('date')) errorBorder @endif" />
+                        <input class="input @if ($errors->has('date')) errorBorder @endif" type="datetime-local" name="date" id="date"
+                            onchange="removeErrors('date');"
+                            value="{{ empty($event) ? old('date') : $event->date->format('Y-m-d\TH:i') }}" />
 
                         @if ($errors->has('date'))
                             <span id="dateError" class="error">
@@ -71,8 +73,8 @@
                     <div class="col-lg-12 col-12">
                         <h4>Description:</h4>
                         <textarea id="description" name="description" placeholder="Insert description"
-                            class=" @if ($errors->has('description')) errorBorder @endif"
-                            onchange="removeErrors('description');">@if ($event ?? ''){{ $event->description ?: '' }}@endif</textarea>
+                            class="input @if ($errors->has('description')) errorBorder @endif"
+                            onchange="removeErrors('description');">{{ empty($event) ? old('description') : $event->description }}</textarea>
                         @if ($errors->has('description'))
                             <span id="descriptionError" class="error">
                                 {{ $errors->first('description') }}
@@ -84,39 +86,47 @@
                 <div class="event-form w-100 d-flex flex-column border rounded p-3 gap-3">
                     <h3>Location.<span class="text-muted"> Where the action will unfold.</span></h3>
                     <div class="d-flex gap-4 align-items-center justify-content-center">
-                        <input class="input" class="input" type="text" id="mapGlobalFilter" name="body"
-                            placeholder="Introduce a location...">
+                        <input class="input @if ($errors->has('lat') || $errors->has('long')) errorBorder @endif " type="text" id="mapGlobalFilter" name="body"
+                            placeholder="Introduce a location..." onchange="removeErrors('description');">
                         <button id="submit_comment_button" class="btn btn-custom" type="button"
                             onclick="searchMap();">Submit</button>
                     </div>
+                    @if ($errors->has('lat') || $errors->has('long'))
+                        <span id="locError" class="error">
+                            Invalid location
+                        </span>
+                    @endif
 
                     <input class="input" id="lat" name="lat" type="hidden"
-                        value="{{ $event->location->lat ?? '' }}" />
+                        value="{{ empty($event) ? old('lat') : $event->location->lat }}" />
                     <input class="input" id="long" name="long" type="hidden"
-                        value="{{ $event->location->long ?? '' }}" />
+                        value="{{ empty($event) ? old('long') : $event->location->long }}" />
 
                     <div class="d-flex flex-column">
                         <h4>City:</h4>
                         <input class="input" id="city" name="city" type="text" class="transparent"
-                            value="{{ $event->location->city ?? '' }}" />
+                            value="{{ empty($event) ? old('city') : $event->location->city }}" />
                     </div>
 
                     <div class="d-flex flex-column">
                         <h4>Country:</h4>
                         <input class="input" id="country" name="country" type="text" class="transparent"
-                            readonly="readonly" value="{{ $event->location->country ?? '' }}" />
+                            readonly="readonly"
+                            value="{{ empty($event) ? old('country') : $event->location->country }}" />
                     </div>
 
                     <div class="d-flex flex-column">
                         <h4>Display name:</h4>
                         <input class="input" id="display_name" name="display_name" type="text"
-                            class="transparent" value="{{ $event->location->name ?? '' }}" />
+                            class="transparent"
+                            value="{{ empty($event) ? old('display_name') : $event->location->display_name }}" />
                     </div>
 
                     <div class="d-flex flex-column">
                         <h4>Post-code:</h4>
                         <input class="input" id="postcode" name="postcode" type="text" class="transparent"
-                            readonly="readonly" value="{{ $event->location->postcode ?? '' }}" />
+                            readonly="readonly"
+                            value="{{ empty($event) ? old('postcode') : $event->location->postcode }}" />
                     </div>
 
                     @if (!empty($event))
@@ -141,11 +151,11 @@
                         <h4>Event Restriction:</h4>
                         <div class="btn-group gap-2" role="group">
                             <input type="radio" class="btn-check" name="restriction" id="restriction1"
-                                autocomplete="off" value="public" @if (!empty($event) && !$event->is_private) checked @endif>
+                                autocomplete="off" value="public" @if ((!empty($event) && !$event->is_private) || old('restriction') == 'public') checked @endif>
                             <label class="btn btn-outline-primary" for="restriction1">Public</label>
 
                             <input type="radio" class="btn-check" name="restriction" id="restriction2"
-                                autocomplete="off" value="private" @if (empty($event) || $event->is_private) checked @endif>
+                                autocomplete="off" value="private" @if ((!empty($event) && $event->is_private) || old('restriction') != 'public' || empty($event)) checked @endif>
                             <label class="btn btn-outline-primary" for="restriction2">Private</label>
                         </div>
                     </div>

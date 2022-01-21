@@ -6,6 +6,7 @@ integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b
 integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script type="text/javascript" src={{ asset('js/app.js') }} defer></script>
 <script type="text/javascript" src={{ asset('js/comments.js') }} defer></script>
+<script type="text/javascript" src={{ asset('js/attendees.js') }} defer></script>
 <script type="text/javascript" src={{ asset('js/notification.js') }}></script>
 <script type="text/javascript" src={{ asset('js/report.form.js') }}></script>
 <script type="text/javascript" src={{ asset('js/polls.js') }}></script>

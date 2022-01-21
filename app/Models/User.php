@@ -29,22 +29,9 @@ class User extends Authenticatable
         'is_blocked' => false,
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password', 'remember_token',
     ];
-
-    /**
-     * The cards this user owns.
-     */
-    public function cards()
-    {
-        return $this->hasMany('App\Models\Card');
-    }
 
     public function events()
     {
@@ -56,22 +43,14 @@ class User extends Authenticatable
         return $this->hasMany(Attendance::class, 'attendee_id');
     }
 
+    public function attended_events()
+    {
+        return $this->belongsToMany(Event::class, 'attendances', 'attendee_id', 'event_id');
+    }
+
     public function attendanceRequest()
     {
         return $this->hasMany(AttendanceRequest::class, 'attendee_id');
-    }
-
-
-    public function attended_events()
-    {
-        $attended_events = [];
-        foreach ($this->attendances as $attendance) {
-            $event = Event::findOrFail($attendance->event_id);
-            if (!$event->is_disabled) {
-                $attended_events = Arr::add($attended_events, $attendance->event_id, $event);
-            }
-        }
-        return $attended_events;
     }
 
     public function profile_picture()

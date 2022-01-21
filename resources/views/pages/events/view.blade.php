@@ -87,119 +87,122 @@
 
         </div>
         <div id="event-header" class="row mb-4">
-            <div id="event-info" class="d-flex flex-column col-sm-12 col-md-12 col-lg-6 col-xl-6 p-4 gap-3">
-                <div class="w-100">
-                    <h1 id="event-title">{{ $event->title }}
-                         @if($event->is_private)<span class="bi bi-lock-fill fs-1"
-                                                      style="color: var(--primary-color);"
-                                                      title="This event is private"> </span> @endif
-                    </h1>
+            <div id="event-info" class="d-flex flex-column col-sm-12 col-md-12 col-lg-6 col-xl-6 p-4 pb-0 gap-3 justify-content-between">
+                <div>
+                    <div class="w-100">
+                        <h1 id="event-title">{{ $event->title }}</h1>
+                        @if($event->is_private)
+                            <span class="bi bi-lock-fill fs-1" style="color: var(--primary-color);" title="This event is private"> </span>
+                        @endif
+                    </div>
+    
+                    <div class="w-100 event-subtitle">
+                        <label>Date: </label>
+                        <span>{{ $event->date->format('d/m/Y H:i') }}</span>
+                    </div>
+    
+                    <div class="d-flex event-subtitle">
+                        <div class="d-flex flex-wrap align-items-center gap-3">
+                            <label> Organized by:</label>
+                            <span class="border p-3 event-organizer">
+                                @include('partials.users.smallCard', ['user' => $event->organizer])
+                            </span>
+                        </div>
+                    </div>
+                    <div class="d-flex w-100 event-subtitle">
+                        <div class="d-flex flex-column gap-3">
+                            <label> Tags: </label>
+                            <span id="tags" class="d-flex flex-wrap gap-2">
+                                @include("partials.events.tags", ['event' => $event])
+                            </span>
+                        </div>
+                    </div>
                 </div>
+                    
+                <div>
+                    <div class="d-flex justify-content-start gap-2">
+                        @if ($event->organizer !== null)
+                            @if (Auth::check())
+                                @if (Auth::user()->id !== $event->organizer->id && !Auth::user()->is_admin)
+                                    @if (Auth::user()->attends($event->id))
+                                        <button class="btn btn-custom"
+                                            onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
+                                            id="attend_button" type="submit">Leave event</button>
+                                    @elseif($userInvite)
+                                        <form
+                                            action="{{ route('answerInvite', ['eventId' => $event->id, 'inviteId' => $userInvite]) }}"
+                                            method="POST">
+                                            @csrf
+                                            <input type="hidden" name="accept" id="accept" value="true" />
+                                            <button class="btn btn-custom mx-2" type="submit">Accept invite</button>
+                                        </form>
 
-                <div class="w-100 event-subtitle">
-                    <label>Date: </label>
-                    <span>{{ $event->date->format('d/m/Y H:i') }}</span>
-                </div>
+                                        <form
+                                            action="{{ route('answerInvite', ['eventId' => $event->id, 'inviteId' => $userInvite]) }}"
+                                            method="POST">
+                                            @csrf
+                                            <input type="hidden" name="reject" id="reject" value="false" />
 
-                <div class="d-flex event-subtitle">
-                    <div class="d-flex align-items-center gap-3">
-                        <label> Organized by:</label>
-                        <span class="border p-3">
-                            @include('partials.users.smallCard', ['user' => $event->organizer])
-                        </span>
+                                            <button class="btn btn-custom mx-2" type="submit">Reject invite</button>
+                                        </form>
+                                    @elseif($event->is_private)
+
+                                            @if($event->attendanceRequests()->getQuery()->where('attendee_id', Auth::id())->where('is_invite', 'false')->exists())
+                                            <button class="btn btn-custom mx-2" type="button"
+                                                disabled>
+                                                @if($event->attendanceRequests()->getQuery()->where('attendee_id', Auth::id())->where('is_invite', 'false')->where('is_handled', 'false')->exists())
+                                                Join request pending
+                                                @else
+                                                    Join request rejected
+                                                @endif
+                                            </button>
+                                            @else
+                                                <form action="{{ route('joinRequest', ['eventId' => $event->id]) }}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="id" id="id" value="{{ $event->id }}" />
+                                                        <button class="btn btn-custom mx-2" type="submit">Request to join</button>
+                                                </form>
+                                            @endif
+                                    @else
+                                        <button class="btn btn-custom"
+                                            onclick="addAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
+                                            id="attend_button">Attend
+                                            event</button>
+                                    @endif
+                                @else
+                                    <form action="{{ route('event', ['id' => $event->id]) }}" method="POST">
+                                        @csrf
+                                        <button class="btn btn-custom" type="submit">
+                                            @if ($event->organizer->id === Auth::user()->id)
+                                                Delete event
+                                            @endif
+                                            @if (Auth::user()->is_admin)
+                                                Disable event
+                                            @endif
+                                        </button>
+                                    </form>
+                                    @if (Auth::user()->id === $event->organizer->id)
+                                        <form action="{{ route('editEvent', ['id' => $event->id]) }}">
+                                            <button class="btn btn-custom " type="submit">Edit event</button>
+                                        </form>
+                                    @endif
+                                @endif
+
+                            @else
+                                <button class="btn btn-custom" disabled>Login to attend event</button>
+                            @endif
+                        @endif
+                        @if (Auth::check() && Auth::id() != $event->organizer_id)
+                                <button class="btn btn-custom" style="font-size: 0.9em;" type="button"
+                                    onclick="getReportModal('event', {{ $event->id }});">
+                                    Report event
+                                </button>
+                        @endif
                     </div>
                 </div>
-                <div class="d-flex w-100 event-subtitle">
-                    <div class="d-flex flex-column gap-3">
-                        <label> Tags: </label>
-                        <span id="tags">
-                            @include("partials.events.tags", ['event' => $event])
-                        </span>
-                    </div>
-                </div>
-                @if (Auth::check() && Auth::id() != $event->organizer_id)
-                    <div id="report-container" class="text-end pe-1">
-                        <span class="link-primary" style="font-size: 0.9em;" type="button"
-                            onclick="getReportModal('event', {{ $event->id }});">Report
-                            event</span>
-                    </div>
-                @endif
             </div>
             <div class="event-image d-none d-lg-flex col-lg-6 col-xl-6">
                 <img src="/{{ $event->image->path ?? 'images/group.jpg' }}" class="w-100" />
-            </div>
-            <div class="d-flex justify-content-start">
-                @if ($event->organizer !== null)
-                    @if (Auth::check())
-                        @if (Auth::user()->id !== $event->organizer->id && !Auth::user()->is_admin)
-                            @if (Auth::user()->attends($event->id))
-                                <button class="btn btn-custom"
-                                    onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
-                                    id="attend_button" type="submit">Leave event</button>
-                            @elseif($userInvite)
-                                <form
-                                    action="{{ route('answerInvite', ['eventId' => $event->id, 'inviteId' => $userInvite]) }}"
-                                    method="POST">
-                                    @csrf
-                                    <input type="hidden" name="accept" id="accept" value="true" />
-                                    <button class="btn btn-custom mx-2" type="submit">Accept invite</button>
-                                </form>
-
-                                <form
-                                    action="{{ route('answerInvite', ['eventId' => $event->id, 'inviteId' => $userInvite]) }}"
-                                    method="POST">
-                                    @csrf
-                                    <input type="hidden" name="reject" id="reject" value="false" />
-
-                                    <button class="btn btn-custom mx-2" type="submit">Reject invite</button>
-                                </form>
-                            @elseif($event->is_private)
-
-                                    @if($event->attendanceRequests()->getQuery()->where('attendee_id', Auth::id())->where('is_invite', 'false')->exists())
-                                    <button class="btn btn-custom mx-2" type="button"
-                                        disabled>
-                                        @if($event->attendanceRequests()->getQuery()->where('attendee_id', Auth::id())->where('is_invite', 'false')->where('is_handled', 'false')->exists())
-                                        Join request pending
-                                        @else
-                                            Join request rejected
-                                        @endif
-                                    </button>
-                                    @else
-                                        <form action="{{ route('joinRequest', ['eventId' => $event->id]) }}" method="POST">
-                                                @csrf
-                                                <input type="hidden" name="id" id="id" value="{{ $event->id }}" />
-                                                <button class="btn btn-custom mx-2" type="submit">Request to join</button>
-                                        </form>
-                                    @endif
-                            @else
-                                <button class="btn btn-custom"
-                                    onclick="addAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
-                                    id="attend_button">Attend
-                                    event</button>
-                            @endif
-                        @else
-                            <form action="{{ route('event', ['id' => $event->id]) }}" method="POST">
-                                @csrf
-                                <button class="btn btn-custom mx-2" type="submit">
-                                    @if ($event->organizer->id === Auth::user()->id)
-                                        Delete event
-                                    @endif
-                                    @if (Auth::user()->is_admin)
-                                        Disable event
-                                    @endif
-                                </button>
-                            </form>
-                            @if (Auth::user()->id === $event->organizer->id)
-                                <form action="{{ route('editEvent', ['id' => $event->id]) }}">
-                                    <button class="btn btn-custom " type="submit">Edit event</button>
-                                </form>
-                            @endif
-                        @endif
-
-                    @else
-                        <button class="btn btn-custom" disabled>Login to attend event</button>
-                    @endif
-                @endif
             </div>
         </div>
 
@@ -209,27 +212,27 @@
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description"
                         type="button" role="tab" aria-controls="description" aria-selected="true"
-                        onclick="appendToUrl('')">Description</button>
+                        onclick="replaceHash('')">Description</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="forum-tab" data-bs-toggle="tab" data-bs-target="#forum" type="button"
                         role="tab" aria-controls="forum" aria-selected="false"
-                        onclick="appendToUrl('#forum'); getComments();">Forum</button>
+                        onclick="replaceHash('#forum'); getComments();">Forum</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="polls-tab" data-bs-toggle="tab" data-bs-target="#polls" type="button"
                         role="tab" aria-controls="polls" aria-selected="false"
-                        onclick="appendToUrl('#polls'); getPolls();">Polls</button>
+                        onclick="replaceHash('#polls'); getPolls();">Polls</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="attendees-tab" data-bs-toggle="tab" data-bs-target="#attendees"
                         type="button" role="tab" aria-controls="attendees" aria-selected="false"
-                        onclick="appendToUrl('#attendees')">Attendees</button>
+                        onclick="replaceHash('#attendees'); getAttendees();">Attendees</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="statistics-tab" data-bs-toggle="tab" data-bs-target="#statistics"
                         type="button" role="tab" aria-controls="statistics" aria-selected="false"
-                        onclick="appendToUrl('#statistics')">Statistics</button>
+                        onclick="replaceHash('#statistics')">Statistics</button>
                 </li>
             </ul>
             @endif
@@ -287,7 +290,7 @@
                             let eventChannel = pusher.subscribe("event-channel-{{ $event->id }}");
 
                             eventChannel.bind('event', function(data) {
-                                if (data.message === 'comment') {
+                                if (data.message === 'comment' && !data.child) {
                                     remove('comment_area:refreshIcon');
                                     prependComment(data.id);
                                 } else if (data.message === 'poll') {
@@ -341,94 +344,89 @@
 
                     <div class="tab-pane fade" id="attendees" role="tabpanel" aria-labelledby="contact-tab">
 
-                        @if (Auth::check() && Auth::user()->id == $event->organizer_id)
-                            <!-- Invite user -->
-                            <div class="col-lg-6 col-sm-12 col-12">
-                                <h3>Invite user</h3>
-                                <input list="userOptions" id="selectUser" placeholder="Search user...">
-                                <datalist id="userOptions">
-                                    @foreach ($users as $user)
-                                        <option id="{{ $user->name }}-option" value="{{ $user->username }}">
-                                        </option>
-                                    @endforeach
-                                </datalist>
-                                <button type="button" onclick="inviteUser({{ $event->id }});">
-                                    Invite
+                        <div class="d-flex flex-column p-4 gap-4">
+                            @if (Auth::check() && Auth::user()->id == $event->organizer_id)
+                                <!-- Invite user -->
+                                <div class="col-lg-6 col-sm-12 col-12 d-flex flex-column flex-wrap">
+                                    <h3>Invite user</h3>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <input list="userOptions" id="selectUser" placeholder="Search user...">
+                                        <datalist id="userOptions">
+                                            @foreach ($users as $user)
+                                                <option id="{{ $user->name }}-option" value="{{ $user->username }}">
+                                                </option>
+                                            @endforeach
+                                        </datalist>
+                                        <button class="btn btn-custom"type="button" onclick="inviteUser({{ $event->id }});">
+                                            Invite
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="">
+                                    <h3>Currently invited users</h3>
+                                    <div id="invitees" class="d-flex gap-4 flex-wrap justify-content" >
+                                        @forelse ($invites as $invite)
+                                            <div class="event-invitee border rounded d-flex p-3" style="width: 250px;">
+                                                @include('partials.users.smallCard', ['user' => $users->find($invite->attendee_id)])
+                                            </div>
+                                        @empty
+                                        @endforelse
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <h3>Pending join requests</h3>
+                                    <div id="joinRequests" >
+                                        @forelse ($event->attendanceRequests()->getQuery()->where('is_invite', 'false')->where('is_handled', 'false')->get() as $request)
+                                            <div id="joinRequest{{$request->attendee->username}}" class="border rounded d-flex p-1" style="width: 250px;">
+                                                <div class="col-10">
+                                                    @include('partials.users.smallCard', ['user' => $request->attendee])
+                                                </div>
+                                                <div class="d-flex align-items-center col-2">
+                                                    <span class="col-6 bi-check text-success fs-1 clickable"
+                                                            title="Accept join request"
+                                                            onclick="answerJoinRequest({{$request->event_id}}, {{$request->id}}, true)"> </span>
+                                                    <span class="col-6 bi-x text-danger fs-1 clickable"
+                                                            title="Reject join request"
+                                                            onclick="answerJoinRequest({{$request->event_id}}, {{$request->id}}, false)"> </span>
+                                                </div>
+                                            </div>
+                                        @empty
+                                        @endforelse
+                                    </div>
+                                </div>
+                            @endif
+
+                            <div>
+                                <h3>Attendees</h3>
+                                <div class="d-flex gap-4 flex-wrap justify-content" id="attendees-list">
+
+                                </div>
+                                <button id="view_more_attendees" class="btn btn-custom mt-4" style="display: none;"
+                                    onclick="viewMoreAttendees();">
+                                    View more
                                 </button>
                             </div>
-                            <br>
-
-                            <h3>Currently invited users</h3>
-
-                            <!-- Current invites -->
-                            <div id="invitees">
-                                @foreach ($invites as $invite)
-                                    <div class="border rounded d-flex p-1" style="width: 250px;">
-                                        @include('partials.users.smallCard', ['user' => $users->find($invite->attendee_id)])
-                                    </div>
-                                @endforeach
-                            </div>
-
-                            <h3>Pending join requests</h3>
-                            <div id="joinRequests" >
-                                @foreach ($event->attendanceRequests()->getQuery()->where('is_invite', 'false')->where('is_handled', 'false')->get() as $request)
-                                    <div id="joinRequest{{$request->attendee->username}}" class="border rounded d-flex p-1" style="width: 250px;">
-                                        <div class="col-10">
-                                            @include('partials.users.smallCard', ['user' => $request->attendee])
-                                        </div>
-                                        <div class="d-flex align-items-center col-2">
-                                            <span class="col-6 bi-check text-success fs-1 clickable"
-                                                    title="Accept join request"
-                                                    onclick="answerJoinRequest({{$request->event_id}}, {{$request->id}}, true)"> </span>
-                                            <span class="col-6 bi-x text-danger fs-1 clickable"
-                                                    title="Reject join request"
-                                                    onclick="answerJoinRequest({{$request->event_id}}, {{$request->id}}, false)"> </span>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-
-                            <br>
-                            <h3>Attendees</h3>
-                        @endif
-
-                        <div class="p-4 d-flex gap-4 flex-wrap justify-content" id="attendees-list">
-                            @forelse ($event->attendances as $attendance)
-                                <div id="{{ $attendance->attendee->username . '-entry' }}"
-                                    class="border rounded d-flex p-1" style="width: 250px;">
-                                    @if (Auth::check() && Auth::user()->id == $event->organizer_id)
-                                        @include('partials.users.smallCard', ['user' => $attendance->attendee, 'event' =>
-                                        $event])
-                                        <div class="align-self-center" style="margin-left:auto;">
-                                            <button id="{{ $user->username . '-btn' }}" class="btn btn-light"
-                                                onclick="removeAttendee({{ $event->id }}, {{ $attendance->attendee->id }}, '{{ $attendance->attendee->username }}', false)">
-                                                <i class="bi bi-x-circle"></i>
-                                            </button>
-                                        </div>
-                                    @else
-                                        @include ('partials.users.smallCard', ['user' => $attendance->attendee])
-                                    @endif
-                                </div>
-                            @empty
-                                <p>No attendees around here...</p>
-                            @endforelse
                         </div>
+
                     </div>
                     <div class="tab-pane fade" id="statistics" role="tabpanel" aria-labelledby="contact-tab">
-                        <br>
-                        <h2 class="m-2">{{ $event->attendees()->count() }} attendees</h2>
-                        <div class="d-flex">
-                            <div class="col">
-                                @include('partials.charts.ageChart', ['age0' => $ages[0], 'age1' => $ages[1], 'age2' =>
-                                $ages[2],
-                                'age3'
-                                =>
-                                $ages[3]])
-                            </div>
-                            <div class="col-4">
-                                @include('partials.charts.genderChart', ['male' => $genders[0], 'female' => $genders[1],
-                                'other' =>
-                                $genders[2]])
+                        <div class="d-flex flex-column p-4 gap-4">
+                            <h2 class="m-2">{{ $event->attendees()->count() }} attendees</h2>
+                            <div class="row h-100 d-flex align-items-center">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                    @include('partials.charts.ageChart', ['age0' => $ages[0], 'age1' => $ages[1], 'age2' =>
+                                    $ages[2],
+                                    'age3'
+                                    =>
+                                    $ages[3]])
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                    @include('partials.charts.genderChart', ['male' => $genders[0], 'female' => $genders[1],
+                                    'other' =>
+                                    $genders[2]])
+                                </div>
                             </div>
                         </div>
                     </div>
