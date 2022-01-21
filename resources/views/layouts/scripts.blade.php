@@ -25,22 +25,20 @@ crossorigin=""></script>
 <script src="//js.pusher.com/3.1/pusher.min.js"></script>
 
 <script>
-    var pusher = new Pusher('5aaef3148145a5edc935', {
+    let pusher = new Pusher('5aaef3148145a5edc935', {
         encrypted: true,
         cluster: 'eu'
     });
 
-    function subscribeNotifications(user) {
-
-    }
     // Subscribe to the channel we specified in our Laravel Event
     @if (Auth::check())
-        var channel = pusher.subscribe("notification-received-channel-{{ Auth::user()->username }}");
-    
+        let channel = pusher.subscribe("notification-received-channel-{{ Auth::user()->username }}");
+
         channel.bind('notification-received', function(data) {
-        getNotifications(null, true);
-    
+            getNotifications(null, true);
+
         });
-    
+        window.addEventListener('load', getNotifications);
+
     @endif
 </script>

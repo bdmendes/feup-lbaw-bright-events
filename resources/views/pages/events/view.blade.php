@@ -91,6 +91,9 @@
                 <div>
                     <div class="w-100">
                         <h1 id="event-title">{{ $event->title }}</h1>
+                        @if($event->is_private)
+                            <span class="bi bi-lock-fill fs-1" style="color: var(--primary-color);" title="This event is private"> </span>
+                        @endif
                     </div>
     
                     <div class="w-100 event-subtitle">

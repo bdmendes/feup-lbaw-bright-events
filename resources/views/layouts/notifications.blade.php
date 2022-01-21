@@ -9,7 +9,7 @@
         <div id="notifications" class="w-100">
         </div>
         <div class="w-100 d-flex justify-content-center my-2">
-            <button id="getPastNotifications" class="btn-primary" onclick="getPastNotifications();">
+            <button id="getPastNotifications" class="btn btn-custom" onclick="getPastNotifications();">
                 Load more
             </button>
         </div>

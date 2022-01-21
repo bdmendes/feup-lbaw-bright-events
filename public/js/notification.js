@@ -1,5 +1,3 @@
-window.addEventListener('load', getNotifications);
-
 function getNotifications(event, showNewOnes = false) {
   let refreshId = addRefreshIcon('notifications', true);
   let lastNotification = document.getElementsByClassName('notification');
@@ -195,4 +193,3 @@ function addGrowlMessage(message, type) {
     document.getElementById('growl' + id).remove();
   }, 4000);
 }
-window.addEventListener('load', getNotifications);

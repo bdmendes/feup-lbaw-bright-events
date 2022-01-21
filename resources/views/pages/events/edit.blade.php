@@ -195,11 +195,13 @@
                 <button type="submit" class="btn btn-custom"> @if ($event ?? '') Edit @else Create @endif </button>
         </div>
         <div id="map-wrapper" class="col-6 position-fixed" style="right: 0">
-            <div id="map" class="w-100 h-100">
+            <div id="map" class="w-100">
 
             </div>
 
             <script>
+                 let navbar = document.getElementById("navbar");
+                document.getElementById("map").style.height = window.innerHeight - navbar.offsetHeight + "px";
                 @if ($event->location ?? '')
                     let eventCoords = [{{ $event->location->lat }}, {{ $event->location->long }}];
                     giveBlack();
