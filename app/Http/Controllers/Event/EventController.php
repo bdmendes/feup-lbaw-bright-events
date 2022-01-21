@@ -161,7 +161,7 @@ class EventController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-            ->route('createEvent')
+            ->route('editEvent', ['id' => $request->id])
             ->withErrors($validator)
             ->withInput();
         }
