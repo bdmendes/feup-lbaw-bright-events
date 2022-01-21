@@ -2,10 +2,15 @@
         <a class="navbar-brand" href=" {{ route('home') }} ">
             <h1><span class="highlight">B</span>right Events</h1>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsable"
-            aria-controls="collapsable" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <div class="d-md-none d-flex align-items-center gap-4">
+            @if (Auth::check())
+                @include('layouts.notifications')
+            @endif
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsable"
+                aria-controls="collapsable" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
         <div id="collapsable" class="collapse navbar-collapse">
             <a class="nav-item nav-link" href="{{ route('browseEvents') }}">
                 <h2>Events</h2>
@@ -14,7 +19,9 @@
                 <h2>Users</h2>
             </a>
             @if (Auth::check())
-                @include('layouts.notifications')
+                <div class="d-sm-none d-md-flex">
+                    @include('layouts.notifications')
+                </div>
                 @if (Auth::user()->is_admin)
                     <a class="nav-item nav-link" href="{{ route('reportsDash') }}">
                         <h2>Dashboard</h2>
