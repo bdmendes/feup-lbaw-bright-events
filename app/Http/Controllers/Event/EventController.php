@@ -85,11 +85,13 @@ class EventController extends Controller
             'title' => 'required',
             'description' => 'nullable|string|max:1000',
             'cover_image' => 'nullable|mimes:png,jpg,jpe',
-            'date' => 'required|date|after:now'
+            'date' => 'required|date|after:now',
+            'lat' => 'required',
+            'long' =>'required'
         ], $messages = [
             'date.after' => 'An event cannot be set in the past!',
         ]);
-
+        
         $file = null;
 
         if ($validator->fails()) {
@@ -152,7 +154,9 @@ class EventController extends Controller
             'title' => 'required',
             'description' => 'nullable|string|max:1000',
             'cover_image' => 'nullable|mimes:png,jpg,jpe',
-            'date' => 'required|date|after:now'
+            'date' => 'required|date|after:now',
+            'lat' => 'required',
+            'long' =>'required'
         ], $messages = [
             'date.after' => 'An event cannot be set in the past!',
         ]);

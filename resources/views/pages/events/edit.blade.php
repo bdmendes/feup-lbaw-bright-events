@@ -59,10 +59,9 @@
                     </div>
                     <div class="col-lg-6 col-12">
                         <h4>Event Date:</h4>
-                        <input class="input" type="datetime-local" name="date" id="date"
+                        <input class="input @if ($errors->has('date')) errorBorder @endif" type="datetime-local" name="date" id="date"
                             onchange="removeErrors('date');"
-                            value="{{ empty($event) ? old('date') : $event->date->format('Y-m-d\TH:i') }}"
-                            class="@if ($errors->has('date')) errorBorder @endif" />
+                            value="{{ empty($event) ? old('date') : $event->date->format('Y-m-d\TH:i') }}" />
 
                         @if ($errors->has('date'))
                             <span id="dateError" class="error">
@@ -74,7 +73,7 @@
                     <div class="col-lg-12 col-12">
                         <h4>Description:</h4>
                         <textarea id="description" name="description" placeholder="Insert description"
-                            class=" @if ($errors->has('description')) errorBorder @endif"
+                            class="input @if ($errors->has('description')) errorBorder @endif"
                             onchange="removeErrors('description');">{{ empty($event) ? old('description') : $event->description }}</textarea>
                         @if ($errors->has('description'))
                             <span id="descriptionError" class="error">
@@ -87,11 +86,16 @@
                 <div class="event-form w-100 d-flex flex-column border rounded p-3 gap-3">
                     <h3>Location.<span class="text-muted"> Where the action will unfold.</span></h3>
                     <div class="d-flex gap-4 align-items-center justify-content-center">
-                        <input class="input" class="input" type="text" id="mapGlobalFilter" name="body"
-                            placeholder="Introduce a location...">
+                        <input class="input @if ($errors->has('lat') || $errors->has('long')) errorBorder @endif " type="text" id="mapGlobalFilter" name="body"
+                            placeholder="Introduce a location..." onchange="removeErrors('description');">
                         <button id="submit_comment_button" class="btn btn-custom" type="button"
                             onclick="searchMap();">Submit</button>
                     </div>
+                    @if ($errors->has('lat') || $errors->has('long'))
+                        <span id="locError" class="error">
+                            Invalid location
+                        </span>
+                    @endif
 
                     <input class="input" id="lat" name="lat" type="hidden"
                         value="{{ empty($event) ? old('lat') : $event->location->lat }}" />
