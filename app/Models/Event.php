@@ -77,6 +77,19 @@ class Event extends Model
         return AttendanceRequest::where('event_id', $this->id)->where('is_invite', 'true')->get();
     }
 
+    public function score()
+    {
+        $score = 0;
+        $score += $this->loadCount("attendees")->attendees_count;
+        $score += $this->loadCount("comments")->comments_count;
+        foreach ($this->polls as $poll) {
+            foreach ($poll->options as $option) {
+                $score += $option->loadCount("voters")->voters_count;
+            }
+        }
+        return $score;
+    }
+
     public function scopeSearch($query, $search)
     {
         if ($search) {

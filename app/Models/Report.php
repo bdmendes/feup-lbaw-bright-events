@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Report extends Model
 {
@@ -18,15 +19,21 @@ class Report extends Model
      * @var array
      */
     protected $fillable = [
-        'description', 'report_motive', 'reported_comment_id', 'reported_user_id', 'reported_event_id',
+        'description', 'report_motive', 'type', 'handled_by_id', 'reported_user_id', 'reported_event_id', 'reported_comment_id',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'handled_by_id',
-    ];
+    public function reportedUser()
+    {
+        return $this->hasOne(User::class, 'id', 'reported_user_id');
+    }
+
+    public function reportedEvent()
+    {
+        return $this->hasOne(Event::class, 'id', 'reported_event_id');
+    }
+
+    public function reportedComment()
+    {
+        return $this->hasOne(Comment::class, 'id', 'reported_comment_id');
+    }
 }

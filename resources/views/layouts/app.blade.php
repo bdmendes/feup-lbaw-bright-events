@@ -11,67 +11,37 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+
     <!-- Styles -->
     <link href="{{ asset('css/milligram.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/nav.css') }}" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Spartan&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-    <script type="text/javascript">
-        // Fix for Firefox autofocus CSS bug
-        // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
-    </script>
-    <script type="text/javascript" src={{ asset('js/app.js') }} defer></script>
-    <script type="text/javascript" src={{ asset('js/notification.js') }}></script>
-    <script type="text/javascript" src={{ asset('js/comments.js') }}></script>
-    <script type="text/javascript" src={{ asset('js/polls.js') }}></script>
-    <script type="text/javascript" src={{ asset('js/location.js') }}></script>
-    <script src="//js.pusher.com/3.1/pusher.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-    crossorigin=""/>
 
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-    crossorigin=""></script>
+    @yield('styles')
 
-    <script>
-        var pusher = new Pusher('5aaef3148145a5edc935', {
-            encrypted: true,
-            cluster: 'eu'
-        });
-
-        function subscribeNotifications(user) {
-
-        }
-        // Subscribe to the channel we specified in our Laravel Event
-        @if (Auth::check())
-            var channel = pusher.subscribe("notification-received-channel-{{ Auth::user()->username }}");
-
-            channel.bind('notification-received', function(data) {
-            getNotifications(null, true);
-
-            });
-
-        @endif
-        // Bind a function to a Event (the full Laravel class)
-    </script>
+    @yield('scripts')
 
 </head>
 
-<body>
+<body class="min-vh-100 d-flex flex-column">
 
     @include('layouts.navbar')
 
-    <div class="w-100 position-relative">
+    <section class="w-100 position-relative wrapper flex-grow-1" id ="main">
         <div id="growls">
 
         </div>
-        <section id="content">
+        <section id="content" class="w-100 min-vh-100">
 
             @yield('content')
         </section>
-    </div>
+    </section>
 
     @include('layouts.footer')
 

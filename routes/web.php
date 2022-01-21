@@ -13,7 +13,7 @@ Route::get('events', "Event\EventController@index")->name('browseEvents');
 Route::get('events/create', "Event\EventController@indexCreate")->name('createEvent');
 Route::post('events/create', "Event\EventController@create");
 Route::get('events/{id}', "Event\EventController@get")->name('event');
-Route::delete('events/{id}', 'Event\EventController@delete');
+Route::post('events/{id}', "Event\EventController@disable");
 Route::get('events/{id}/edit', 'Event\EventController@indexEdit')->name('editEvent');
 Route::post('events/{id}/edit', 'Event\EventController@update');
 Route::post('events/{eventId}/join-request', 'Event\EventController@joinRequest')->name('joinRequest');

@@ -40,7 +40,12 @@ class EventPolicy
 
     public function delete(User $user, Event $event)
     {
-        return $user != null && $user->id == $event->organizer_id;
+        return $user != null && ($user->id == $event->organizer_id || $user->is_admin);
+    }
+
+    public function block(User $user)
+    {
+        return $user->is_admin;
     }
 
     public function joinRequest(?User $user, Event $event)

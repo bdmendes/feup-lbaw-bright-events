@@ -1,0 +1,40 @@
+@import url("colors.css");
+
+.banner {
+    height: 70vh !important;
+    object-fit: cover;
+}
+
+#navbar  {
+    background-color: rgba(247, 255, 247, 0.3);
+}
+
+#trends, #footer {
+    position: relative;
+    top: 68vh;
+}
+
+.trending-header {
+    font-size: 50px;
+}
+
+.trending-header .text-muted {
+    font-size: 45px;
+}
+
+.trending-body {
+    font-size: 20px;
+}
+
+.trending-org {
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.1) !important;
+
+    padding: 10px;
+    width: 20% !important;
+}
+
+.trending-org img {
+    width: 100%;
+    object-fit: cover;
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.1) !important;
+}
