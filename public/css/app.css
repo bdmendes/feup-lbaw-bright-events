@@ -53,11 +53,6 @@ main {
     box-shadow: 0 0 0 0.25rem rgba(45, 68, 95, 0.25) !important;
 }
 
-.active span {
-    background-color: var(--primary-color) !important;
-    border-color: var(--primary-color) !important;
-}
-
 button.active {
     background-color: var(--primary-color) !important;
 }
@@ -72,7 +67,7 @@ button.nav-link {
 }
 
 button.nav-link.active {
-    background-color: white !important;
+    background-color: transparent !important;
     color: var(--primary-color) !important;
     border: none !important;
     border-bottom: 2px solid var(--primary-color) !important;
@@ -95,6 +90,14 @@ footer {
     display: flex;
     align-items: flex-end;
     height: 5%;
+}
+
+#footer {
+    z-index: 1000;
+}
+
+#footer div {
+    background-color: white;
 }
 
 footer > span {
