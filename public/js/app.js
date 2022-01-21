@@ -165,9 +165,8 @@ function trimEnd(s, mask) {
   return s;
 }
 
-function appendToUrl(str) {
-  window.history.replaceState(
-      null, '', trimEnd(window.location.pathname, '/') + str);
+function replaceHash(str) {
+  window.location.hash = str;
 }
 
 function answerJoinRequest(eventId, requestId, accept){

@@ -11,7 +11,7 @@
 @section('content')
     <div class="d-flex justify-content-center">
         <div class="col-6 d-flex flex-column justify-content-center align-items-center" id="register-col">
-            <form method="POST" action="{{ route('password.reset') }}"
+            <form method="POST" action="{{ route('password.update') }}"
                 class="d-flex flex-column col-lg-6 col-md-8 col-sm-10 gap-4">
                 {{ csrf_field() }}
 

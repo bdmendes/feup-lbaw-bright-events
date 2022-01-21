@@ -47,7 +47,7 @@
                 </div>
                 <div class="lost-password">
                     Trouble remembering?
-                    <a class="recover-link" href="{{ route('recoverPassword') }}">Recover your password</a>
+                    <a class="recover-link" href="{{ route('recoverPasswordForm') }}">Recover your password</a>
                 </div>
             </form>
         </div>

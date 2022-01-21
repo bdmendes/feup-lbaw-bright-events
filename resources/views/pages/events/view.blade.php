@@ -202,27 +202,27 @@
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description"
                         type="button" role="tab" aria-controls="description" aria-selected="true"
-                        onclick="appendToUrl('')">Description</button>
+                        onclick="replaceHash('')">Description</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="forum-tab" data-bs-toggle="tab" data-bs-target="#forum" type="button"
                         role="tab" aria-controls="forum" aria-selected="false"
-                        onclick="appendToUrl('#forum'); getComments();">Forum</button>
+                        onclick="replaceHash('#forum'); getComments();">Forum</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="polls-tab" data-bs-toggle="tab" data-bs-target="#polls" type="button"
                         role="tab" aria-controls="polls" aria-selected="false"
-                        onclick="appendToUrl('#polls'); getPolls();">Polls</button>
+                        onclick="replaceHash('#polls'); getPolls();">Polls</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="attendees-tab" data-bs-toggle="tab" data-bs-target="#attendees"
                         type="button" role="tab" aria-controls="attendees" aria-selected="false"
-                        onclick="appendToUrl('#attendees')">Attendees</button>
+                        onclick="replaceHash('#attendees')">Attendees</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="statistics-tab" data-bs-toggle="tab" data-bs-target="#statistics"
                         type="button" role="tab" aria-controls="statistics" aria-selected="false"
-                        onclick="appendToUrl('#statistics')">Statistics</button>
+                        onclick="replaceHash('#statistics')">Statistics</button>
                 </li>
             </ul>
             @endif
