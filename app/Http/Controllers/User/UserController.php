@@ -48,17 +48,24 @@ class UserController extends Controller
     public function editUser(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'string|max:255',
-            'username' => 'string|max:255',
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
             'bio' => 'nullable|string|max:255',
-            'email' => 'string|email|max:255',
+            'email' => 'required|string|email|max:255',
             'birth_date' => 'nullable|date',
             'gender' => 'string|in:Female,Male,Other',
             'password' => 'nullable|string|min:6|confirmed',
             'profile_picture' => 'nullable|mimes:png,jpg,jpe',
         ]);
 
+        if ($validator->fails()) {
+            return redirect()
+            ->route('editProfile', ['username' => Auth::user()->username])
+            ->withErrors($validator)
+            ->withInput();
+        }
         $user = User::findOrFail($request->id);
+        
 
         $this->authorize('edit', $user);
 

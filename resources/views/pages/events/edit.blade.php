@@ -5,10 +5,8 @@
 @section('content')
 
 
-    <form id="eventCE"
-     action="{{ empty($event) ? route('createEvent') : route('editEvent', [$event->id]) }}"
-     enctype="multipart/form-data"
-     method="post">
+    <form id="eventCE" action="{{ empty($event) ? route('createEvent') : route('editEvent', [$event->id]) }}"
+        enctype="multipart/form-data" method="post">
         @csrf
         @if (!empty($event))
             <input type="hidden" name="id" id="id" value="{{ $event->id }}" />
@@ -25,13 +23,10 @@
             <div class="p-3 w-100 content-float">
                 <div class="col-lg-6 col-12 mb-2 pe-5">
                     <label class="w-100"> Event title:</label>
-                    <input id="title"
-                         type="text"
-                         name="title"
-                         class="col-lg-8 col-12
+                    <input id="title" type="text" name="title"
+                        class="col-lg-8 col-12
                             @if ($errors->has('title')) errorBorder @endif"
-                         onchange="removeErrors('title');"
-                         placeholder="Insert event title" @if (!empty($event)) value="{{ $event->title }}" @endif />
+                        onchange="removeErrors('title');" placeholder="Insert event title" @if (!empty($event)) value="{{ $event->title }}" @endif />
 
                     @if ($errors->has('title'))
                         <span id="titleError" class="error">
@@ -56,11 +51,8 @@
                 <!-- Event date -->
                 <div class="col-lg-6 col-sm-12 col-12 mb-2">
                     <label class="w-100"> Event date: </label>
-                    <input type="date" name="date"
-                         id="date"
-                         onchange="removeErrors('date');"
-                         @if (!empty($event)) value="{{ $event->date->format('Y-m-d') }}" @endif
-                         class="@if ($errors->has('date')) errorBorder @endif" />
+                    <input type="date" name="date" id="date" onchange="removeErrors('date');" @if (!empty($event)) value="{{ $event->date->format('Y-m-d') }}" @endif
+                        class="@if ($errors->has('date')) errorBorder @endif" />
 
                     @if ($errors->has('date'))
                         <span id="dateError" class="error">
@@ -108,17 +100,17 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-12">
-                    <label class="p-2 w-100"> <!-- Add tags --> </label>
-                    <input list="tagOptions" id="selec" placeholder="Search tag...">
+                    <label class="p-2 w-100">
+                        <!-- Add tags -->
+                    </label>
+                    <input type="search" list="tagOptions" autocomplete="off" id="selec" placeholder="Search tag...">
                     <datalist id="tagOptions">
                         @foreach ($tags as $tag)
                             <option id="{{ $tag->name }}" data-id="t{{ $tag->id }}" value="{{ $tag->name }}">
                             </option>
                         @endforeach
                     </datalist>
-                    <button type="button"
-                            class="btn-primary"
-                            onclick="addTag('selec', 'tagsDiv');">
+                    <button type="button" class="btn-primary" onclick="addTag('selec', 'tagsDiv');">
                         Add
                     </button>
                 </div>
@@ -137,8 +129,7 @@
                 @endif
             </div>
 
-            <button type="submit"
-                    class="btn-primary "> @if ($event ?? '') Edit @else Create @endif </button>
+            <button type="submit" class="btn-primary "> @if ($event ?? '') Edit @else Create @endif </button>
 
         </div>
         <form>
