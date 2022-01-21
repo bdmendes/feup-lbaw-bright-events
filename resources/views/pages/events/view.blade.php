@@ -75,31 +75,44 @@
     </div>
 
     <div id="event-content" class="container w-75 border rounded p-4 bg-light my-4">
+        <div class="event-image col-sm-12 col-md-12 d-flex d-lg-none d-xl-none">
+                <img src="/{{ $event->image->path ?? 'images/group.jpg' }}" class="w-100" />
+            </div>
         <div id="event-header" class="row mb-4">
-            <div id="event-info" class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                <div class="p-3 w-100">
-                    <h1>{{ $event->title }}</h1>
+            <div id="event-info" class="d-flex flex-column col-sm-12 col-md-12 col-lg-6 col-xl-6 p-4 gap-3">
+                <div class="w-100">
+                    <h1 id="event-title">{{ $event->title }}</h1>
                 </div>
 
-                <div class="p-3  w-100">
+                <div class="w-100 event-subtitle">
                     <label>Date: </label>
-                    {{ $event->date->format('d/m/Y H:i') }}
+                    <span>{{ $event->date->format('d/m/Y H:i') }}</span>
                 </div>
-                <div class="p-3  w-100">
+                <div class="w-100 event-subtitle">
                     <label>Location: </label>
-                    @if ($event->location ?? '')
-                        {{ $event->location->pretty_print() }}
-                    @else
-                        Not defined
-                    @endif
+                    <span>
+                        @if ($event->location ?? '')
+                            {{ $event->location->pretty_print() }}
+                        @else
+                            Not defined
+                        @endif
+                    </span>
                 </div>
-                <div class="p-3  w-100">
-                    <label> Organizer: </label>
-                    @include('partials.users.smallCard', ['user' => $event->organizer])
+                <div class="d-flex event-subtitle">
+                    <div class="d-flex align-items-center gap-3">
+                        <label> Organized by:</label>
+                        <span class="border p-3">
+                            @include('partials.users.smallCard', ['user' => $event->organizer])
+                        </span>
+                    </div>
                 </div>
-                <div class="p-3 w-100">
-                    <label> Tags: </label>
-                    @include("partials.events.tags", ['event' => $event])
+                <div class="d-flex w-100 event-subtitle">
+                    <div class="d-flex flex-column gap-3">
+                        <label> Tags: </label>
+                        <span>
+                            @include("partials.events.tags", ['event' => $event])
+                        </span>
+                    </div>
                 </div>
                 @if (Auth::check() && Auth::id() != $event->organizer_id)
                     <div id="report-container" class="text-end pe-1">
@@ -109,7 +122,7 @@
                     </div>
                 @endif
             </div>
-            <div id="event-image" class="col-6">
+            <div class="event-image d-none d-lg-flex col-lg-6 col-xl-6">
                 <img src="/{{ $event->image->path ?? 'images/group.jpg' }}" class="w-100" />
             </div>
         </div>

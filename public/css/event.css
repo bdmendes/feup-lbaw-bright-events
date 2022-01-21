@@ -15,7 +15,16 @@
     box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
 }
 
-#event-image img {
-    max-height: 400px !important;
+.event-image img {
+    height: 100%;
+    max-height: 500px !important;
     object-fit: cover !important;
+}
+
+#event-title {
+    font-size: 50px !important;
+}
+
+.event-subtitle label, .event-subtitle span {
+    font-size: 20px;
 }
