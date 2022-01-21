@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Events\NotificationReceived;
+use App\Models\Attendance;
 use App\Models\Event;
 use App\Models\Location;
 use App\Models\User;
@@ -235,8 +236,8 @@ class EventController extends Controller
         }
         $users = User::where('is_admin', 'false')->get();
         $invites = $event->getInvites();
-
-        return view("pages.events.view", compact('users', 'event', 'invites', 'isAttendee'));
+        $userInvite = $event->attendanceRequests()->getQuery()->where('attendee_id', Auth::id())->where('is_invite', 'true')->first();
+        return view("pages.events.view", compact('users', 'event', 'invites', 'isAttendee', 'userInvite'));
     }
 
     public function joinRequest($id)
@@ -269,6 +270,22 @@ class EventController extends Controller
             'attendee_id' => $user->id,
             'is_invite' => true
         ]);
+    }
+
+    public function answerInvite(Request $request)
+    {
+        $event = Event::find($request->eventId);
+        $attendanceRequest = AttendanceRequest::find($request->inviteId);
+
+        event(new NotificationReceived('answer invite ', [$event->organizer]));
+        if ($request->get('accept')) {
+            $attendance = Attendance::create([
+                'event_id' => $event->id,
+                'attendee_id' => Auth::id()
+            ]);
+        }
+        $attendanceRequest->delete();
+        return redirect()->route('event', ['id' => $event->id]);
     }
 
     public function disable(Request $request, $event_id)
