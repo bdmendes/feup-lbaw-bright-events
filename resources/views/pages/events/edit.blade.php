@@ -56,10 +56,10 @@
                 <!-- Event date -->
                 <div class="col-lg-6 col-sm-12 col-12 mb-2">
                     <label class="w-100"> Event date: </label>
-                    <input type="date" name="date"
+                    <input type="datetime-local" name="date"
                          id="date"
                          onchange="removeErrors('date');"
-                         @if (!empty($event)) value="{{ $event->date->format('Y-m-d') }}" @endif
+                         @if (!empty($event)) value="{{ $event->date->format('Y-m-d\TH:i') }}" @endif
                          class="@if ($errors->has('date')) errorBorder @endif" />
 
                     @if ($errors->has('date'))
@@ -82,6 +82,81 @@
                         <label class="btn btn-outline-primary" for="restriction2">Private</label>
                     </div>
                 </div>
+            </div>
+
+            <div class="p-3 w-100 content-float">
+                <label class="p-2 w-100">Location</label>
+                <div class="col-lg-6 col-12 p-3">
+                    <label class="p-2 w-100">Search:</label>
+                    <input type="text"
+                            placeholder="Search map"
+                           id="mapGlobalFilter"/>
+
+                    <button onclick="searchMap();" type="button">Search</button>
+
+                    <input  id="lat" name="lat" type="hidden"
+                            value="{{$event->location->lat ?? ''}}" />
+                    <input id="long" name="long" type="hidden"
+                           value="{{$event->location->long ?? ''}}" />
+
+                    <label class="p-2 w-100">City:</label>
+                    <input id="city" name="city"
+                           type="text" class="transparent"
+                           value="{{$event->location->city ?? ''}}"/>
+
+                    <label class="p-2 w-100">Country:</label>
+                    <input id="country" name="country" type="text" class="transparent"
+                           readonly="readonly"
+                           value="{{$event->location->country ?? ''}}"/>
+
+                    <label class="p-2 w-100">Display name:</label>
+                    <input  id="display_name" name="display_name"
+                            type="text" class="transparent"
+                            value="{{$event->location->name ?? ''}}"/>
+
+                    <label class="p-2 w-100">Postcode:</label>
+                    <input id="postcode" name="postcode"
+                           type="text" class="transparent"
+                           readonly="readonly"
+                           value="{{$event->location->postcode ?? ''}}"/>
+
+
+                </div>
+                <div class="col-lg-6 col-12">
+                    <div id="map"
+                        class="w-100"
+                        style="height: 400px">
+
+                    </div>
+
+                </div>
+                <script>
+                    @if($event->location ?? '')
+                        let eventCoords = [{{$event->location->lat}}, {{$event->location->long}}];
+                        giveBlack();
+                    @else
+                        let eventCoords = [51.505, -0.09];
+                    @endif
+                    let map = L.map('map').setView(eventCoords, 17);
+                    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                    maxZoom: 18,
+                    id: 'mapbox/streets-v11',
+                    tileSize: 512,
+                    zoomOffset: -1,
+                    accessToken: 'pk.eyJ1IjoiYnJ1bm9nb21lczMwIiwiYSI6ImNreWxnbzltMzAwYTgydnBhaW81OGhha24ifQ.X-WsoAxJ_WcIlFoQpR4rFA'
+                }).addTo(map);
+                    @if($event->location ?? '')
+                        let mapMarker = L.marker(eventCoords).addTo(map);
+                    @else
+                        let mapMarker = null;
+                    @endif
+
+                    map.on('click',async function(ev)  {
+                        clickMap(ev);
+                    });
+
+                </script>
             </div>
 
             <!-- Tags -->

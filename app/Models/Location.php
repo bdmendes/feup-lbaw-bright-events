@@ -10,8 +10,17 @@ class Location extends Model
     public $timestamps  = false;
     protected $table = 'locations';
 
+    protected $fillable = [
+        'lat',
+        'long',
+        'city',
+        'country',
+        'postcode',
+        'name'
+    ];
+
     public function pretty_print()
     {
-        return $this->address . ", " . $this->city . ", " . $this->country;
+        return $this->name;
     }
 }

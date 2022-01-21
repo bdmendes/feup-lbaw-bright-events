@@ -6,10 +6,12 @@ use App\Models\User;
 use App\Models\File;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Event;
 use Illuminate\Support\Facades\Crypt;
 use Auth;
 use Validator;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -26,9 +28,13 @@ class UserController extends Controller
             abort('404', 'User not found');
         }
 
+        $invitedEvents = Event::whereExists(function ($query) {
+            $query->select(DB::raw(1))->from('attendance_requests')->whereColumn('attendance_requests.event_id', 'events.id')->whereColumn('attendance_requests.attendee_id', DB::raw(Auth::id()))->whereColumn('attendance_requests.is_invite', DB::raw('true'))->whereColumn('attendance_requests.is_accepted', DB::raw('false'));
+        })->get();
         return view('pages.users.view', [
             'user' => $user,
             'attended_events' => $user->attended_events(),
+            'invited_events' => $invitedEvents
         ]);
     }
 

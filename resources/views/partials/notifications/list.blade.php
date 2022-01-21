@@ -49,12 +49,12 @@
                 @break
 
             @case('New poll')
-                <!-- Event pusher NOT DONE-->
+                <!-- Event pusher DONE-->
                 <span class="bi bi-list"> </span>
                 @break
 
             @case('Closed Poll')
-                <!-- Event pusher not done-->
+                <!-- Event pusher done-->
                 @break
             @default
                 {{$notification->notication_type}}

@@ -12,9 +12,6 @@
     aria-labelledby="notificationBell">
 
         <div  id="notifications" class="w-100">
-            <script>
-                window.addEventListener('load', getNotifications);
-                </script>
         </div>
         <div class="w-100 d-flex justify-content-center my-2">
             <button id="getPastNotifications" class="btn-primary"
