@@ -24,6 +24,10 @@ class RecoverController extends Controller
         $request->validate([
             'email' => 'required|email|confirmed'
         ]);
+        /*         $user = User::where('email', $request->email)->first();
+                if ($user == null) {
+                    return back()->with(['error' => 'Email not found in the database']);
+                } */
         $status = Password::sendResetLink(
             $request->only('email')
         );
@@ -53,9 +57,8 @@ class RecoverController extends Controller
                 $user->save();
             }
         );
-
         return $status === Password::PASSWORD_RESET
-                    ? redirect()->route('login')->with('status', __($status))
-                    : back()->withErrors(['email' => [__($status)]]);
+                ? redirect()->route('login')->with('status', __($status))
+                : back()->withErrors(['email' => [__($status)]]);
     }
 }

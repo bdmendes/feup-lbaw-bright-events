@@ -27,6 +27,11 @@
 
                 <input class="input" id="password" type="password" name="password" placeholder="New password"
                     required>
+                @if ($errors->has('password'))
+                    <span class="error" id="passwordError">
+                        {{ $errors->first('password') }}
+                    </span>
+                @endif
 
                 <input class="input" id="password_confirmation" type="password" name="password_confirmation"
                     placeholder="Confirm your new password" required>
@@ -40,15 +45,11 @@
                 @if (Session::has('message'))
                     <div class="alert alert-info">{{ Session::get('message') }}</div>
                 @endif
-                @if (Session::has('errors'))
-                    <div class="alert alert-danger">{{ Session::get('errors') }}</div>
-                @endif
             </form>
         </div>
         <div id="thumbnail" class="d-none d-xl-block col-xl-6 bg-dark">
             <img src="/images/auth/recover.jpg" alt="">
         </div>
     </div>
-
 
 @endsection
