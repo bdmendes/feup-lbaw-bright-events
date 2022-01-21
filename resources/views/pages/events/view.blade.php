@@ -92,9 +92,9 @@
                     </div>
     
                     <div class="d-flex event-subtitle">
-                        <div class="d-flex align-items-center gap-3">
+                        <div class="d-flex flex-wrap align-items-center gap-3">
                             <label> Organized by:</label>
-                            <span class="border p-3">
+                            <span class="border p-3 event-organizer">
                                 @include('partials.users.smallCard', ['user' => $event->organizer])
                             </span>
                         </div>
@@ -102,7 +102,7 @@
                     <div class="d-flex w-100 event-subtitle">
                         <div class="d-flex flex-column gap-3">
                             <label> Tags: </label>
-                            <span id="tags">
+                            <span id="tags" class="d-flex flex-wrap gap-2">
                                 @include("partials.events.tags", ['event' => $event])
                             </span>
                         </div>
@@ -332,66 +332,71 @@
                         </div>
                     </div>
 
-                    <div class="tab-pane fade" id="attendees" role="tabpanel" aria-labelledby="contact-tab">
+                    <div class="tab-pane fade d-flex flex-column p-4 gap-4" id="attendees" role="tabpanel" aria-labelledby="contact-tab">
 
                         @if (Auth::check() && Auth::user()->id == $event->organizer_id)
                             <!-- Invite user -->
-                            <div class="col-lg-6 col-sm-12 col-12">
+                            <div class="col-lg-6 col-sm-12 col-12 d-flex flex-column flex-wrap">
                                 <h3>Invite user</h3>
-                                <input list="userOptions" id="selectUser" placeholder="Search user...">
-                                <datalist id="userOptions">
-                                    @foreach ($users as $user)
-                                        <option id="{{ $user->name }}-option" value="{{ $user->username }}">
-                                        </option>
-                                    @endforeach
-                                </datalist>
-                                <button type="button" onclick="inviteUser({{ $event->id }});">
-                                    Invite
-                                </button>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <input list="userOptions" id="selectUser" placeholder="Search user...">
+                                    <datalist id="userOptions">
+                                        @foreach ($users as $user)
+                                            <option id="{{ $user->name }}-option" value="{{ $user->username }}">
+                                            </option>
+                                        @endforeach
+                                    </datalist>
+                                    <button class="btn btn-custom"type="button" onclick="inviteUser({{ $event->id }});">
+                                        Invite
+                                    </button>
+                                </div>
                             </div>
-                            <br>
-
-                            <h3>Currently invited users</h3>
-
-                            <!-- Current invites -->
-                            <div id="invitees">
-                                @foreach ($invites as $invite)
-                                    <div class="border rounded d-flex p-1" style="width: 250px;">
-                                        @include('partials.users.smallCard', ['user' => $users->find($invite->attendee_id)])
-                                    </div>
-                                @endforeach
-                            </div>
-
-                            <h3>Pending join requests</h3>
-                            <div id="joinRequests" >
-                                @foreach ($event->attendanceRequests()->getQuery()->where('is_invite', 'false')->where('is_handled', 'false')->get() as $request)
-                                    <div id="joinRequest{{$request->attendee->username}}" class="border rounded d-flex p-1" style="width: 250px;">
-                                        <div class="col-10">
-                                            @include('partials.users.smallCard', ['user' => $request->attendee])
+                            
+                            <div class="">
+                                <h3>Currently invited users</h3>
+                                <div id="invitees" class="d-flex gap-4 flex-wrap justify-content" >
+                                    @forelse ($invites as $invite)
+                                        <div class="event-invitee border rounded d-flex p-3" style="width: 250px;">
+                                            @include('partials.users.smallCard', ['user' => $users->find($invite->attendee_id)])
                                         </div>
-                                        <div class="d-flex align-items-center col-2">
-                                            <span class="col-6 bi-check text-success fs-1 clickable"
-                                                    title="Accept join request"
-                                                    onclick="answerJoinRequest({{$request->event_id}}, {{$request->id}}, true)"> </span>
-                                            <span class="col-6 bi-x text-danger fs-1 clickable"
-                                                    title="Reject join request"
-                                                    onclick="answerJoinRequest({{$request->event_id}}, {{$request->id}}, false)"> </span>
-                                        </div>
-                                    </div>
-                                @endforeach
+                                    @empty
+                                    @endforelse
+                                </div>
                             </div>
 
-                            <br>
-                            <h3>Attendees</h3>
+                            <div class="">
+                                <h3>Pending join requests</h3>
+                                <div id="joinRequests" >
+                                    @forelse ($event->attendanceRequests()->getQuery()->where('is_invite', 'false')->where('is_handled', 'false')->get() as $request)
+                                        <div id="joinRequest{{$request->attendee->username}}" class="border rounded d-flex p-1" style="width: 250px;">
+                                            <div class="col-10">
+                                                @include('partials.users.smallCard', ['user' => $request->attendee])
+                                            </div>
+                                            <div class="d-flex align-items-center col-2">
+                                                <span class="col-6 bi-check text-success fs-1 clickable"
+                                                        title="Accept join request"
+                                                        onclick="answerJoinRequest({{$request->event_id}}, {{$request->id}}, true)"> </span>
+                                                <span class="col-6 bi-x text-danger fs-1 clickable"
+                                                        title="Reject join request"
+                                                        onclick="answerJoinRequest({{$request->event_id}}, {{$request->id}}, false)"> </span>
+                                            </div>
+                                        </div>
+                                    @empty
+                                    @endforelse
+                                </div>
+                            </div>
                         @endif
 
-                        <div class="p-4 d-flex gap-4 flex-wrap justify-content" id="attendees-list">
+                        <div>
+                            <h3>Attendees</h3>
+                            <div class="d-flex gap-4 flex-wrap justify-content" id="attendees-list">
 
                         </div>
                         <button id="view_more_attendees" class="btn btn-custom mt-4" style="display: none;"
                             onclick="viewMoreAttendees();">
                             View more
                         </button>
+                        </div>
 
                     </div>
                     <div class="tab-pane fade" id="statistics" role="tabpanel" aria-labelledby="contact-tab">

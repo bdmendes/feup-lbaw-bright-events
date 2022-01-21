@@ -54,8 +54,6 @@ async function attendEventClick(eventId, attendeeId, username) {
           attendees.removeChild(attendees.firstElementChild);
         }
         attendees.appendChild(div);
-      } else {
-        alert('Something went wrong');
       }
     }
   };
@@ -80,8 +78,6 @@ async function leaveEventClick(eventId, attendeeId, username) {
           p.innerHTML = 'No attendees around here...';
           attendees.appendChild(p);
         }
-      } else {
-        alert('Something went wrong');
       }
     }
   };
