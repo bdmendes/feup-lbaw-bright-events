@@ -39,7 +39,7 @@
                 <span class="bi bi-envelope-check"> </span>
                 @break
 
-            @case('Declined Invite')
+            @case('Declined invite')
                 <!--  Event pusher and Trigger working-->
                 <span class="bi bi-envelope-dash"> </span>
                 @break
@@ -104,7 +104,7 @@
                 @include('partials.hyperlinks.event', ['event' => $notification->attendanceRequest->event])
                 @break
 
-            @case('Declined Invite')
+            @case('Declined invite')
                 @include('partials.hyperlinks.user', ['user' => $notification->attendanceRequest->attendee])
                 declined your invite to
                 @include('partials.hyperlinks.event', ['event' => $notification->attendanceRequest->event])

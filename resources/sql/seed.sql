@@ -433,11 +433,11 @@ BEGIN
     IF NEW.is_invite = TRUE AND NEW.is_accepted = TRUE AND OLD.is_handled = FALSE AND OLD.is_handled = TRUE THEN
         INSERT INTO lbaw2134.notifications
         (notification_type, event_id, attendance_request_id, poll_id, comment_id, addressee_id)
-        VALUES (CAST('Accepted Invite' AS lbaw2134.notification_type), NEW.event_id, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee_id);
+        VALUES (CAST('Accepted invite' AS lbaw2134.notification_type), NEW.event_id, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee_id);
     ELSIF NEW.is_invite = TRUE AND NEW.is_accepted = FALSE AND OLD.is_handled = FALSE AND OLD.is_handled = TRUE THEN
         INSERT INTO lbaw2134.notifications
         (notification_type, event_id, attendance_request_id, poll_id, comment_id, addressee_id)
-        VALUES (CAST('Declined Invite' AS lbaw2134.notification_type), NEW.event_id, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee_id);
+        VALUES (CAST('Declined invite' AS lbaw2134.notification_type), NEW.event_id, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee_id);
     END IF;
     RETURN NEW;
 END
