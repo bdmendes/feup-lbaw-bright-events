@@ -27,11 +27,10 @@ class UserController extends Controller
         if (is_null($user) || $user->is_admin) {
             abort('404', 'User not found');
         }
-        if (Auth::check()) {
-            $invitedEvents = Event::whereExists(function ($query) {
-                $query->select(DB::raw(1))->from('attendance_requests')->whereColumn('attendance_requests.event_id', 'events.id')->whereColumn('attendance_requests.attendee_id', DB::raw(Auth::id()))->whereColumn('attendance_requests.is_invite', DB::raw('true'))->whereColumn('attendance_requests.is_accepted', DB::raw('false'));
-            });
-        }
+        $invitedEvents = Event::whereExists(function ($query) use ($user) {
+            $query->select(DB::raw(1))->from('attendance_requests')->whereColumn('attendance_requests.event_id', 'events.id')->whereColumn('attendance_requests.attendee_id', DB::raw($user->id))->whereColumn('attendance_requests.is_invite', DB::raw('true'))->whereColumn('attendance_requests.is_accepted', DB::raw('false'));
+        });
+
         return view('pages.users.view', [
             'user' => $user,
             'attended_events' => $user->attended_events()->paginate(4, ['*'], 'attended_events'),
