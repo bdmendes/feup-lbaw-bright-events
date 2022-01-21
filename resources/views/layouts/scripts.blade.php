@@ -11,7 +11,7 @@ integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+
 <script type="text/javascript" src={{ asset('js/report.form.js') }}></script>
 <script type="text/javascript" src={{ asset('js/polls.js') }}></script>
 <script type="text/javascript" src={{ asset('js/style.js') }} defer></script>
-
+<script type="text/javascript" src={{ asset('js/location.js') }}></script>
 <script type="text/javascript"> // Fix for Firefox autofocus CSS bug // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951</script>
 
 
@@ -29,12 +29,12 @@ integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+
         // Subscribe to the channel we specified in our Laravel Event
         @if (Auth::check())
             var channel = pusher.subscribe("notification-received-channel-{{ Auth::user()->username }}");
-        
+
             channel.bind('notification-received', function(data) {
             getNotifications(null, true);
-        
+
             });
-        
+
         @endif
         // Bind a function to a Event (the full Laravel class)
     </script>
