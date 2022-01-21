@@ -20,6 +20,27 @@ main {
     height: 100%;
 }
 
+.btn-outline-primary {
+    font-size: 1em !important;
+    background-color: white !important;
+    border: 1px solid var(--primary-color) !important;
+    border-radius: 5px !important;
+    color: var(--primary-color) !important;
+    transition: background-color .25s ease-in-out !important;
+    transition: color .25s ease-in-out !important;
+}
+
+.btn-outline-primary:hover {
+    color: white !important;
+    background-color: var(--primary-color) !important;
+}
+
+.btn-check:checked + .btn-outline-primary{
+    color: white !important;
+    background-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0 var(--dark-color) !important;
+}
+
 .btn-custom {
     font-size: 1em !important;
     background-color: var(--darker-color) !important;
