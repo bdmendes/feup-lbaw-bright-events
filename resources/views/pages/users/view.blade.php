@@ -32,6 +32,12 @@
                         Events</button>
                 @endif
             </li>
+            @if(Auth::id() == $user->id)
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="invites-tab" data-bs-toggle="tab" data-bs-target="#invites"
+                            type="button" role="tab" aria-controls="profile" aria-selected="false">My invites</button>
+                </li>
+            @endif
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="attendances-tab" data-bs-toggle="tab"
                     data-bs-target="#attendances" type="button" role="tab" aria-controls="contact"
@@ -57,8 +63,20 @@
                     @endforelse
                 </div>
             </div>
+            @if(Auth::id() == $user->id)
+                <div class="tab-pane fade" id="invites"
+                role="tabpanel" aria-labelledby="contact-tab">
+                    <div class="w-100 p-4">
+                        @forelse ($invited_events as $event)
+                            @include('partials.events.card', ['event' => $event]))
+                        @empty
+                            <p class="text-grey disabled">You haven't been invited to events, yet</p>
+                        @endforelse
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 </div>
-        
+
 @endsection

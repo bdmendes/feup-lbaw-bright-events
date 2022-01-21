@@ -105,9 +105,22 @@
                                     <button class="btn-light"
                                         onclick="removeAttendee({{ $event->id }}, {{ Auth::user()->id }}, '{{ Auth::user()->username }}', true)"
                                         id="attend_button" type="submit">Leave event</button>
+                                @elseif($userInvite)
+                                    <form action="{{ route('answerInvite', ['eventId' => $event->id, 'inviteId' => $userInvite]) }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="accept" id="accept" value="true" />
+                                        <button class="btn btn-primary mx-2" type="submit">Accept invite</button>
+                                    </form>
+
+                                    <form action="{{ route('answerInvite', ['eventId' => $event->id, 'inviteId' => $userInvite]) }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="reject" id="reject" value="false" />
+
+                                        <button class="btn btn-primary mx-2" type="submit">Reject invite</button>
+                                    </form>
                                 @elseif($event->is_private)
 
-                                        @if($event->attendanceRequests()->getQuery()->where('attendee_id', Auth::id())->exists())
+                                        @if($event->attendanceRequests()->getQuery()->where('attendee_id', Auth::id())->where('is_invite', 'false')->exists())
                                         <button class="btn btn-primary mx-2" type="button"
                                             disabled>
                                             Join request pending

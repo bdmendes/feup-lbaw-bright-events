@@ -26,7 +26,7 @@ main {
     border: none !important;
     border-radius: 5px !important;
     color: white !important;
-    transition: background-color .15s ease-in !important;
+    transition: background-color 0.15s ease-in !important;
 }
 
 .btn-custom:hover {
@@ -37,17 +37,20 @@ main {
     box-shadow: 0 0 1px 1px var(--dark-color) !important;
 }
 
-.page-item span, .page-item a {
+.page-item span,
+.page-item a {
     color: var(--primary-color);
 }
 
-.page-item span:hover, .page-item a:hover {
+.page-item span:hover,
+.page-item a:hover {
     color: var(--primary-color);
 }
 
-.page-item span:focus, .page-item a:focus {
+.page-item span:focus,
+.page-item a:focus {
     color: var(--primary-color) !important;
-    box-shadow: 0 0 0 .25rem rgba(45,68,95,.25) !important;
+    box-shadow: 0 0 0 0.25rem rgba(45, 68, 95, 0.25) !important;
 }
 
 .active span {
@@ -233,7 +236,7 @@ div.bi {
     display: flex;
     gap: 15px;
     flex-direction: column;
-    top: calc(30px);
+    top: calc(100px);
     right: calc(15px);
 }
 
