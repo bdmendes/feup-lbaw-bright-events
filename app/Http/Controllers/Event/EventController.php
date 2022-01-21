@@ -239,7 +239,9 @@ class EventController extends Controller
         $users = User::where('is_admin', 'false')->get();
         $invites = $event->getInvites();
         $userInvite = $event->attendanceRequests()->getQuery()->where('attendee_id', Auth::id())->where('is_invite', 'true')->first();
-        return view("pages.events.view", compact('users', 'event', 'invites', 'isAttendee', 'userInvite'));
+        $ages = $event->getAgeStats();
+        $genders = $event->getGenderStats();
+        return view("pages.events.view", compact('users', 'event', 'invites', 'ages', 'genders', 'isAttendee', 'userInvite'));
     }
 
     public function joinRequest($id)

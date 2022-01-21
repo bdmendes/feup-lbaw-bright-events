@@ -10,7 +10,7 @@
             <div class="col-auto align-self-end text-decoration-none d-flex flex-column align-items-center"
                 onclick="getReportModal('comment', {{ $comment->id }});" type="button">
                 <i class="bi bi-exclamation-triangle"></i>
-                <p>Report user</p>
+                <p>Report comment</p>
             </div>
         @endif
     </div>

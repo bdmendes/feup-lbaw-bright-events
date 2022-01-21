@@ -15,7 +15,7 @@
 </div>
 
 
-<div class="d-flex w-100 justify-content-between align-items-center mb-3" data-bs-toggle="collapse" href="#filter">
+<div class="mt-4 d-flex w-100 justify-content-between align-items-center mb-3" data-bs-toggle="collapse" href="#filter">
     <h2>Filter</h2>
     <i class="bi bi-chevron-down"></i>
 </div>
@@ -44,7 +44,7 @@
 
         </div>
 
-        <div data-bs-toggle="collapse" href="#filter-organizer">
+        <div class="mt-4" data-bs-toggle="collapse" href="#filter-organizer">
             <div class="d-flex w-100 justify-content-between" data-bs-toggle="collapse" href="#filter-organizer">
                 <h4>Organizer</h4>
                 <i class="bi bi-chevron-down"></i>
@@ -58,7 +58,7 @@
 
         </div>
 
-        <div data-bs-toggle="collapse" href="#filter-tag">
+        <div class="mt-4" data-bs-toggle="collapse" href="#filter-tag">
             <div class="d-flex w-100 justify-content-between" data-bs-toggle="collapse" href="#filter-tag">
                 <h4>Tag</h4>
                 <i class="bi bi-chevron-down"></i>
