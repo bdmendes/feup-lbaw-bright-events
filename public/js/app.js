@@ -182,7 +182,7 @@ function appendToUrl(str) {
     );
 }
 
-function answerJoinRequest(eventId, requestId, attendeeId,  accept){
+function answerJoinRequest(eventId, requestId, accept){
     let url = "/api/events/" + eventId + "/join-requests/"+ requestId;
     let data = {'accept' : accept};
     let  options = {
@@ -199,10 +199,9 @@ function answerJoinRequest(eventId, requestId, attendeeId,  accept){
     .then(html => {
         let divId = "joinRequest"+requestId;
         let username = document.querySelector("#"+divId + " .text-muted").innerText;
-        remove("joinRequest"+requestId);
+        remove("joinRequest"+username);
         if(accept){
             let div = document.createElement("div");
-            let parser = new DOMParser();
             div.classList.add("border", "rounded", "d-flex", "p-1");
             div.style.width = "250px";
             div.id = username + "-entry";

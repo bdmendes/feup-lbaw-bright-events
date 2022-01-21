@@ -351,12 +351,27 @@ BEGIN
     IF NEW.is_invite = FALSE THEN
         INSERT INTO lbaw2134.notifications
         (notification_type, event_id, attendance_request_id, poll_id, comment_id, addressee_id)
-        VALUES (CAST('Join request' AS lbaw2134.notification_type), NEW.event_id, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee_id);
+        VALUES (CAST('Join request' AS lbaw2134.notification_type), NEW.event_id, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), (select organizer_id from events where events.id = NEW.event_id));
     END IF;
     RETURN NEW;
 END
 $BODY$
 LANGUAGE plpgsql;
+
+CREATE FUNCTION lbaw2134.join_request_change_notification() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.is_invite = FALSE and NEW.is_handled = FALSE and old.is_invite = true and new.is_accepted = false THEN
+        INSERT INTO lbaw2134.notifications
+        (notification_type, event_id, attendance_request_id, poll_id, comment_id, addressee_id)
+        VALUES (CAST('Join request' AS lbaw2134.notification_type), NEW.event_id, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), (select organizer_id from events where events.id = NEW.event_id));
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+
 
 CREATE FUNCTION lbaw2134.accepted_request_notification() RETURNS TRIGGER AS
 $BODY$
@@ -365,6 +380,19 @@ BEGIN
         INSERT INTO lbaw2134.notifications
         (notification_type, event_id, attendance_request_id, poll_id, comment_id, addressee_id)
         VALUES (CAST('Accepted request' AS lbaw2134.notification_type), NEW.event_id, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee_id);
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION lbaw2134.reject_request_notification() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.is_invite = FALSE AND NEW.is_accepted = FALSE AND NEW.is_handled = TRUE AND OLD.is_handled = false  THEN
+        INSERT INTO lbaw2134.notifications
+        (notification_type, event_id, attendance_request_id, poll_id, comment_id, addressee_id)
+        VALUES (CAST('Declined request' AS lbaw2134.notification_type), NEW.event_id, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee_id);
     END IF;
     RETURN NEW;
 END
@@ -384,18 +412,39 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE FUNCTION lbaw2134.accepted_invite_notification() RETURNS TRIGGER AS
+CREATE FUNCTION lbaw2134.invite_notification_change() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF NEW.is_invite = TRUE AND NEW.is_accepted = TRUE AND OLD.is_accepted = FALSE THEN
+    IF NEW.is_invite = TRUE AND OLD.is_invite = FALSE and new.is_handled = false THEN
         INSERT INTO lbaw2134.notifications
         (notification_type, event_id, attendance_request_id, poll_id, comment_id, addressee_id)
-        VALUES (CAST('Accepted Invite' AS lbaw2134.notification_type), NEW.event_id, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee_id);
+        VALUES (CAST('Invite' AS lbaw2134.notification_type), NEW.event_id, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee_id);
     END IF;
     RETURN NEW;
 END
 $BODY$
 LANGUAGE plpgsql;
+
+
+
+CREATE FUNCTION lbaw2134.answer_invite_notification() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.is_invite = TRUE AND NEW.is_accepted = TRUE AND OLD.is_handled = FALSE AND OLD.is_handled = TRUE THEN
+        INSERT INTO lbaw2134.notifications
+        (notification_type, event_id, attendance_request_id, poll_id, comment_id, addressee_id)
+        VALUES (CAST('Accepted Invite' AS lbaw2134.notification_type), NEW.event_id, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee_id);
+    ELSIF NEW.is_invite = TRUE AND NEW.is_accepted = FALSE AND OLD.is_handled = FALSE AND OLD.is_handled = TRUE THEN
+        INSERT INTO lbaw2134.notifications
+        (notification_type, event_id, attendance_request_id, poll_id, comment_id, addressee_id)
+        VALUES (CAST('Declined Invite' AS lbaw2134.notification_type), NEW.event_id, NEW.id, CAST(NULL AS Integer), CAST(NULL AS Integer), NEW.attendee_id);
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+
 
 --CREATE FUNCTION lbaw2134.new_comment_notification() RETURNS TRIGGER AS
 --$BODY$
@@ -544,20 +593,36 @@ CREATE TRIGGER join_request_notification
     FOR EACH ROW
     EXECUTE PROCEDURE lbaw2134.join_request_notification();
 
+CREATE TRIGGER join_request_change_notification
+    AFTER UPDATE ON lbaw2134.attendance_requests
+    FOR EACH ROW
+    EXECUTE PROCEDURE lbaw2134.join_request_change_notification();
+
 CREATE TRIGGER accepted_request_notification
     AFTER UPDATE ON lbaw2134.attendance_requests
     FOR EACH ROW
     EXECUTE PROCEDURE lbaw2134.accepted_request_notification();
+
+CREATE TRIGGER reject_request_notification
+    AFTER UPDATE ON lbaw2134.attendance_requests
+    FOR EACH ROW
+    EXECUTE PROCEDURE lbaw2134.reject_request_notification();
+
+CREATE TRIGGER invite_notification_change
+    AFTER UPDATE ON lbaw2134.attendance_requests
+    FOR EACH ROW
+    EXECUTE PROCEDURE lbaw2134.invite_notification_change();
 
 CREATE TRIGGER invite_notification
     AFTER INSERT ON lbaw2134.attendance_requests
     FOR EACH ROW
     EXECUTE PROCEDURE lbaw2134.invite_notification();
 
-CREATE TRIGGER accepted_invite_notification
+
+CREATE TRIGGER answer_invite_notification
     AFTER UPDATE ON lbaw2134.attendance_requests
     FOR EACH ROW
-    EXECUTE PROCEDURE lbaw2134.accepted_invite_notification();
+    EXECUTE PROCEDURE lbaw2134.answer_invite_notification();
 
 CREATE TRIGGER new_comment_notification
     AFTER INSERT ON lbaw2134.comments
@@ -804,7 +869,7 @@ INSERT INTO lbaw2134.ATTENDANCES (event_id, attendee_id) VALUES
 	( 111, 106 ) ,
 	( 111, 108 ) ;
 INSERT INTO lbaw2134.ATTENDANCE_REQUESTS VALUES
-	( 100, 108, 100, False, ,False, False ) ;
+	( 100, 108, 100, False, False, False ) ;
 INSERT INTO lbaw2134.POLLS VALUES
 	( 100, 103, 109, 'Do you want to change the schedule?',  'I am afraid the current schedule might not be appropriate for everyone. Please feel free to vote and comment on your reasons on the forum.' , TO_TIMESTAMP('2021/12/18 00:00', 'YYYY/MM/DD/ HH24:MI'), True ) ,
 	( 101, 111, 107, 'What should we eat',  '' , TO_TIMESTAMP('2021/11/29 00:00', 'YYYY/MM/DD/ HH24:MI'), False ) ;
