@@ -10,11 +10,11 @@
     <script type="text/javascript" src={{ asset('js/profile.js') }} defer></script>
 @endsection
 
-@section('content')
-    @include('partials.breadcrumbs', ['pages'=>[['name' => 'Home', 'route'=> route('home')],['name' => 'Users',
-    'route'=>route('browseUsers')], ['name' => $user->username,
-    'route'=>route('profile', ['username' => $user->username])]]])
+@include('layouts.breadcrumbs', ['pages'=>[['name' => 'Home', 'route'=> route('home')],['name' => 'Users',
+'route'=>route('browseUsers')], ['name' => $user->username,
+'route'=>route('profile', ['username' => $user->username])]]])
 
+@section('content')
     <div id="small-user-banner" class="col-12 d-xs-flex d-sm-flex d-md-flex d-lg-flex d-xl-none justify-content-center p-4">
         <div class="row w-100 p-0">
             @include('partials.users.smallProfileInfo', compact('user'))

@@ -52,7 +52,8 @@
         </div>
         <div class="collapse {{ $request->filled('organizer') ? 'show' : '' }}" id="filter-organizer">
 
-            <input type="search" autocomplete="off" name="organizer" onchange="this.form.submit()"
+            <input type="search" autocomplete="off" class="input" name="organizer"
+                onchange="this.form.submit()"
                 value="{{ $request->filled('organizer') ? $request->query('organizer') : '' }}">
 
 
@@ -66,7 +67,7 @@
         </div>
         <div class="pb-4 collapse {{ $request->filled('tag') ? 'show' : '' }}" id="filter-tag">
 
-            <input type="search" autocomplete="off" name="tag" onchange="this.form.submit()"
+            <input type="search" autocomplete="off" class="input" name="tag" onchange="this.form.submit()"
                 value="{{ $request->filled('tag') ? $request->query('tag') : '' }}">
 
         </div>

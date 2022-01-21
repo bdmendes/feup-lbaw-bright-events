@@ -1,0 +1,8 @@
+@import url("colors.css");
+
+.breadcrumb * {
+    color: var(--primary-color);
+}
+.breadcrumb li:hover * {
+    color: var(--secondary-color);
+}
