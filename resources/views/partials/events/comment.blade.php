@@ -26,12 +26,6 @@
                     Reply
                 </button>
             @endif
-            <span class="span-btn d-flex flex-colum align-items-center" style="cursor:pointer">
-                <span onclick="switchCommentReplyAreaDisplay({{ $comment->id }});"
-                    id="comment_{{ $comment->id }}_reply_count" style="border-bottom: 1px solid black">
-                    Replies
-                </span>
-            </span>
         @endif
         <div class="d-flex justify-content-between align-items-center gap-4 flex-grow-1">
             @if (Auth::check() && Auth::id() == $comment->commenter_id)

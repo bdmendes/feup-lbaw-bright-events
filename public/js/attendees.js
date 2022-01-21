@@ -5,7 +5,6 @@ function getAttendees() {
       .then((html) => {
         document.getElementById('attendees-list').innerHTML = html;
         updateViewMoreAttendeesButton();
-        console.log('hey');
       });
 }
 

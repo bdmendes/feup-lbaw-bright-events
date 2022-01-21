@@ -56,8 +56,8 @@
     <br>
 
     <div id="trends" class="bg-light py-5">
-        <div class="container">
-            <div class="row trending">
+        <div class="container d-flex flex-column justify-content-center">
+            <div class="row trending mx-0">
                 <div class="col-md-12 col-lg-6 col-xl-6 d-flex flex-column justify-content-center mb-4">
                     <h2 class="trending-header">Trending Events. <span class="text-muted">What everybody is talking
                             about.</span></h2>
@@ -88,16 +88,18 @@
             <hr>
             <br>
 
-            <div class="row trending justify-content-center ">
+            <div class="row trending d-flex flex-column justify-content-center mx-0">
                 <div class="row">
                     <h2 class="trending-header">Trending Organizers. <span class="text-muted">The engines behind our
                             vibrant community.</span></h2>
                     <p class="trending-body">See for yourself who are the dynamic people who keep our community engaged.
                     </p>
                 </div>
-                <div class="row d-flex justify-content-stretch w-100 gap-4 mt-4 mb-4">
+                <div class="d-flex justify-content-center flex-wrap flex-row w-100 gap-4 mt-4 mb-4">
                     @foreach ($users as $user)
-                        @include('partials.users.homeCard', compact('user'))
+                    <div class="d-flex flex-grow-1 flex-wrap col-4 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                            @include('partials.users.homeCard', compact('user'))
+                    </div>
                     @endforeach
                 </div>
                 <div class="w-100 d-flex flex-column align-items-end">

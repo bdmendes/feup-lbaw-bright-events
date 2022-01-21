@@ -5,11 +5,6 @@ function deleteComment(eventId, commentId, parentId) {
     if (response.ok) {
       const comment = document.getElementById('event_comment_' + commentId);
       if (comment != null) comment.remove();
-      if (parentId == null) return;
-      const reply_number =
-          document.getElementById('comment_' + parentId + '_reply_count');
-      const curr_count = parseInt(reply_number.innerHTML);
-      reply_number.innerHTML = curr_count - 1;
     }
   });
 }
@@ -36,11 +31,11 @@ function submitComment() {
   fetch('/api/events/' + eventId + '/comments', {
     method: 'POST',
     body: JSON.stringify(data),
-  })
-      .then((response) => response.text())
-      .then((html) => {
-        element_body.value = '';
-      });
+  }).then((response) => {
+    if (response.ok) {
+      element_body.value = '';
+    }
+  });
 }
 
 function submitReply(parent) {
@@ -59,14 +54,10 @@ function submitReply(parent) {
   })
       .then((response) => response.text())
       .then((html) => {
-        console.log('comment_' + parent + '_replies');
+        alert('hey');
         document.getElementById('comment_' + parent + '_replies')
             .insertAdjacentHTML('afterbegin', html);
         element_body.value = '';
-        const reply_number =
-            document.getElementById('comment_' + parent + '_reply_count');
-        const curr_count = parseInt(reply_number.innerHTML);
-        reply_number.innerHTML = curr_count + 1;
       });
 }
 

@@ -106,18 +106,11 @@
                         </span>
                     </div>
                 </div>
-                @if (Auth::check() && Auth::id() != $event->organizer_id)
-                    <div id="report-container" class="text-end pe-1">
-                        <span class="link-primary" style="font-size: 0.9em;" type="button"
-                            onclick="getReportModal('event', {{ $event->id }});">Report
-                            event</span>
-                    </div>
-                @endif
             </div>
             <div class="event-image d-none d-lg-flex col-lg-6 col-xl-6">
                 <img src="/{{ $event->image->path ?? 'images/group.jpg' }}" class="w-100" />
             </div>
-            <div class="d-flex justify-content-start">
+            <div class="d-flex justify-content-start gap-2">
                 @if ($event->organizer !== null)
                     @if (Auth::check())
                         @if (Auth::user()->id !== $event->organizer->id && !Auth::user()->is_admin)
@@ -131,7 +124,7 @@
                                     method="POST">
                                     @csrf
                                     <input type="hidden" name="accept" id="accept" value="true" />
-                                    <button class="btn btn-primary mx-2" type="submit">Accept invite</button>
+                                    <button class="btn btn-custom" type="submit">Accept invite</button>
                                 </form>
 
                                 <form
@@ -140,19 +133,19 @@
                                     @csrf
                                     <input type="hidden" name="reject" id="reject" value="false" />
 
-                                    <button class="btn btn-primary mx-2" type="submit">Reject invite</button>
+                                    <button class="btn btn-custom" type="submit">Reject invite</button>
                                 </form>
                             @elseif($event->is_private)
 
                                 @if ($event->attendanceRequests()->getQuery()->where('attendee_id', Auth::id())->where('is_invite', 'false')->exists())
-                                    <button class="btn btn-primary mx-2" type="button" disabled>
+                                    <button class="btn btn-custom" type="button" disabled>
                                         Join request pending
                                     </button>
                                 @else
                                     <form action="{{ route('joinRequest', ['eventId' => $event->id]) }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="id" id="id" value="{{ $event->id }}" />
-                                        <button class="btn btn-primary mx-2" type="submit">Request to join</button>
+                                        <button class="btn btn-custom mx-2" type="submit">Request to join</button>
                                     </form>
                                 @endif
                             @else
@@ -164,7 +157,7 @@
                         @else
                             <form action="{{ route('event', ['id' => $event->id]) }}" method="POST">
                                 @csrf
-                                <button class="btn btn-custom mx-2" type="submit">
+                                <button class="btn btn-custom" type="submit">
                                     @if ($event->organizer->id === Auth::user()->id)
                                         Delete event
                                     @endif
@@ -183,6 +176,12 @@
                     @else
                         <button class="btn btn-custom" disabled>Login to attend event</button>
                     @endif
+                @endif
+                @if (Auth::check() && Auth::id() != $event->organizer_id)
+                    <button class="btn btn-custom" style="font-size: 0.9em;" type="button"
+                        onclick="getReportModal('event', {{ $event->id }});">
+                        Report event
+                    </button>
                 @endif
             </div>
         </div>
@@ -269,7 +268,7 @@
                             let eventChannel = pusher.subscribe("event-channel-{{ $event->id }}");
 
                             eventChannel.bind('event', function(data) {
-                                if (data.message === 'comment') {
+                                if (data.message === 'comment' && !data.child) {
                                     remove('comment_area:refreshIcon');
                                     prependComment(data.id);
                                 } else if (data.message === 'poll') {

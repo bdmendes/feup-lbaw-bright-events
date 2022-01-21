@@ -16,6 +16,7 @@ class EventPusher implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
+    public $child;
     public $id;
     private $channels;
     /**
@@ -23,10 +24,11 @@ class EventPusher implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($message, $id,  $event)
+    public function __construct($message, $id, $event, $child = null)
     {
         $this->message = $message;
         $this->id = $id;
+        $this->child = $child;
         $this->channels = ['event-channel-' . $event->id];
     }
 
