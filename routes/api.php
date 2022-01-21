@@ -28,6 +28,7 @@ Route::get('events/{eventId}/comments/count', 'Event\EventApiController@getComme
 Route::post('events/{eventId}/comments', 'Event\EventApiController@submitComment')->name('createComment');
 Route::delete('events/{eventId}/comments/{commentId}', 'Event\EventApiController@deleteComment')->name('deleteComment');
 Route::get('events/{eventId}/comments/{commentId}', 'Event\EventApiController@getComment')->name('getComment');
+Route::post('events/{eventId}/join-requests/{requestId}', 'Event\EventApiController@answerJoinRequest');
 Route::post('events/{eventId}/polls/{pollId}/{pollOption}', 'Event\EventApiController@addVote')->name('addVote');
 Route::delete('events/{eventId}/polls/{pollId}/{pollOption}', 'Event\EventApiController@removeVote')->name('removeVote');
 Route::post('events/{eventId}/polls', 'Event\EventApiController@submitPoll')->name('createPoll');
@@ -35,6 +36,7 @@ Route::get('events/{eventId}/polls', 'Event\EventApiController@getPolls')->name(
 Route::get('events/{eventId}/polls/{pollId}', 'Event\EventApiController@getPoll')->name('getPoll');
 Route::post('events/{eventId}/polls/{pollId}', 'Event\EventApiController@switchPollState')->name('switchPollState');
 Route::delete('events/{eventId}/polls/{pollId}', 'Event\EventApiController@removePoll')->name('removePoll');
+
 
 // Reports
 Route::get('reports/form', 'Report\ReportAPIController@getForm')->name('registerReport');

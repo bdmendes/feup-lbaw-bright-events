@@ -29,8 +29,8 @@ function updatePollOptionFields(optionNumber) {
   } else {
     if (!is_last_child) return;
     const new_elem = document.createElement('input');
-    new_elem.classList.add('form-control');
-    new_elem.classList.add('new_poll_option');
+    new_elem.classList.add('input');
+    new_elem.type = "text";
     const new_id_option = (optionNumber + 1);
     new_elem.id = 'new_poll_option_' + new_id_option;
     new_elem.placeholder = 'Enter option ' + new_id_option;

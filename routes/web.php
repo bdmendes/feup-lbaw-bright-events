@@ -16,11 +16,8 @@ Route::get('events/{id}', "Event\EventController@get")->name('event');
 Route::post('events/{id}', "Event\EventController@disable");
 Route::get('events/{id}/edit', 'Event\EventController@indexEdit')->name('editEvent');
 Route::post('events/{id}/edit', 'Event\EventController@update');
-Route::get('test', function () {
-    event(new App\Events\NotificationReceived('teste'));
-    return "Event has been sent!";
-});
-
+Route::post('events/{eventId}/join-request', 'Event\EventController@joinRequest')->name('joinRequest');
+Route::post('events/{eventId}/invites/{inviteId}', 'Event\EventController@answerInvite')->name('answerInvite');
 // Reports
 Route::get('reports', 'Report\ReportController@index')->name('reportsDash');
 // Route::get('reports/{report_id}', 'Report\ReportController@show');
@@ -32,7 +29,10 @@ Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register', 'Auth\RegisterController@register');
-
+Route::get('recover', 'Auth\RecoverController@showRecoverPasswordForm')->middleware('guest')->name('recoverPassword');
+Route::post('recover', 'Auth\RecoverController@submitRecoverPasswordForm')->name('recoverPassword');
+Route::get('reset', 'Auth\RecoverController@showResetPasswordForm')->middleware('guest')->name('password.reset');
+Route::post('reset', 'Auth\RecoverController@submitResetPasswordForm')->name('password.reset');
 
 //Users
 Route::get('users', 'User\UserController@index')->name('browseUsers');

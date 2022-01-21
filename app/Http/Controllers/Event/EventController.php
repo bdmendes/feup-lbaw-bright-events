@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Events\NotificationReceived;
+use App\Models\Attendance;
 use App\Models\Event;
+use App\Models\Location;
 use App\Models\User;
 use App\Models\File;
 use App\Models\Tag;
@@ -107,6 +109,7 @@ class EventController extends Controller
         ]);
         $event->tags()->attach($request->tags);
 
+
         if ($request->cover_image) {
             $filename = 'event' . $event->id . '.' . $request->cover_image->extension();
             $request->cover_image->move(public_path('storage'), $filename);
@@ -122,9 +125,20 @@ class EventController extends Controller
                 'name' => $request->file('cover_image')->getClientOriginalName()
             ]);
             $event->cover_image_id = $file->id;
-            $event->save();
         }
 
+        if ($request->city) {
+            $location = Location::create([
+                'city' => $request->city,
+                'postcode' => $request->postcode,
+                'country' => $request->country,
+                'name' => $request->display_name,
+                'lat' => $request->lat,
+                'long' => $request->long
+            ]);
+            $event->location_id = $location->id;
+        }
+        $event->save();
         return redirect()->route('event', ['id' => $event->id]);
     }
 
@@ -194,6 +208,20 @@ class EventController extends Controller
             $event->tags()->attach($request->tags);
         }
 
+        if ($request->city) {
+            $event->location->delete();
+
+            $location = Location::create([
+                'city' => $request->city,
+                'postcode' => $request->postcode,
+                'country' => $request->country,
+                'name' => $request->display_name,
+                'lat' => $request->lat,
+                'long' => $request->long
+            ]);
+            $event->location_id = $location->id;
+        }
+
         $event->save();
         return redirect()->route('event', ['id' => $event->id]);
     }
@@ -202,10 +230,31 @@ class EventController extends Controller
     {
         $event = Event::find($id);
         $this->authorize('view', $event);
+        $isAttendee = false;
+        foreach ($event->attendances as $attendance) {
+            if ($attendance->attendee_id == Auth::user()->id) {
+                $isAttendee =  true;
+            }
+        }
         $users = User::where('is_admin', 'false')->get();
         $invites = $event->getInvites();
-        return view("pages.events.view", compact('users', 'event', 'invites'));
+        $userInvite = $event->attendanceRequests()->getQuery()->where('attendee_id', Auth::id())->where('is_invite', 'true')->first();
+        return view("pages.events.view", compact('users', 'event', 'invites', 'isAttendee', 'userInvite'));
     }
+
+    public function joinRequest($id)
+    {
+        $event = Event::find($id);
+        $this->authorize('joinRequest', $event);
+        AttendanceRequest::create([
+            'event_id' => $id,
+            'attendee_id' => Auth::user()->id,
+            'is_invite' => false
+        ]);
+        event(new NotificationReceived('join request', [$event->organizer]));
+        return redirect()->route('event', ['id' => $id]);
+    }
+
 
     public function inviteUser($username)
     {
@@ -223,6 +272,22 @@ class EventController extends Controller
             'attendee_id' => $user->id,
             'is_invite' => true
         ]);
+    }
+
+    public function answerInvite(Request $request)
+    {
+        $event = Event::find($request->eventId);
+        $attendanceRequest = AttendanceRequest::find($request->inviteId);
+
+        event(new NotificationReceived('answer invite ', [$event->organizer]));
+        if ($request->get('accept')) {
+            $attendance = Attendance::create([
+                'event_id' => $event->id,
+                'attendee_id' => Auth::id()
+            ]);
+        }
+        $attendanceRequest->delete();
+        return redirect()->route('event', ['id' => $event->id]);
     }
 
     public function disable(Request $request, $event_id)

@@ -77,7 +77,7 @@ function viewMoreComments() {
     .then((response) => response.text())
     .then((html) => {
       document.getElementById('comment_area')
-        .insertAdjacentHTML('afterend', html);
+        .insertAdjacentHTML('beforeend', html);
       updateViewMoreCommentsButton();
     });
 }

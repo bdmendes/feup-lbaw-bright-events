@@ -1,13 +1,13 @@
 let toggles = document.getElementsByClassName('report-toggle');
 for (let toggle of toggles) {
     toggle.addEventListener('click', function () {
-        if (toggle.firstElementChild.classList.contains('bi-chevron-compact-down')) {
-            toggle.firstElementChild.classList.remove('bi-chevron-compact-down');
-            toggle.firstElementChild.classList.add('bi-chevron-compact-up');
+        if (toggle.firstElementChild.classList.contains('bi-chevron-down')) {
+            toggle.firstElementChild.classList.remove('bi-chevron-down');
+            toggle.firstElementChild.classList.add('bi-chevron-up');
         }
         else {
-            toggle.firstElementChild.classList.remove('bi-chevron-compact-up');
-            toggle.firstElementChild.classList.add('bi-chevron-compact-down');
+            toggle.firstElementChild.classList.remove('bi-chevron-up');
+            toggle.firstElementChild.classList.add('bi-chevron-down');
         }
     }.bind(toggle));
 }

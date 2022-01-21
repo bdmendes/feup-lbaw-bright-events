@@ -17,12 +17,15 @@ function getNotifications(event, showNewOnes = false) {
     let options = {
         method: 'get'
     };
-    fetch(url, options)
+    fetch(url)
         .then((response) => response.text())
         .then(html => {
             remove(refreshId);
             remove("emptyNotifications");
             let notifications = document.getElementById("notifications");
+            if (notifications == null) {
+                return;
+            }
             notifications.insertAdjacentHTML('afterbegin', html);
             let count = parseInt(document.getElementById("notificationCount").innerText);
             remove("notificationCount");
@@ -60,11 +63,14 @@ function getPastNotifications(event = null, size = 10) {
             remove(refreshId);
             let notifications = document.getElementById("notifications");
 
+
+
             notifications.insertAdjacentHTML('beforeend', html);
-
-
             let n = document.getElementById("notificationCount").innerText;
-            if (parseInt(n) < size) {
+            n = parseInt(n);
+            if (document.getElementsByClassName("notification").length > 0)
+                remove("emptyNotifications");
+            if (n < size) {
                 console.log("n " + n + " size = " + size);
                 remove("getPastNotifications");
             }
@@ -116,7 +122,6 @@ function notificationEdit(id, isRead) {
             "Accept": "application/json",
             "X-CSRF-Token": $('input[name="_token"]').val()
         }
-
     };
     fetch(url, options)
         .then((response) => response.text())
@@ -204,3 +209,4 @@ function addGrowlMessage(message, type) {
     setTimeout(() => { document.getElementById("growl" + id).classList.add("opacity0"); }, 3000);
     setTimeout(() => { document.getElementById("growl" + id).remove(); }, 4000);
 }
+window.addEventListener('load', getNotifications);

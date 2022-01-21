@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div>
+    <div class="p-4">
         <h2>Reports Dashboard</h2>
 
         <div class="mb-4" id="order">
