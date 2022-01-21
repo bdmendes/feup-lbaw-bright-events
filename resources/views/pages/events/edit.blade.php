@@ -27,7 +27,7 @@
             <h3>Event fundamentals. <span class="text-muted">What everyone should know.</span></h3>
             <div class="col-lg-6 col-12">
                 <h4>Event Title:</h4>
-                <input id="title"
+                <input class="input" id="title"
                     type="text"
                     name="title"
                     class="col-lg-8 col-12
@@ -43,7 +43,7 @@
             </div>
             <div class="col-lg-6 col-12">
                     <h4>Event Date:</h4>
-                    <input type="datetime-local" name="date"
+                    <input class="input" type="datetime-local" name="date"
                         id="date"
                         onchange="removeErrors('date');"
                         @if (!empty($event)) value="{{ $event->date->format('Y-m-d\TH:i') }}" @endif
@@ -72,47 +72,47 @@
         <div class="event-form w-100 d-flex flex-column border rounded p-3 gap-3">
             <h3>Location.<span class="text-muted"> Where the action will unfold.</span></h3>
             <div class="d-flex gap-4 align-items-center justify-content-center">
-                <input class="input" type="text" id="mapGlobalFilter" name="body" placeholder="Introduce a location...">
+                <input class="input" class="input" type="text" id="mapGlobalFilter" name="body" placeholder="Introduce a location...">
                 <button id="submit_comment_button" class="btn btn-custom" type="button"
                     onclick="searchMap();">Submit</button>
             </div>
 
-            <input  id="lat" name="lat" type="hidden"
+            <input class="input"  id="lat" name="lat" type="hidden"
                     value="{{$event->location->lat ?? ''}}" />
-            <input id="long" name="long" type="hidden"
+            <input class="input" id="long" name="long" type="hidden"
                     value="{{$event->location->long ?? ''}}" />
             
             <div class="d-flex flex-column">
                 <h4>City:</h4>
-                <input id="city" name="city"
+                <input class="input" id="city" name="city"
                         type="text" class="transparent"
                         value="{{$event->location->city ?? ''}}"/>
             </div>
 
             <div class="d-flex flex-column">
                 <h4>Country:</h4>
-                <input id="country" name="country" type="text" class="transparent"
+                <input class="input" id="country" name="country" type="text" class="transparent"
                         readonly="readonly"
                         value="{{$event->location->country ?? ''}}"/>
             </div>
 
             <div class="d-flex flex-column">
                 <h4>Display name:</h4>
-                <input  id="display_name" name="display_name"
+                <input class="input"  id="display_name" name="display_name"
                         type="text" class="transparent"
                         value="{{$event->location->name ?? ''}}"/>
             </div>
 
             <div class="d-flex flex-column">
                 <h4>Post-code:</h4>
-                <input id="postcode" name="postcode"
+                <input class="input" id="postcode" name="postcode"
                         type="text" class="transparent"
                         readonly="readonly"
                         value="{{$event->location->postcode ?? ''}}"/>
             </div>
 
             @if (!empty($event))
-                <input type="hidden" name="id" id="id" value="{{ $event->id }}" />
+                <input class="input" type="hidden" name="id" id="id" value="{{ $event->id }}" />
             @endif
         </div>
 
@@ -120,7 +120,7 @@
             <h3>Optionals. <span class="text-muted">For all the fine-tuning you need.</span></h3>
             <div class="col-lg-6 col-12">
                 <h4>Cover Image:</h4>
-                <input id="cover_image" name="cover_image" type="file" class="w-100"
+                <input class="input" id="cover_image" name="cover_image" type="file" class="w-100"
                     onchange="remove('cover_imageError');" />
                 @if ($errors->has('cover_image'))
                     <span id="cover_imageError" class="error">
@@ -164,8 +164,8 @@
                         @endif
                     </div>
                 </div>
-                <div class="col-lg-6 col-12 d-flex gap-2">
-                    <input list="tagOptions" id="selec" placeholder="Search tag...">
+                <div class="col-lg-6 col-12">
+                    <input class="input" list="tagOptions" id="selec" placeholder="Search tag...">
                     <datalist id="tagOptions">
                         @foreach ($tags as $tag)
                         <option id="{{ $tag->name }}" data-id="t{{ $tag->id }}" value="{{ $tag->name }}">
