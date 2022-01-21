@@ -1,5 +1,5 @@
 <footer class="footer mt-auto d-block" id="footer">
-    <div class="w-100 py-2 d-flex justify-content-between align-items-center">
+    <div class="w-100 p-2 d-flex justify-content-between align-items-center">
         <div class="d-inline-flex align-items-center">
             @Bright Events 2021
         </div>
