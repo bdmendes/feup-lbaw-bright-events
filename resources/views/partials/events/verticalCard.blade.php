@@ -22,6 +22,7 @@
                         </h4>
                     </a>
                 </div>
+                @if ($display_tags)
                 <div class="d-block mt-2 p-2">
                     @if ($event->tags ?? '')
                         @foreach ($event->tags as $tag)
@@ -31,6 +32,7 @@
                         <span>No tags</span>
                     @endif
                 </div>
+                @endif
             </div>
         </div>
     </div>

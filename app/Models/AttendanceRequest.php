@@ -11,7 +11,7 @@ class AttendanceRequest extends Model
     protected $table = 'attendance_requests';
 
     protected $fillable = [
-        'event_id', 'attendee_id', 'is_invite'
+        'event_id', 'attendee_id', 'is_invite', 'is_accepted'
     ];
 
     public function attendee()
