@@ -30,12 +30,13 @@ class UserController extends Controller
         if (Auth::check()) {
             $invitedEvents = Event::whereExists(function ($query) {
                 $query->select(DB::raw(1))->from('attendance_requests')->whereColumn('attendance_requests.event_id', 'events.id')->whereColumn('attendance_requests.attendee_id', DB::raw(Auth::id()))->whereColumn('attendance_requests.is_invite', DB::raw('true'))->whereColumn('attendance_requests.is_accepted', DB::raw('false'));
-            })->get();
+            });
         }
         return view('pages.users.view', [
             'user' => $user,
-            'attended_events' => $user->attended_events(),
-            'invited_events' => $invitedEvents ?? null
+            'attended_events' => $user->attended_events()->paginate(4, ['*'], 'attended_events'),
+            'invited_events' => $invitedEvents->paginate(4, ['*'], 'invited_events'),
+            'events' => $user->events()->where('is_disabled', 'false')->paginate(4, ['*'], 'events'),
         ]);
     }
 
