@@ -720,6 +720,30 @@ CREATE INDEX user_notification_idx  ON lbaw2134.notifications USING HASH (addres
 -----------------------------------------------------
 --------------------Populate database----------------
 -----------------------------------------------------
+
+INSERT INTO lbaw2134.files values(1000, 'storage/user100.jpg', 'photo.jpg'),
+                                 (1001, 'storage/user101.jpg', 'photo.jpg'),
+                                 (1002, 'storage/user102.jpg', 'photo.jpg'),
+                                 (1003, 'storage/user103.jpg', 'photo.jpg'),
+                                 (1004, 'storage/user104.jpg', 'photo.jpg'),
+                                 (1005, 'storage/user105.jpg', 'photo.jpg'),
+                                 (1006, 'storage/user106.jpg', 'photo.jpg'),
+                                 (1007, 'storage/user107.jpg', 'photo.jpg'),
+                                 (1008, 'storage/user108.jpg', 'photo.jpg'),
+                                 (1009, 'storage/user109.jpg', 'photo.jpg'),
+                                 (1010, 'storage/event100.jpg', 'myevent.jpg'),
+                                 (1011, 'storage/event101.jpg', 'myevent.jpg'),
+                                 (1012, 'storage/event102.jpg', 'myevent.jpg'),
+                                 (1013, 'storage/event103.jpg', 'myevent.jpg'),
+                                 (1014, 'storage/event104.jpg', 'myevent.jpg'),
+                                 (1015, 'storage/event105.jpg', 'myevent.jpg'),
+                                 (1016, 'storage/event106.jpg', 'myevent.jpg'),
+                                 (1017, 'storage/event107.jpg', 'myevent.jpg'),
+                                 (1018, 'storage/event108.jpg', 'myevent.jpg'),
+                                 (1019, 'storage/event109.jpg', 'myevent.jpg'),
+                                 (1020, 'storage/event110.jpg', 'myevent.jpg'),
+                                 (1021, 'storage/event111.jpg', 'myevent.jpg');
+
 INSERT INTO lbaw2134.LOCATIONS values
 	( 100, null, 'Soito', '40.4690667', '-8.1110545',  '484 Weeping Birch Street', 'Portugal' ),
 	( 101, null, 'Craoteil', '48.7803815' , '2.4549884' , '42514 Old Gate Junction', 'France' ),
@@ -735,31 +759,31 @@ INSERT INTO lbaw2134.LOCATIONS values
 	( 111, null, 'Mantes-la-Jolie', '48.9990813', '1.6899473', '5997 Burning Wood Way', 'France' ),
 	( 112, null, 'Aco', '-9.3601019' , '-77.553344', '5 Redwing Center', 'Peru' );
 INSERT INTO lbaw2134.USERS VALUES
-	 (110, 'admin@admin.com', 'admin', '$2y$10$2ZQsdg13mHYK6QeLEVjPPOp5sJmAjlOrUU7tRlIpa8tMKB6EW5Ef2', 'LBAW2134', True, '','null', date '1978-09-28', False, 'Male', null ) ,
-     (100, 'danial1978@gmail.com', 'danial1978', '$2y$10$WNIrrB/6C7yPQpvScdXSs.y/mLdxJ8PajD0YxWnugGEfAJsqtCh2e', 'Breanda Marple', False, 'Hi! I amm Danial but my friends call me Dani.
-I love the outdoors, camping and adrenaline pumping activities.','null', date '1978-09-28', False, 'Female', null ) ,
-	 (101, 'PedroLLiao@rhyta.com', 'pedrolliao', '$2y$10$7clHki3BzBs..oeY/Ym6vuGOfUe7xeahf.JjVBumBxrTp4iNCKjpK', 'Pedro Liao', False, '','null', date '1954-07-28', False, 'Male', null ) ,
-	 (102, 'MatthewERaleigh@dayrep.com', 'rayleigh', '$2y$10$vgqw.lujkVX0Txekfw0SbegdAb2OdfoUWA8haJVDgb6mG4NpvAAZ2', 'Matthew Raleigh', False, '','null', date '1998-02-21', False, 'Male', null ) ,
-	 (103, 'JuanitaWPayton@dayrep.com', 'juanitaJuan', '$2y$10$PIxT1sCJn.q6qNc.aJe7nuJ014oLBTKjpFPdKE6Ka.yHy0gCmsXJy', 'Juanita Payton', False, '','null', date '1982-01-18', False, 'Female', null ) ,
-	 (104, 'LouisJAvelar@jourrapide.com', 'louislit', '$2y$10$svD6JX.6Aoh12j7z1Hlct.oMIwtZKM1K9mvAgTs53XBm17wgvMS9O', 'Louis Avelar', False, '','null', date '1982-04-01', False, 'Male', null ) ,
-	 (105, 'MaryMHolland@dayrep.com', 'maryland', '$2y$10$zFCrQueN5tCr4s9ZrDCFHuj7nD8ERM1pImghymJpf7LdcG9db6wQa', 'Mary Holland', False, '','null', date '1991-5-21', False, 'Female', null ) ,
-	 (106, 'WilliamSKing@teleworm.us', 'willking', '$2y$10$x3tHiP27A6F0Jm6f03ZvrOv4Ua1e9vuqbWOi5pW.TbDbc1vSxMoyO', 'William King', False, '','null', date '1998-06-27', False, 'Male', null ) ,
-	 (107, 'MichaelVJones@jourrapide.com', 'michaelbjones', '$2y$10$YZYNFof5Jwim1OcS.Z8xI.98vbDubcawtkgmkQySddPuSuNLisCGe', 'Michael Jones', False, '','null', date '1997-12-12', False, 'Male', null ) ,
-	 (108, 'MeredithMFry@jourrapide.com', 'meredithfried', '$2y$10$OqRoswFxgz2xK5wUv78L2eFB2go2.fAmkUIoYsWObuUJiRNShgnZK', 'Meredith Fry', False, '','null', date '2001-11-20', False, 'Female', null ) ,
-	 (109, 'PeterLWhite@armyspy.com', 'peterpeter', '$2y$10$QUc83MLokA/gh6H7.s6AH.pW2aLjaF/6CeM.mlCiuvjaXKI2iF4Na', 'Peter White', False, '','null', date '2000-01-09', False, 'Male', null ) ;
+	 (110, 'admin@admin.com', 'admin', '$2y$10$2ZQsdg13mHYK6QeLEVjPPOp5sJmAjlOrUU7tRlIpa8tMKB6EW5Ef2', 'LBAW2134', True, '','null', date '1978-09-28', False, 'Male', NULL ) ,
+     (100, 'Maddy1990@gmail.com', 'maddy_90', '$2a$12$0WOC0KQt71B8VxlaLP6fjOkg.iHAyZ1W69vP9D6TMlFxg1DHRtJcC', 'Madison Clarck', False, 'Hello my sweet friends! Any one looking for animal events or is it just me?','null', date '1978-09-28', False, 'Female', 1000 ) ,
+	 (101, 'olliewilliams97@hotmail.com', 'ollie97', '$2a$12$mXhFcfqdheRS/m8Cm19D3eTCnL7SaElFtxAekRYHYl.oEdf4VwzFq', 'Oliver Logan Williams', False, 'Hi! I am Oliver but my friends call me Ollie.
+I love the outdoors, camping and adrenaline pumping activities.','null', date '1995-07-28', False, 'Male', 1001 ) ,
+	 (102, 'Lam_heart2002@hotmail.com', 'lam_2002', '$2a$12$2TDqL6scuySxzq9a3KPNWuULz4Fu.nlHjSGgeSS5TPqYYRAb46ypa', 'Ah Lam Lee', False, 'Hello friends! Is there any gardening event? count with me','null', date '1998-02-21', False, 'Female', 1002 ) ,
+	 (103, 'Green_Alex@hotmail.com', 'alexaTheGreen', '$2a$12$fbt4dx5fUN3pZrtGe1qStu8L4QlFw7HKpXMRfg5h2EhMdznxuXKae', 'Alexa Green', False, 'Hallo! Guten Tag','null', date '1972-01-18', False, 'Female', 1003 ) ,
+	 (104, 'Alfred_Kenny87@hotmail.com', 'alex_oficcical_ken', '$2a$12$OToM.S3uTjdQDM0F5FQy8eHjoFfz2Jp.Ejtn4FjdNTrbPyTlTJbZu', 'Alfred Kenneally', False, '','null', date '1982-04-01', False, 'Male', 1004 ) ,
+	 (105, 'Kazal_Ali80@hotmail.com', 'ali_1980', '$2a$12$/WzLGLVKIanzCETceVF8kOFXQ9LZ9EFqDHRsOzsWnAjLb6NzxwJYe', 'Ali Kazal', False, 'Hello guys. Se you in a nature and animals event','null', date '1991-5-21', False, 'Male', 1005 ) ,
+	 (106, 'WilliamSKing@teleworm.us', 'willking', '$2a$12$gP28bj0vQUy060kcyLGmWuOXMM/dUuvDEq28NDGakUHRYSaA6Qidi', 'William King', False, '','null', date '1998-06-27', False, 'Male', 1006 ) ,
+	 (107, 'MichaelVJones@jourrapide.com', 'michaelbjones', '$2a$12$V1Uc4zMdnLbKcwKSPjtwueGSWTaxQIlPuslEGlJ9pTJ.3kSnh66XG', 'Michael Jones', False, '','null', date '1997-12-12', False, 'Male', 1007 ) ,
+	 (108, 'ValRicci_61@gmail.com', 'valricci61', '$2a$12$iWnJW87iEMOsDz1omhtq4O70XzW6RpVA/8MdBWvlYLU9SHnBmId1i', 'Valentina Ricci', False, 'Hello guys, my name is Valentina! Lets have fun together','null', date '1990-11-20', False, 'Female', 1008) ,
+	 (109, 'PeterLWhite@armyspy.com', 'peterpeter', '$2y$10$QUc83MLokA/gh6H7.s6AH.pW2aLjaF/6CeM.mlCiuvjaXKI2iF4Na', 'Peter White', False, '','null', date '2000-01-09', False, 'Male', 1009 ) ;
 INSERT INTO lbaw2134.EVENTS VALUES
-	 (100, 'Vegan for beginners' ,'More and more people are interested in vegan/plant-based eating. Some are just curious, some want to get their feet wet, and some are ready to come to the V-side!', TO_TIMESTAMP('2021/12/29 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 105, 100) ,
-	 (101, 'Begin your taichi journey' ,'This series does seasonal training to help you develop a wide range of skills which will enhance both your health and your practice. We practices basic Tai Chi skills as posting, walking, breathing, stretching, energy work, bone tapping and hand movements.', TO_TIMESTAMP('2021/12/03 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 109, 101) ,
-	 (102, 'Knee pain corrective exercise workshop' ,'If you or a loved one is experiencing hip or knee pain, you wont want to miss this special event. This is an interactive workshop where you will perform the exercises while sitting at your computer.', TO_TIMESTAMP('2021/12/09 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 106, 102) ,
-	 (103, 'Baking from Scratch 101' ,'Formerly known as Puff Pastry 101, weve shifted to include fun baking projects of all kinds! Bring a friend and join us on Instagram Live!', TO_TIMESTAMP('2021/12/18 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 109, 103) ,
-	 (104, 'Tech career fair' ,'We will be hosting a Tech Career Fair with our hiring partners from lbaw2134.fast growing startups and Fortune 500 companies in technology in the US/Canada.  There will be a focus on helping companies achieve their diversity and inclusivity initiative with more diverse candidates to their talent pool.', TO_TIMESTAMP('2021/12/10 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 102, 104) ,
-	 (105, 'Gentle yoga for terrible times' ,'Human beings are not meant to be in constant fight, flight, or freeze mode. Chronic stress takes a devastating toll on our mental and physical well-being. If you are exhausted, stressed out, burnt out, or just looking to relax and nourish your mind, body, and spirit, please join me for 75 minutes of gentle yoga', TO_TIMESTAMP('2021/12/17 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 109, 105) ,
-	 (106, 'The antidote: Womens circle' ,'The Antidote: Womens Circle is a virtual event that uses meditation and reflection to help women gracefully navigate todays world.', TO_TIMESTAMP('2021/12/16 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 102, 106) ,
-	 (107, 'Health and Happiness Workshop' ,'The pandemic environment, personal problems and work pressure take a toll on our body and mind. The Art of Living brings you this free holistic and integrated workshop called the Health and Happiness which provide unique tools and techniques which help combat stress accumulated in our daily, modern life.', TO_TIMESTAMP('2021/12/10 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', null, 109, 107) ,
-	 (108, 'Doge Disco Party' ,'Our ultimate dream is to create a Doge-Powered Party Metaverse. A new Party Layer that will sit atop reality, allowing anyone, anywhere to instantly step into a parallel dimension alive with sound, light and positive vibes.', TO_TIMESTAMP('2021/12/01 00:00', 'YYYY/MM/DD/ HH24:MI'), True, False, 'due', null, 109, 108) ,
-	 (109, 'Lets Talk... Conversations on Race, Equity, & Belonging' ,'There is still SO MUCH to talk about when it comes to systemic racism and often times there is not a safe space with which to have these conversations, ask questions, self reflect, learn from lbaw2134.others and identify the next action step.', TO_TIMESTAMP('2021/12/18 00:00', 'YYYY/MM/DD/ HH24:MI'), True, False, 'due', null, 108, 109) ,
-	 (110, 'Black Singles Virtual Speed Dating' ,'Join the Filter Off free virtual speed dating event! This event is for all ages.', TO_TIMESTAMP('2021/12/17 00:00', 'YYYY/MM/DD/ HH24:MI'), True, False, 'due', null, 104, 110) ,
-	 (111, 'SocietyX :The Magic Portal: Healing Through the Tarot' ,'Have you ever wanted to learn more about the tarot but didnt know where to start? This year the Magic Portal will be teaching the art of the tarot! Each class for the next 78 weeks will be dedicated to teaching each card of this well known divination practice.', TO_TIMESTAMP('2021/11/29 00:00', 'YYYY/MM/DD/ HH24:MI'), True, False, 'due', null, 107, 111) ;
+	 (100, 'Vegan for beginners' ,'More and more people are interested in vegan/plant-based eating. Some are just curious, some want to get their feet wet, and some are ready to come to the V-side!', TO_TIMESTAMP('2021/12/29 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', 1010, 105, 100) ,
+	 (101, 'Begin your taichi journey' ,'This series does seasonal training to help you develop a wide range of skills which will enhance both your health and your practice. We practices basic Tai Chi skills as posting, walking, breathing, stretching, energy work, bone tapping and hand movements.', TO_TIMESTAMP('2021/12/03 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', 1011, 109, 101) ,
+	 (102, 'Knee pain corrective exercise workshop' ,'If you or a loved one is experiencing hip or knee pain, you wont want to miss this special event. This is an interactive workshop where you will perform the exercises while sitting at your computer.', TO_TIMESTAMP('2021/12/09 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', 1012, 106, 102) ,
+	 (103, 'Baking from Scratch 101' ,'Formerly known as Puff Pastry 101, weve shifted to include fun baking projects of all kinds! Bring a friend and join us on Instagram Live!', TO_TIMESTAMP('2021/12/18 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', 1013, 109, 103) ,
+	 (104, 'Tech career fair' ,'We will be hosting a Tech Career Fair with our hiring partners from lbaw2134.fast growing startups and Fortune 500 companies in technology in the US/Canada.  There will be a focus on helping companies achieve their diversity and inclusivity initiative with more diverse candidates to their talent pool.', TO_TIMESTAMP('2021/12/10 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', 1014, 102, 104) ,
+	 (105, 'Gentle yoga for terrible times' ,'Human beings are not meant to be in constant fight, flight, or freeze mode. Chronic stress takes a devastating toll on our mental and physical well-being. If you are exhausted, stressed out, burnt out, or just looking to relax and nourish your mind, body, and spirit, please join me for 75 minutes of gentle yoga', TO_TIMESTAMP('2021/12/17 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', 1015, 109, 105) ,
+	 (106, 'The antidote: Womens circle' ,'The Antidote: Womens Circle is a virtual event that uses meditation and reflection to help women gracefully navigate todays world.', TO_TIMESTAMP('2021/12/16 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', 1016, 102, 106) ,
+	 (107, 'Health and Happiness Workshop' ,'The pandemic environment, personal problems and work pressure take a toll on our body and mind. The Art of Living brings you this free holistic and integrated workshop called the Health and Happiness which provide unique tools and techniques which help combat stress accumulated in our daily, modern life.', TO_TIMESTAMP('2021/12/10 00:00', 'YYYY/MM/DD/ HH24:MI'), False, False, 'due', 1017, 109, 107) ,
+	 (108, 'Doge Disco Party' ,'Our ultimate dream is to create a Doge-Powered Party Metaverse. A new Party Layer that will sit atop reality, allowing anyone, anywhere to instantly step into a parallel dimension alive with sound, light and positive vibes.', TO_TIMESTAMP('2021/12/01 00:00', 'YYYY/MM/DD/ HH24:MI'), True, False, 'due', 1018, 109, 108) ,
+	 (109, 'Lets Talk... Conversations on Race, Equity, & Belonging' ,'There is still SO MUCH to talk about when it comes to systemic racism and often times there is not a safe space with which to have these conversations, ask questions, self reflect, learn from lbaw2134.others and identify the next action step.', TO_TIMESTAMP('2021/12/18 00:00', 'YYYY/MM/DD/ HH24:MI'), True, False, 'due', 1019, 108, 109) ,
+	 (110, 'Black Singles Virtual Speed Dating' ,'Join the Filter Off free virtual speed dating event! This event is for all ages.', TO_TIMESTAMP('2021/12/17 00:00', 'YYYY/MM/DD/ HH24:MI'), True, False, 'due', 1020, 104, 110) ,
+	 (111, 'SocietyX :The Magic Portal: Healing Through the Tarot' ,'Have you ever wanted to learn more about the tarot but didnt know where to start? This year the Magic Portal will be teaching the art of the tarot! Each class for the next 78 weeks will be dedicated to teaching each card of this well known divination practice.', TO_TIMESTAMP('2021/11/29 00:00', 'YYYY/MM/DD/ HH24:MI'), True, False, 'due', 1021, 107, 111) ;
 INSERT INTO lbaw2134.TAGS VALUES
 	 (100, 'fun') ,
 	 (101, 'science') ,
