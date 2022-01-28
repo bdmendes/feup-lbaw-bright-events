@@ -25,72 +25,269 @@ security:
   - cookieAuth: []
 
 paths:
-  ### Static pages ###
-  /:
+  ### Authentication ###
+  /login:
     get:
-      operationId: R401
-      summary: "R401: Home page"
-      description: "Provide home page. Access: NAU, AU, AUO, ADM"
+      operationId: R101
+      summary: "R101: Login page"
+      description: "Provide login form. Access: NAU"
       tags:
-        - "M04: Static Pages"
+        - "M01: Authentication"
       responses:
         "200":
-          description: "OK. Show home page (UI01)"
+          description: "OK. Show login form (UI09)"
+    post:
+      operationId: R102
+      summary: "R102: Login action"
+      description: "Process the login form. Access: NAU"
+      tags:
+        - "M01: Authentication"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username_or_email:
+                  type: string
+                password:
+                  type: string
+                  format: password
+              required:
+                - username_or_email
+                - password
+      responses:
+        "302":
+          description: "Post credentials processing redirect"
+          headers:
+            Location:
+              description: "Redirect path"
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Authentication succeeded. Redirecting to home page (UI01)"
+                  value: "/home"
+                302Failure:
+                  description: "Authentication failed. Redirect to login form (UI09)"
+                  value: "/login"
+            Set-Cookie:
+              description: "Session token"
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Current user login session brightevents_session"
+                  value: brightevents_session=cookie; Path=/; HttpOnly
+                302Failure:
+                  description: "Invalid login session"
+                  value: ""
 
-  /privacy-policy:
-    get:
-      operationId: R402
-      summary: "R402: Privacy Policy page"
-      description: "Provide privacy policy page. Access: NAU, AU, AUO, ADM"
+  /logout:
+    post:
+      operationId: R103
+      summary: "R103: Logout action"
+      description: "Logout the currently authenticated user. Access: AU, ADM"
       tags:
-        - "M04: Static Pages"
+        - "M01: Authentication"
+      security:
+        - cookieAuth: []
       responses:
-        "200":
-          description: "OK. Show privacy policy page (UI02)"
+        "302":
+          description: "Success: Post logout redirect"
+          headers:
+            Location:
+              description: "Redirect path"
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Logout succeeded. Redirecting to home page (UI01)"
+                  value: "/"
+        "401":
+          description: "Unauthorized. User is not logged in"
+          headers:
+            Location:
+              description: "Redirect path"
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Logout failed. Redirecting to home page (UI01)"
+                  value: "/"
 
-  /terms-and-conditions:
+  /register:
     get:
-      operationId: R403
-      summary: "R403: Terms and Conditions page"
-      description: "Provide terms and conditions page. Access: NAU, AU, AUO, ADM"
+      operationId: R104
+      summary: "R104: Register page"
+      description: "Provide Register form. Access: NAU"
       tags:
-        - "M04: Static Pages"
+        - "M01: Authentication"
       responses:
         "200":
-          description: "OK. Show terms and conditions page (UI03)"
+          description: "OK. Show register form (UI08)"
+    post:
+      operationId: R105
+      summary: "R105: Register action"
+      description: "Process the Register form. Access: NAU"
+      tags:
+        - "M01: Authentication"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                [name, username, email, password, password_confirm, gender]
+              properties:
+                name:
+                  type: string
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                password_confirm:
+                  type: string
+                  format: password
+                gender:
+                  type: string
+                  enum: ["male, female, other"]
+      responses:
+        "302":
+          description: "Post credentials processing redirect"
+          headers:
+            Location:
+              description: "Redirect path"
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Authentication succeeded. Redirect to user profile (UI01)"
+                  value: "/home"
+                302Failure:
+                  description: "Authentication failed. Redirect to register form (UI08)"
+                  value: "/register"
+            Set-Cookie:
+              description: "Login session cookie"
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Current user login session brightevents_session"
+                  value: brightevents_session=cookie; Path=/; HttpOnly
+                302Failure:
+                  description: "Invalid login session"
+                  value: ""
 
-  /faq:
+  /recover:
     get:
-      operationId: R404
-      summary: "R404: FAQ page"
-      description: "Provide frequently asked questions page. Access: NAU, AU, AUO, ADM"
+      operationId: R106
+      summary: "R106: Recover Password page"
+      description: "Provide Recover Password form. Access: NAU"
       tags:
-        - "M04: Static Pages"
+        - "M01: Authentication"
       responses:
         "200":
-          description: "OK. Show FAQ page (UI04)"
+          description: "OK. Show recover password form (UI23)"
+    post:
+      operationId: R107
+      summary: "R107: Recover Password action"
+      description: "Process the Recover Password form. Access: NAU"
+      tags:
+        - "M01: Authentication"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                email_confirm:
+                  type: string
+                  format: email
+              required:
+                - email
+                - email_confirm
+      responses:
+        "302":
+          description: "Success: Post recover credentials processing redirect"
+          headers:
+            Location:
+              description: "Redirect path"
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Recover succeeded. Redirect to home page (UI01)"
+                  value: "/"
+                302Failure:
+                  description: "Recover failed. Redirect to login form (UI09)"
+                  value: "/login"
 
-  /about:
+  /reset:
     get:
-      operationId: R405
-      summary: "R405: About page"
-      description: "Provide about page. Access: NAU, AU, AUO, ADM"
+      operationId: R108
+      summary: "R108: Show reset password form"
+      description: "Shows form to reset an user's password, after a successful password recovery request. Submission only succeds if the token in the path parameter is valid. This token is associated with a recover password request and therefora a single user. Accessible to NAU."
       tags:
-        - "M04: Static Pages"
+        - "M01: Authentication"
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          description: "Password recovery token"
       responses:
         "200":
-          description: "OK. Show About page (UI05)"
-
-  /contacts:
-    get:
-      operationId: R406
-      summary: "R406: Contact Us page"
-      description: "Provide Contact Us page. Access: NAU, AU, AUO, ADM"
-      tags:
-        - "M04: Static Pages"
+          description: "OK. Show reset password form."
+    post:
+      operationId: R109
+      summary: "R109: Submit reset password form"
+      description: "Submits the form with new passord info"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                password_confirm:
+                  type: string
+                  format: password
+              required:
+                - email
+                - password
+                - password_confirm
       responses:
-        "200":
-          description: "OK. Show Contact Us page (UI06)"
+        "302":
+          description: "Success: Post submit reset password processing redirect"
+          headers:
+            Location:
+              description: "Redirect path"
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Recover succeeded. Redirect to home page (UI01)"
+                  value: "/"
+                302Failure:
+                  description: "Recover failed. Redirect to the reset password form"
+                  value: "/reset?token={token}"
 
   ### Users ###
   /users:
@@ -255,408 +452,6 @@ paths:
           description: "Unauthorized. User must be logged in"
         "500":
           description: "Internal server error. Invalid data"
-
-  ### Authentication ###
-  /login:
-    get:
-      operationId: R101
-      summary: "R101: Login page"
-      description: "Provide login form. Access: NAU"
-      tags:
-        - "M01: Authentication"
-      responses:
-        "200":
-          description: "OK. Show login form (UI09)"
-    post:
-      operationId: R102
-      summary: "R102: Login action"
-      description: "Process the login form. Access: NAU"
-      tags:
-        - "M01: Authentication"
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  format: email
-                password:
-                  type: string
-                  format: password
-              required:
-                - email
-                - password
-      responses:
-        "302":
-          description: "Post credentials processing redirect"
-          headers:
-            Location:
-              description: "Redirect path"
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: "Authentication succeeded. Redirecting to user profile (UI19)"
-                  value: "/users/{id}"
-                302Failure:
-                  description: "Authentication failed. Redirect to login form (UI09)"
-                  value: "/login"
-            Set-Cookie:
-              description: "Login session cookie"
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: "Current user login session JSESSIONID"
-                  value: JSESSIONID=cookie; Path=/; HttpOnly
-                302Failure:
-                  description: "Invalid login session"
-                  value: ""
-
-  /logout:
-    post:
-      operationId: R103
-      summary: "R103: Logout action"
-      description: "Logout the currently authenticated user. Access: AU, ADM"
-      tags:
-        - "M01: Authentication"
-      security:
-        - cookieAuth: []
-      responses:
-        "302":
-          description: "Success: Post logout redirect"
-          headers:
-            Location:
-              description: "Redirect path"
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: "Logout succeeded. Redirecting to home page (UI01)"
-                  value: "/"
-        "401":
-          description: "Unauthorized. User is not logged in"
-          headers:
-            Location:
-              description: "Redirect path"
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: "Logout failed. Redirecting to home page (UI01)"
-                  value: "/"
-
-  /register:
-    get:
-      operationId: R104
-      summary: "R104: Register page"
-      description: "Provide Register form. Access: NAU"
-      tags:
-        - "M01: Authentication"
-      responses:
-        "200":
-          description: "OK. Show register form (UI08)"
-    post:
-      operationId: R105
-      summary: "R105: Register action"
-      description: "Process the Register form. Access: NAU"
-      tags:
-        - "M01: Authentication"
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              required: [username, password, name, email, gender]
-              properties:
-                username:
-                  type: string
-                password:
-                  type: string
-                  format: password
-                name:
-                  type: string
-                email:
-                  type: string
-                  format: email
-                birth_date:
-                  type: string
-                  format: date
-                bio:
-                  type: string
-                picture:
-                  type: string
-                  format: binary
-                gender:
-                  type: string
-                  enum: ["male, female, other"]
-      responses:
-        "302":
-          description: "Post credentials processing redirect"
-          headers:
-            Location:
-              description: "Redirect path"
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: "Authentication succeeded. Redirect to user profile (UI19)"
-                  value: "/users/{id}"
-                302Failure:
-                  description: "Authentication failed. Redirect to register form (UI08)"
-                  value: "/register"
-            Set-Cookie:
-              description: "Login session cookie"
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: "Current user login session JSESSIONID"
-                  value: JSESSIONID=cookie; Path=/; HttpOnly
-                302Failure:
-                  description: "Invalid login session"
-                  value: ""
-
-  /recover:
-    get:
-      operationId: R106
-      summary: "R106: Recover Password page"
-      description: "Provide Recover Password form. Access: NAU"
-      tags:
-        - "M01: Authentication"
-      responses:
-        "200":
-          description: "OK. Show recover password form (UI23)"
-    post:
-      operationId: R107
-      summary: "R107: Recover Password action"
-      description: "Process the Recover Password form. Access: NAU"
-      tags:
-        - "M01: Authentication"
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                username:
-                  type: string
-                email:
-                  type: string
-                  format: email
-              required:
-                - username
-                - email
-      responses:
-        "302":
-          description: "Success: Post recover credentials processing redirect"
-          headers:
-            Location:
-              description: "Redirect path"
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: "Recover succeeded. Redirect to home page (UI01)"
-                  value: "/"
-                302Failure:
-                  description: "Recover failed. Redirect to login form (UI09)"
-                  value: "/login"
-
-  ### Administration ###
-  /api/reports/event:
-    post:
-      operationId: R501
-      summary: "R501: Report Event action"
-      description: "Report an event. Access: AU with event visibility"
-      tags:
-        - "M05: Administration Management"
-      requestBody:
-        description: "Report form"
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: integer
-                motive:
-                  type: string
-                  enum:
-                    [
-                      "sexual_harassment",
-                      "violence_bodily_harm",
-                      "nudity_explicit_content",
-                      "hate_speech",
-                      "other",
-                    ]
-                description:
-                  type: string
-                timestamp:
-                  type: string
-                  format: date-time
-              required: [id, motive, description, timestamp]
-      responses:
-        "401":
-          description: "No authentication found. Please login."
-        "403":
-          description: "You don't have permission to make this request."
-        "404":
-          description: "Id not found"
-        "201":
-          description: "OK. Event report created."
-
-  /api/reports/user:
-    post:
-      operationId: R502
-      summary: "R502: Report User action"
-      description: "Report an user. Access: AU with user visibility"
-      tags:
-        - "M05: Administration Management"
-      requestBody:
-        description: "Report form"
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: integer
-                motive:
-                  type: string
-                  enum:
-                    [
-                      "sexual_harassment",
-                      "violence_bodily_harm",
-                      "nudity_explicit_content",
-                      "hate_speech",
-                      "other",
-                    ]
-                description:
-                  type: string
-                timestamp:
-                  type: string
-                  format: date-time
-              required: [id, motive, description, timestamp]
-      responses:
-        "401":
-          description: "No authentication found. Please login."
-        "403":
-          description: "You don't have permission to make this request."
-        "404":
-          description: "Id not found"
-        "201":
-          description: "User report created."
-
-  /api/reports/comment:
-    post:
-      operationId: R503
-      summary: "R503: Report Comment action"
-      description: "Report a comment. Access: AU with comment visibility"
-      tags:
-        - "M05: Administration Management"
-      requestBody:
-        description: "Report form"
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: integer
-                motive:
-                  type: string
-                  enum:
-                    [
-                      "sexual_harassment",
-                      "violence_bodily_harm",
-                      "nudity_explicit_content",
-                      "hate_speech",
-                      "other",
-                    ]
-                description:
-                  type: string
-                timestamp:
-                  type: string
-                  format: date-time
-              required: [id, motive, description, timestamp]
-      responses:
-        "401":
-          description: "No authentication found. Please login."
-        "403":
-          description: "You don't have permission to make this request."
-        "404":
-          description: "Id not found"
-        "201":
-          description: "Message report created."
-
-  /api/reports/{id}:
-    post:
-      operationId: R504
-      summary: "R504: Handle Report"
-      description: "Change report state, manipulating the resource availability. Access: ADM"
-      tags:
-        - "M05: Administration Management"
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        description: "Action to take"
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                action:
-                  type: string
-                  enum: ["ignore_report", "block_resource", "delete_resource"]
-              required: [action]
-      responses:
-        "200":
-          description: "OK. Action taken."
-        "401":
-          description: "No authentication found. Please login."
-        "403":
-          description: "You don't have permission to make this request."
-        "404":
-          description: "Id not found."
-        "500":
-          description: "Internal server failure."
-
-  /reports:
-    get:
-      operationId: R505
-      summary: "R505: Browse Reports page"
-      description: "Show reports list page.  Access: ADM."
-      parameters:
-        - in: query
-          name: page
-          required: false
-          schema:
-            type: integer
-            default: 0
-          description: "Starting page of reports list"
-      tags:
-        - "M05: Administration Management"
-      responses:
-        "401":
-          description: "No authentication found. Please login."
-        "403":
-          description: "You don't have permission to access this page."
-        "200":
-          description: "OK. Show reports list page (UI07)"
 
   ### Events ###
   /events:
@@ -1076,7 +871,6 @@ paths:
         "500":
           description: "Internal server error. Invalid data"
 
-
   /api/events/{id}/invites:
     get:
       operationId: "R315"
@@ -1491,6 +1285,241 @@ paths:
           description: "Poll option vote removed"
         "401":
           description: "User did not vote on this poll option"
+
+  ### Static pages ###
+  /:
+    get:
+      operationId: R401
+      summary: "R401: Home page"
+      description: "Provide home page. Access: NAU, AU, AUO, ADM"
+      tags:
+        - "M04: Static Pages"
+      responses:
+        "200":
+          description: "OK. Show home page (UI01)"
+
+  /faq:
+    get:
+      operationId: R404
+      summary: "R404: FAQ page"
+      description: "Provide frequently asked questions page. Access: NAU, AU, AUO, ADM"
+      tags:
+        - "M04: Static Pages"
+      responses:
+        "200":
+          description: "OK. Show FAQ page (UI04)"
+
+  /about:
+    get:
+      operationId: R405
+      summary: "R405: About page"
+      description: "Provide about page. Access: NAU, AU, AUO, ADM"
+      tags:
+        - "M04: Static Pages"
+      responses:
+        "200":
+          description: "OK. Show About page (UI05)"
+
+  /contacts:
+    get:
+      operationId: R406
+      summary: "R406: Contact Us page"
+      description: "Provide Contact Us page. Access: NAU, AU, AUO, ADM"
+      tags:
+        - "M04: Static Pages"
+      responses:
+        "200":
+          description: "OK. Show Contact Us page (UI06)"
+
+  ### Administration ###
+  /api/reports/event:
+    post:
+      operationId: R501
+      summary: "R501: Report Event action"
+      description: "Report an event. Access: AU with event visibility"
+      tags:
+        - "M05: Administration Management"
+      requestBody:
+        description: "Report form"
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                motive:
+                  type: string
+                  enum:
+                    [
+                      "sexual_harassment",
+                      "violence_bodily_harm",
+                      "nudity_explicit_content",
+                      "hate_speech",
+                      "other",
+                    ]
+                description:
+                  type: string
+                timestamp:
+                  type: string
+                  format: date-time
+              required: [id, motive, description, timestamp]
+      responses:
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to make this request."
+        "404":
+          description: "Id not found"
+        "201":
+          description: "OK. Event report created."
+
+  /api/reports/user:
+    post:
+      operationId: R502
+      summary: "R502: Report User action"
+      description: "Report an user. Access: AU with user visibility"
+      tags:
+        - "M05: Administration Management"
+      requestBody:
+        description: "Report form"
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                motive:
+                  type: string
+                  enum:
+                    [
+                      "sexual_harassment",
+                      "violence_bodily_harm",
+                      "nudity_explicit_content",
+                      "hate_speech",
+                      "other",
+                    ]
+                description:
+                  type: string
+                timestamp:
+                  type: string
+                  format: date-time
+              required: [id, motive, description, timestamp]
+      responses:
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to make this request."
+        "404":
+          description: "Id not found"
+        "201":
+          description: "User report created."
+
+  /api/reports/comment:
+    post:
+      operationId: R503
+      summary: "R503: Report Comment action"
+      description: "Report a comment. Access: AU with comment visibility"
+      tags:
+        - "M05: Administration Management"
+      requestBody:
+        description: "Report form"
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                motive:
+                  type: string
+                  enum:
+                    [
+                      "sexual_harassment",
+                      "violence_bodily_harm",
+                      "nudity_explicit_content",
+                      "hate_speech",
+                      "other",
+                    ]
+                description:
+                  type: string
+                timestamp:
+                  type: string
+                  format: date-time
+              required: [id, motive, description, timestamp]
+      responses:
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to make this request."
+        "404":
+          description: "Id not found"
+        "201":
+          description: "Message report created."
+
+  /api/reports/{id}:
+    post:
+      operationId: R504
+      summary: "R504: Handle Report"
+      description: "Change report state, manipulating the resource availability. Access: ADM"
+      tags:
+        - "M05: Administration Management"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "Action to take"
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: ["ignore_report", "block_resource", "delete_resource"]
+              required: [action]
+      responses:
+        "200":
+          description: "OK. Action taken."
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to make this request."
+        "404":
+          description: "Id not found."
+        "500":
+          description: "Internal server failure."
+
+  /reports:
+    get:
+      operationId: R505
+      summary: "R505: Browse Reports page"
+      description: "Show reports list page.  Access: ADM."
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            default: 0
+          description: "Starting page of reports list"
+      tags:
+        - "M05: Administration Management"
+      responses:
+        "401":
+          description: "No authentication found. Please login."
+        "403":
+          description: "You don't have permission to access this page."
+        "200":
+          description: "OK. Show reports list page (UI07)"
 
   ### Notifications ###
   /api/notifications:
