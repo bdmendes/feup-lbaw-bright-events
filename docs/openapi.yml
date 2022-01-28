@@ -168,7 +168,7 @@ paths:
                 type: string
               examples:
                 302Success:
-                  description: "Authentication succeeded. Redirect to user profile (UI01)"
+                  description: "Authentication succeeded. Redirect to user profile"
                   value: "/home"
                 302Failure:
                   description: "Authentication failed. Redirect to register form (UI08)"
@@ -306,25 +306,11 @@ paths:
             type: string
           description: "Full text search keyword"
         - in: query
-          name: sort_by
-          schema:
-            type: string
-            enum: ["name", "username"]
-            default: "username"
-          description: "Defines the value by which the users should be ordered"
-        - in: query
-          name: order
-          schema:
-            type: string
-            enum: ["ascending", "descending"]
-            default: "ascending"
-          description: "Defines if it's ascending order or descending order"
-        - in: query
           name: page
           schema:
             type: integer
             default: 0
-          description: "Starting page of user list"
+          description: "Page of user list"
 
   /users/{username}:
     get:
@@ -366,14 +352,14 @@ paths:
               format: boolean
       responses:
         "200":
-          description: "Ok. Block user."
+          description: "Ok. Block/Unblock user."
         "404":
           description: "User not found"
 
     delete:
       operationId: R204
       summary: "R204: Remove user"
-      description: "Remove the current user. Access: ADM and current user"
+      description: "Remove the current user. Access: ADM and current user. Access:ADM and AU for itself"
       tags:
         - "M02: Users and Personal Profiles"
       parameters:
@@ -384,7 +370,7 @@ paths:
             type: string
       responses:
         "200":
-          description: "Ok. Block user."
+          description: "Ok. Delete user."
         "404":
           description: "User not found"
 
@@ -392,7 +378,7 @@ paths:
     get:
       operationId: R205
       summary: "R205: Edit User Profile page"
-      description: "Provide edit user profile form. Access: AU"
+      description: "Provide edit user profile form. Access: AU, in its profile"
       parameters:
         - name: username
           in: path
@@ -421,13 +407,11 @@ paths:
             schema:
               type: object
               properties:
-                password:
-                  type: string
-                  format: password
-                confirm_password:
-                  type: string
-                  format: password
                 name:
+                  type: string
+                username:
+                  type: string
+                bio:
                   type: string
                 email:
                   type: string
@@ -435,23 +419,39 @@ paths:
                 birth_date:
                   type: string
                   format: date
-                bio:
-                  type: string
-                picture:
-                  type: string
-                  format: binary
                 gender:
                   type: string
                   enum: ["male, female, other"]
+                password:
+                  type: string
+                  format: password
+                confirm_password:
+                  type: string
+                  format: password
+                profile_picture:
+                  type: string
+                  format: binary
+              required: ["name", "username", "email"]
+
       responses:
-        "200":
-          description: "Ok. Show Edit User Profile UI (UI22)"
+        "302":
+          description: "Redirect after user edit"
+          headers:
+            Location:
+              description: "Redirect path"
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Form submitted with success. Redirecting to profile (UI11)"
+                  value: "/users/{id}"
+                302Failure:
+                  description: "Form submitted with invalid data. Redirecting to profile edit page with errors"
+                  value: "/edit/{id}"
         "404":
           description: "User not found"
         "401":
           description: "Unauthorized. User must be logged in"
-        "500":
-          description: "Internal server error. Invalid data"
 
   ### Events ###
   /events:
