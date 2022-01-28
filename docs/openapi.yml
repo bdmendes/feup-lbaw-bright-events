@@ -463,12 +463,65 @@ paths:
       description: "Show Browse Events page. Access: NAU"
       parameters:
         - in: query
+          name: global
+          required: false
+          schema:
+            type: string
+          description: "Full text search query"
+        - in: query
+          name: begin_date
+          required: false
+          schema:
+            type: string
+            format: date-time
+          description: "Begin datetime of the event"
+        - in: query
+          name: end_date
+          required: false
+          schema:
+            type: string
+            format: date-time
+          description: "End datetime of the event"
+        - in: query
+          name: organizer
+          required: false
+          schema:
+            type: string
+          description: "Organizer username"
+        - in: query
+          name: tag
+          required: false
+          schema:
+            type: string
+          description: "Tag of the event"
+        - in: query
+          name: end_date
+          required: false
+          schema:
+            type: string
+            format: date-time
+          description: "End datetime of the event"
+        - in: query
+          name: sort_by
+          required: false
+          schema:
+            type: string
+            enum: [title, date]
+          description: "Criteria to order results"
+        - in: query
+          name: order
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: "Order to show the results"
+        - in: query
           name: page
           required: false
           schema:
             type: integer
             default: 0
-          description: "Starting page of reports list"
+          description: "Starting page of events list"
       responses:
         "200":
           description: "Ok. Show Browse Events page (UI12)"
@@ -496,14 +549,23 @@ paths:
             schema:
               type: object
               properties:
+                id:
+                  type: string
                 title:
                   type: string
-                description:
-                  type: string
-                isPrivate:
-                  type: boolean
                 date:
                   type: string
+                  format: date-time
+                description:
+                  type: string
+                lat:
+                  type: string
+                long:
+                  type: string
+                display_name:
+                  type: string
+                restriction:
+                  type: boolean
                 cover_image:
                   type: string
                   format: binary
@@ -514,8 +576,20 @@ paths:
       responses:
         "401":
           description: "Event creation requires authentication"
-        "200":
-          description: "Ok. Event created."
+        "302":
+          description: "Event created redirect"
+          headers:
+            Location:
+              description: "Redirect path"
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Creation succeeded. Redirecting to event page"
+                  value: "/events/{id}"
+                302Failure:
+                  description: "Creation failed. Redirect to creation form"
+                  value: "/events/create"
 
   /events/{id}:
     get:
@@ -539,10 +613,10 @@ paths:
           description: "Event requires authentication to be viewed"
         "200":
           description: "OK. Show event details page (UI18)"
-    delete:
+    post:
       operationId: "R305"
-      summary: "R305: Remove Event action"
-      description: "Remove event. Access: AUO"
+      summary: "R305: Disable Event action"
+      description: "Disable event. Access: AUO"
       tags:
         - "M03: Events and Event Content"
       parameters:
@@ -553,8 +627,20 @@ paths:
             type: integer
           description: "Event id"
       responses:
-        "200":
-          description: "Ok. Event deleted."
+        "302":
+          description: "Event disabled redirect"
+          headers:
+            Location:
+              description: "Redirect path"
+              schema:
+                type: string
+              examples:
+                302:
+                  description: "Disabled succeeded. Redirecting to browse events page"
+                  value: "/events"
+                302Failure:
+                  description: "Disable failed. Redirect to event page"
+                  value: "/events/{id}"
         "404":
           description: "Event not found"
         "403":
@@ -593,34 +679,80 @@ paths:
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          multipart/form-data:
             schema:
               type: object
               properties:
+                id:
+                  type: string
                 title:
                   type: string
-                description:
-                  type: string
-                private:
-                  type: boolean
-                  default: false
                 date:
                   type: string
+                  format: date-time
+                description:
+                  type: string
+                lat:
+                  type: string
+                long:
+                  type: string
+                display_name:
+                  type: string
+                restriction:
+                  type: boolean
+                cover_image:
+                  type: string
+                  format: binary
                 tags:
                   type: array
                   items:
                     type: integer
-                cover_image:
-                  type: string
-                  format: binary
-              required: [title, description, date]
       responses:
-        "200":
-          description: "Ok. Event updated."
+        "302":
+          description: "Event updated redirect"
+          headers:
+            Location:
+              description: "Redirect path"
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Edition succeeded. Redirecting to event page"
+                  value: "/events/{id}"
+                302Failure:
+                  description: "Edition failed. Redirect to creation form"
+                  value: "/events/edit/{id}"
         "401":
           description: "Unauthorized. User must be the event organizer"
-        "500":
-          description: "Internal server error. Invalid data"
+
+  /events/{id}/join-requests:
+    post:
+      operationId: "R327"
+      summary: "R327: Join request"
+      description: "Request to join"
+      responses:
+        "200":
+          description: "OK. Request created"
+
+  /events/{id}/invites/{inviteId}/edit:
+    post:
+      operationId: "R328"
+      summary: "R328: Answer invite request"
+      description: "Answer invite request, accessibel to event organizer"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: inviteId
+          schema:
+            type: integer
+          required: true
+      responses:
+        "200":
+          description: "OK. Invite action registered"
 
   /api/events/{id}/attendees:
     get:
